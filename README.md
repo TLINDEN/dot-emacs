@@ -1,1 +1,1 @@
-You can read the [HTML export of my .emacs file](https://raw.githubusercontent.com/TLINDEN/dot-emacs/master/emacs.html) or download the [original elisp file](https://raw.githubusercontent.com/TLINDEN/dot-emacs/master/.emacs).
+You can read the [HTML export of my .emacs file](https://rawgit.com/TLINDEN/dot-emacs/master/emacs.html) or download the [original elisp file](https://raw.githubusercontent.com/TLINDEN/dot-emacs/master/.emacs).
