@@ -405,6 +405,8 @@
 
 ;; * System Specifics
 ;; ** Global init file+dir vars, portable
+;;    - Info mode: C-left+C-right history keys
+
 
 ;; since I  always use ~/.emacs as  my init file, this  results in the
 ;; correct emacs dir:
@@ -1321,6 +1323,8 @@ might be bad."
   (interactive)
   (untabify (point-min) (point-max))
   (delete-trailing-whitespace)
+  (save-excursion
+    (replace-regexp "^\n\\{3,\\}" "\n\n" nil (point-min) (point-max)))
   (set-buffer-file-coding-system 'utf-8)
   (indent-region (point-min) (point-max)))
 
@@ -1888,7 +1892,6 @@ col1, col2"
             (outline-minor-mode)
 
             ;; my own abbrevs for POD using mode-specific abbrev table
-            (defvar pod-abbrev-table nil)
             (c-define-abbrev-table 'pod-mode-abbrev-table '(
                                                             ("ov" "=over\n\n=item\n\n=back\n")
                                                             ("h1" "=head1 ")
@@ -1931,6 +1934,14 @@ col1, col2"
   (electric-indent-local-mode 0))
 
 (add-something-to-mode-hooks '(conf cisco fundamental conf-space pod) 'disarm-conf-mode)
+;; --------------------------------------------------------------------------------
+
+;; *** Config::General mode
+
+;; My own mode for Config::General files
+
+(require 'config-general-mode)
+(add-hook 'config-general-mode-hook 'electric-indent-mode)
 
 ;; --------------------------------------------------------------------------------
 ;; ** Text Manupilation
@@ -2360,7 +2371,7 @@ a list symbol describing the command."
 ;; I like to have some functions fontified differently
 (font-lock-add-keywords
  'emacs-lisp-mode
- '(("(\\s-*\\(eq\\|if\\|cond\\|or\\|not\\|when\\|setq\\|let**\\|lambda\\|kbd\\|defun\\|car\\|cdr\\)\\s-+"
+ '(("(\\s-*\\(eq\\|if\\|cond\\|and\\|set\\|or\\|not\\|when\\|setq\\|let**\\|lambda\\|kbd\\|defun\\|car\\|cdr\\)\\s-+"
     1 'font-lock-keyword-face)))
 
 ;; same applies for quoted symbols
@@ -3251,6 +3262,12 @@ otherwise fold current level and jump one level up."
                        (file-name-sans-extension
                         (file-name-nondirectory file))))))
 
+;; easier navigation in Info mode, intuitive history back and forth.
+(eval-after-load "Info"
+  '(progn
+     (define-key Info-mode-map (kbd "<C-left>")  'Info-history-back)
+     (define-key Info-mode-map (kbd "<C-right>") 'Info-history-forward)))
+
 ;; --------------------------------------------------------------------------------
 
 ;; *** calc et al.
@@ -4123,16 +4140,14 @@ converted to PDF at the same location."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "DejaVu Sans Mono" :foundry "unknown"
-                        :slant normal :weight normal :width normal))))
+ '(default ((t (:family "DejaVu Sans Mono" :foundry "unknown" :slant normal :weight normal :width normal))))
  '(cperl-nonoverridable-face ((((class color) (background light)) (:foreground "Magenta"))))
  '(custom-documentation-face ((t (:foreground "Navy"))) t)
- '(custom-group-tag-face-1 ((((class color) (background light))
-                             (:underline t :foreground "VioletRed"))) t)
+ '(custom-group-tag-face-1 ((((class color) (background light)) (:underline t :foreground "VioletRed"))) t)
  '(font-lock-builtin-face ((t (:foreground "BlueViolet"))))
  '(font-lock-comment-face ((t (:foreground "DarkGreen"))))
- '(font-lock-doc-face ((t (:foreground "DarkOrange3"))))
  '(font-lock-constant-face ((t (:foreground "Magenta"))))
+ '(font-lock-doc-face ((t (:foreground "DarkOrange3"))))
  '(font-lock-function-name-face ((t (:bold nil :foreground "DarkOrchid"))))
  '(font-lock-keyword-face ((t (:foreground "Blue"))))
  '(font-lock-string-face ((t (:foreground "Red"))))
@@ -4144,10 +4159,8 @@ converted to PDF at the same location."
  '(mode-line ((t (:foreground "White" :background "Blue"))))
  '(mode-line-inactive ((t (:foreground "White" :background "DimGray"))))
  '(org-date ((t (:foreground "dark gray" :underline t))))
- '(org-level-1 ((t (:height 1.18 :inherit outline-1
-                            :foreground "medium slate blue" :underline t))))
- '(org-level-2 ((t (:height 1.16 :inherit outline-2
-                            :foreground "sea green" :underline t :weight normal))))
+ '(org-level-1 ((t (:height 1.18 :inherit outline-1 :foreground "medium slate blue" :underline t))))
+ '(org-level-2 ((t (:height 1.16 :inherit outline-2 :foreground "sea green" :underline t :weight normal))))
  '(org-level-3 ((t (:height 1.14 :foreground "saddle brown" :underline t))))
  '(org-level-4 ((t (:height 1.12 :foreground "OrangeRed2" :underline t))))
  '(org-level-5 ((t (:height 1.1 :inherit outline-5 :underline t))))
@@ -4155,6 +4168,10 @@ converted to PDF at the same location."
  '(outline-2 ((t (:inherit font-lock-variable-name-face :underline t :weight bold))))
  '(outline-3 ((t (:inherit font-lock-keyword-face :underline t :weight bold))))
  '(outline-4 ((t (:inherit font-lock-comment-face :underline t))))
+ '(info-title-1 ((t (:inherit outline-1))))
+ '(info-title-2 ((t (:inherit outline-2))))
+ '(info-title-3 ((t (:inherit outline-3))))
+ '(info-title-4 ((t (:inherit outline-4))))
  '(region ((t (:foreground "Aquamarine" :background "Darkblue"))))
  '(secondary-selection ((t (:foreground "Green" :background "darkslateblue"))))
  '(wg-command-face ((t nil)))
@@ -4185,7 +4202,7 @@ converted to PDF at the same location."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
-)
+ )
 
 
 ;; ** done
