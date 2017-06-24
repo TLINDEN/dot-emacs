@@ -389,8 +389,8 @@
 ;;    - removed GNUS config, not used anymore
 ;;    - restored C-d binding to viking in paredit
 ;;    - added outshine HTML exporter via org: outshine-to-html
-
-
+;;    - fixed outshine config
+;;    - added (my) config-general-mode
 
 
 ;; --------------------------------------------------------------------------------
@@ -1942,6 +1942,8 @@ col1, col2"
 
 (require 'config-general-mode)
 (add-hook 'config-general-mode-hook 'electric-indent-mode)
+(add-hook 'config-general-mode-hook '(lambda ()
+                                       (outline-minor-mode)))
 
 ;; --------------------------------------------------------------------------------
 ;; ** Text Manupilation
@@ -2906,9 +2908,11 @@ specify another regex for cell splitting."
 
 (require 'outshine)
 
-;; Only use it for .emacs, so:
+;; enable when outline
+(add-hook 'outline-minor-mode-hook 'outshine-hook-function)
+
+;; use it for .emacs:
 (add-hook 'emacs-lisp-mode-hook '(lambda ()
-                                   (outshine-hook-function)
                                    (outline-minor-mode)))
 
 ;; I do have my own outshine parser here. It generates an alist of all
