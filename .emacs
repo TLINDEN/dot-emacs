@@ -391,6 +391,8 @@
 ;;    - added outshine HTML exporter via org: outshine-to-html
 ;;    - fixed outshine config
 ;;    - added (my) config-general-mode
+;;    - fixed pod format inserters
+
 
 
 ;; --------------------------------------------------------------------------------
@@ -1861,24 +1863,24 @@ col1, col2"
     (er/expand-region 1))
   (save-excursion
     (goto-char (region-beginning))
-    (insert (format "%s<" CHAR))
+    (insert (format "%c<" CHAR))
     (goto-char (region-end))
     (insert ">")))
 
 (defun pod-bold()
   "bold text in outline mode"
   (interactive)
-  (tvd-outline-emphasize "B"))
+  (tvd-outline-emphasize ?B))
 
 (defun pod-italic()
   "italic text in outline mode"
   (interactive)
-  (tvd-outline-emphasize "I"))
+  (tvd-outline-emphasize ?I))
 
 (defun pod-code()
   "verbatim text in outline mode"
   (interactive)
-  (tvd-outline-emphasize "C"))
+  (tvd-outline-emphasize ?C))
 
 ;; pod mode config
 (add-hook 'pod-mode-hook
@@ -4160,6 +4162,10 @@ converted to PDF at the same location."
  '(font-lock-warning-face ((t (:bold t :foreground "Red"))))
  '(highlight ((t (:background "DodgerBlue2" :foreground "White"))))
  '(ido-only-match ((t (:foreground "dark green" :weight bold))))
+ '(info-title-1 ((t (:inherit outline-1))))
+ '(info-title-2 ((t (:inherit outline-2))))
+ '(info-title-3 ((t (:inherit outline-3))))
+ '(info-title-4 ((t (:inherit outline-4))))
  '(mode-line ((t (:foreground "White" :background "Blue"))))
  '(mode-line-inactive ((t (:foreground "White" :background "DimGray"))))
  '(org-date ((t (:foreground "dark gray" :underline t))))
@@ -4172,10 +4178,6 @@ converted to PDF at the same location."
  '(outline-2 ((t (:inherit font-lock-variable-name-face :underline t :weight bold))))
  '(outline-3 ((t (:inherit font-lock-keyword-face :underline t :weight bold))))
  '(outline-4 ((t (:inherit font-lock-comment-face :underline t))))
- '(info-title-1 ((t (:inherit outline-1))))
- '(info-title-2 ((t (:inherit outline-2))))
- '(info-title-3 ((t (:inherit outline-3))))
- '(info-title-4 ((t (:inherit outline-4))))
  '(region ((t (:foreground "Aquamarine" :background "Darkblue"))))
  '(secondary-selection ((t (:foreground "Green" :background "darkslateblue"))))
  '(wg-command-face ((t nil)))
@@ -4206,7 +4208,7 @@ converted to PDF at the same location."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+)
 
 
 ;; ** done
