@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version (20170610.01)          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version (20170628.01)          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -392,8 +392,20 @@
 ;;    - fixed outshine config
 ;;    - added (my) config-general-mode
 ;;    - fixed pod format inserters
+;; 20170629.01:
+;;    - added tablist-minor-mode (+config)
+;;    - added config for tabulated-list-mode
+;;    - added config for help-mode
 
+;; ** TODO
 
+;; - tabulated-list-mode: +hl-line-mode, maybe hl-line+ (melpa),
+;;                       install tablist-mode, Q: close other windows,
+;;                       q: close window and kill buffer
+;; - check helm https://emacs-helm.github.io/helm/
+;; - check helpful https://github.com/wilfred/helpful
+;; - check no-littering
+;; - submit novel + mark-copy-yank-things-mode to MELPA
 
 ;; --------------------------------------------------------------------------------
 ;; ** .emacs config version
@@ -401,7 +413,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20170610.01")
+(defvar tvd-emacs-version "20170628.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -1945,7 +1957,7 @@ col1, col2"
 (require 'config-general-mode)
 (add-hook 'config-general-mode-hook 'electric-indent-mode)
 (add-hook 'config-general-mode-hook '(lambda ()
-                                       (outline-minor-mode)))
+                                       t))
 
 ;; --------------------------------------------------------------------------------
 ;; ** Text Manupilation
@@ -2991,7 +3003,7 @@ update heading list if neccessary."
                (lambda ()
                  (defalias 'j    'tvd-outshine-jump)
                  (defalias 'jump 'tvd-outshine-jump)
-                 (local-set-key (kbd "C-c C-j")  'tvd-outshine-jump)
+                 (define-key outline-minor-mode-map (kbd "C-c C-j")  'tvd-outshine-jump)
                  (setq outshine-org-style-global-cycling-at-bob-p t
                        outshine-use-speed-commands t
                        outshine-speed-commands-user
@@ -3087,9 +3099,9 @@ otherwise fold current level and jump one level up."
                  ;; narrowing, we use outshine functions, it's loaded anyway
                  (defalias 'n 'outshine-narrow-to-subtree)
                  (defalias 'w 'widen)
-                 (local-set-key (kbd "<C-up>")   'tvd-outline-heading-up)
-                 (local-set-key (kbd "<C-down>") 'tvd-outline-heading-down)
-                 (local-set-key (kbd "<C-left>") 'tvd-outline-left-or-level-up)))))
+                 (define-key outline-minor-mode-map (kbd "<C-up>")   'tvd-outline-heading-up)
+                 (define-key outline-minor-mode-map (kbd "<C-down>") 'tvd-outline-heading-down)
+                 (define-key outline-minor-mode-map (kbd "<C-left>") 'tvd-outline-left-or-level-up)))))
 
 ;; orange fringe when narrowed
 (advice-add 'outshine-narrow-to-subtree :after
@@ -3520,6 +3532,53 @@ defun."
 
 ;; experimental: do things on save buffer etc.
 ;; Source: [[https://github.com/wasamasa/firestarter][firestarter]]
+
+;; *** Tabulated List Mode
+;; built-in, used by many interactive major modes
+
+;; +tablist, which provides many cool features
+;; [[https://github.com/politza/tablist][github source]]
+;; important commands:
+;; - <  shrink column
+;; - >  enlarge column
+;; - s  sort column
+;; - /  prefix for filter commands
+;;   / e   edit filter, e.g. do not list auto-complete sub-packages in melpa:
+;;   / a  ! Package =~ ac- <ret>
+(require 'tablist)
+
+;; we need to kill tablist's binding in order to have ours run (see below)
+(define-key tablist-minor-mode-map (kbd "q") nil)
+(define-key tablist-minor-mode-map (kbd "q") 'tvd-close-window)
+
+(defun tvd-close-window ()
+  (interactive)
+  (kill-this-buffer)
+  (delete-window))
+
+(eval-after-load "tabulated-list"
+  '(progn
+     (add-hook 'tabulated-list-mode-hook
+               (lambda ()
+                 (tablist-minor-mode)
+                 (local-set-key (kbd "Q") 'delete-other-windows)
+                 (hl-line-mode)))))
+
+;; *** Help Mode
+
+;; I even customize help windows! ... at least a little :) 
+
+(eval-after-load "Help"
+  '(progn
+     (add-hook 'help-mode-hook
+               (lambda ()
+                 (local-set-key (kbd "q") 'tvd-close-window)
+                 (local-set-key (kbd "x") 'quit-window)
+                 (local-set-key (kbd "p") 'help-go-back)
+                 (local-set-key (kbd "b") 'help-go-back)
+                 (local-set-key (kbd "n") 'help-go-forward)
+                 (local-set-key (kbd "f") 'help-go-forward)
+                 ))))
 
 ;; ** Emacs Interface
 ;; *** Parens
