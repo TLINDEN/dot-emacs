@@ -399,13 +399,12 @@
 
 ;; ** TODO
 
-;; - tabulated-list-mode: +hl-line-mode, maybe hl-line+ (melpa),
-;;                       install tablist-mode, Q: close other windows,
-;;                       q: close window and kill buffer
-;; - check helm https://emacs-helm.github.io/helm/
 ;; - check helpful https://github.com/wilfred/helpful
 ;; - check no-littering
 ;; - submit novel + mark-copy-yank-things-mode to MELPA
+;; - check smart-forward https://github.com/magnars/smart-forward.el
+;; - check ci+co https://github.com/magnars/change-inner.el
+;; - check recent files, exclude read-only/view files, help texts etc
 
 ;; --------------------------------------------------------------------------------
 ;; ** .emacs config version
@@ -866,6 +865,8 @@ to next buffer otherwise."
 ;; ** c-h != delete
 (keyboard-translate ?\C-h ?\C-?)
 (keyboard-translate ?\C-? ?\C-h)
+;;    - added 'change-inner and ci simulators'
+
 
 ;; --------------------------------------------------------------------------------
 ;; ** general keys (re-)mappings
@@ -1970,8 +1971,110 @@ col1, col2"
 (require 'expand-region)
 (global-set-key (kbd "C-0")             'er/expand-region)                                ; C-= without pressing shift on DE keyboard
 
-;; --------------------------------------------------------------------------------
+;; related to ER:
+;; *** change-inner
 
+;; I use change-inner with a prefix key and some wrappers around
+;; mark-copy-yank-things-mode, which is related to change-inner
+;; and expand-region.
+
+;; [[https://github.com/magnars/change-inner.el][github source]]:
+(require 'change-inner)
+
+;; first some functions:
+
+(defun tvd-ci (beg end &optional ins)
+  "change-inner simulator which works with symbols instead of strings.
+
+BEG and END must be executable elisp symbols moving (point). Everything
+in between will be killed. If INS is non-nil, it will be inserted then."
+  (interactive)
+  (let ((B nil))
+    (funcall beg)
+    (setq B (point))
+    (funcall end)
+    (kill-region B (point))
+    (when ins
+      (insert ins))))
+
+(defun tvd-ci-comment ()
+  "\"change inner\" a whole comment [block]."
+  (interactive)
+  (tvd-ci 'mcyt-beginning-of-comment-block
+          'mcyt-end-of-comment-block
+          (format "%s;# " comment-start)))
+
+(defun tvd-ci-quote ()
+  "\"change inner\" quoted text."
+  (interactive)
+  (tvd-ci 'mcyt-beginning-of-quote
+          'mcyt-end-of-quote))
+
+(defun tvd-ci-word ()
+  "\"change inner\" a word (like cw in vi)." 
+  (interactive)
+  (tvd-ci 'mcyt-beginning-of-symbol
+          'mcyt-end-of-symbol))
+
+(defun tvd-ci-line ()
+  "\"change inner\" a whole line."
+  (interactive)
+  (tvd-ci 'beginning-of-line
+          'end-of-line))
+
+(defun tvd-ci-paragraph ()
+  "\"change inner\" a whole paragraph."
+  (interactive)
+  (tvd-ci 'backward-paragraph
+          'forward-paragraph))
+
+(defun tvd-ci-buffer ()
+  "\"change inner\" a whole buffer."
+  (interactive)
+  (tvd-ci 'point-min
+          'point-max))
+
+(defun tvd-ci-sexp ()
+  "\"change inner\" a whole sexp."
+  (interactive)
+  (let ((ign (er/mark-outside-pairs))
+        (beg (mark))
+        (end (point)))
+    (deactivate-mark)
+    (kill-region beg end)
+    (insert "()")
+    (backward-char 1)))
+
+;; Define ALT_R (AltGR) + i as my prefix command for change-inner stuff.
+;; Since I use a german keyboard, this translates to →.
+;; I'll refrence it here now as <A-i ...>
+(define-prefix-command 'ci-map)
+(global-set-key (kbd "→") 'ci-map)
+
+;; typing the prefix key twice calls the real change-inner
+(define-key ci-map (kbd "→") 'change-inner) ;; <A-i A-i>
+
+(define-key ci-map (kbd "c") 'tvd-ci-comment) ;; <A-i c>
+(define-key ci-map (kbd "¢") 'tvd-ci-comment) ;; <A-i A-c>
+
+(define-key ci-map (kbd "q") 'tvd-ci-quote) ;; <A-i q>
+(define-key ci-map (kbd "@") 'tvd-ci-quote) ;; <A-i A-q>
+
+(define-key ci-map (kbd "w") 'tvd-ci-word) ;; <A-i w>
+(define-key ci-map (kbd "ł") 'tvd-ci-word) ;; <A-i A-w>
+
+(define-key ci-map (kbd "l") 'tvd-ci-line) ;; <A-i l>
+
+(define-key ci-map (kbd "s") 'tvd-ci-sexp) ;; <A-i s>
+(define-key ci-map (kbd "ſ") 'tvd-ci-sexp) ;; <A-i A-s>
+
+(define-key ci-map (kbd "p") 'tvd-ci-paragraph) ;; <A-i p>
+(define-key ci-map (kbd "þ") 'tvd-ci-paragraph) ;; <A-i A-p>
+
+(define-key ci-map (kbd "a") 'tvd-ci-buffer) ;; <A-i a>
+(define-key ci-map (kbd "æ") 'tvd-ci-buffer) ;; <A-i A-a>
+
+;; --------------------------------------------------------------------------------
 ;; *** Rotate text
 
 ;; This one is great as well, I  use it to toggle flags and such stuff
@@ -3697,6 +3800,7 @@ defun."
 
 ;; exclude some auto generated files
 (add-to-list 'recentf-exclude "ido.last")
+(add-to-list 'recentf-exclude "elpa")
 
 ;; --------------------------------------------------------------------------------
 
