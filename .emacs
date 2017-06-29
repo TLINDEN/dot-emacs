@@ -396,15 +396,15 @@
 ;;    - added tablist-minor-mode (+config)
 ;;    - added config for tabulated-list-mode
 ;;    - added config for help-mode
+;;    - added default filename for outshine-to-html
+
 
 ;; ** TODO
 
 ;; - check helpful https://github.com/wilfred/helpful
-;; - check no-littering
+;; - check no-littering https://github.com/tarsius/no-littering
 ;; - submit novel + mark-copy-yank-things-mode to MELPA
-;; - check smart-forward https://github.com/magnars/smart-forward.el
-;; - check ci+co https://github.com/magnars/change-inner.el
-;; - check recent files, exclude read-only/view files, help texts etc
+;; - put tvd-ci-* stuff into mcyt
 
 ;; --------------------------------------------------------------------------------
 ;; ** .emacs config version
@@ -2161,6 +2161,18 @@ in between will be killed. If INS is non-nil, it will be inserted then."
 (define-key ci-map (kbd "æ") 'tvd-ci-buffer) ;; <A-i A-a>
 
 ;; --------------------------------------------------------------------------------
+;; *** smart-forward
+
+;; smart-forward gives you semantic navigation, building on expand-region.
+;; [[https://github.com/magnars/smart-forward.el][github source]].
+
+(require 'smart-forward)
+
+(global-set-key (kbd "<S-up>")    'smart-up)
+(global-set-key (kbd "<S-down>")  'smart-down)
+(global-set-key (kbd "<S-left>")  'smart-backward)
+(global-set-key (kbd "<S-right>") 'smart-forward)
+
 ;; *** Rotate text
 
 ;; This one is great as well, I  use it to toggle flags and such stuff
@@ -3211,7 +3223,11 @@ update heading list if neccessary."
 ;; I  use this  to generate  a  HTML version  of my  emacs config  for
 ;; posting online, which makes it way easier to read.
 (defun outshine-to-html (file)
-  (interactive "Foutput html file:")
+  (interactive
+   (list
+    (read-file-name "HTML output file: "
+                    (expand-file-name "~/D/github/dot-emacs")
+                    "emacs.html")))
   (let ((B (current-buffer)))
     (with-temp-buffer
       (insert-buffer-substring B)
@@ -3885,8 +3901,11 @@ defun."
        (car recently-killed-list)))))
 
 ;; exclude some auto generated files
-(add-to-list 'recentf-exclude "ido.last")
-(add-to-list 'recentf-exclude "elpa")
+(setq recentf-exclude (list "ido.last"
+                            "/elpa/"
+                            ".el.gz$"
+                            'file-readable-p
+                            ))
 
 ;; --------------------------------------------------------------------------------
 
