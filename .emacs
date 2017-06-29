@@ -1944,19 +1944,30 @@ col1, col2"
 ;; while  we're  at it,  disable  electric  indent, it's  annoying  in
 ;; configs. Applies for derivates as well.
 
-(defun disarm-conf-mode()
+(defun tvd-disarm-conf-mode()
   (local-set-key  (kbd "C-c C-c") 'comment-or-uncomment-region-or-line)
   (electric-indent-local-mode 0))
 
-(add-something-to-mode-hooks '(conf cisco fundamental conf-space pod) 'disarm-conf-mode)
+(add-something-to-mode-hooks '(conf cisco fundamental conf-space pod) 'tvd-disarm-conf-mode)
 ;; --------------------------------------------------------------------------------
 
 ;; *** Config::General mode
 
-;; My own mode for Config::General files
+;; [[https://github.com/TLINDEN/config-general-mode][config-general-mode]] (also on Melpa).
+
+;; My own mode for [[http://search.cpan.org/dist/Config-General/][Config::General]]
+;; config files. Whenever I write some perl stuff, which needs a config file, I use
+;; this module (and I do this a lot). Previously I used conf-mode or html-mode, but
+;; both did not satisfy me. Now (as of 20170625) I solved this mess once and for all.
 
 (require 'config-general-mode)
+
+;; the mode enables  electric indent automatically, but  I disabled it
+;; for conf-mode (see tvd-disarm-conf-mode), therefore I re-enable it here
+;; for config-general-mode (which inherits from conf-mode).
 (add-hook 'config-general-mode-hook 'electric-indent-mode)
+
+;; empty for now
 (add-hook 'config-general-mode-hook '(lambda ()
                                        t))
 
@@ -1972,6 +1983,81 @@ col1, col2"
 (global-set-key (kbd "C-0")             'er/expand-region)                                ; C-= without pressing shift on DE keyboard
 
 ;; related to ER:
+;; *** Mark, Copy, Yank Things
+
+;; For a long time this stuff was  located here in my emacs config. As
+;; it grew larger  and larger I decided  to put it into  its own mode:
+;; mark-copy-yank-things-mode,  which can  be  found  on github  these
+;; days.
+
+;; With this,  you can quickly mark  or copy or copy+yank  things like
+;; words, ip's,  url's, lines or defun's  with one key binding.  I use
+;; this permanently and couldn't live without it anymore.
+
+;; A special feature is the copy+yanking, this is something vi offers:
+;; go to a line, press yy, then  p and the current line will be yanked
+;; below.  Prefix  with a  number and copy+yank  more lines.   This is
+;; really cool and (in  vi) often used. So, with this  mode, I can use
+;; it with  emacs as well. For  example, say you edit  a configuration
+;; file  and added  a  complicated  statement. Next  you  need to  add
+;; another very similar  statement. Instead of entering  it again, you
+;; just  hit  <C-c  y y>  and  the  current  line  appears as  a  copy
+;; below. Change the differences and you're done!
+
+(require 'mark-copy-yank-things-mode)
+(mark-copy-yank-things-global-mode)
+
+;; The mode  has a rather  impractical prefix since it's  published on
+;; github and therefore must be written  in a way not to disturb other
+;; modes. However, I myself need those simple prefixes:
+(define-key mark-copy-yank-things-mode-map (kbd "C-c")   'mcyt-copy-map)
+(define-key mark-copy-yank-things-mode-map (kbd "M-a")   'mcyt-mark-map)
+;; I use the default yank map
+
+;; With this I  put the last thing  copied into a register  'c.  I can
+;; then  later  yank  this  using C-v  anytime  without  browsing  the
+;; kill-ring if I kill things between yanking.  So, C-v always inserts
+;; the last copied thing, while C-y yanks the last thing killed, which
+;; might be something else.
+(advice-add 'mcyt--copy-thing
+            :after
+            '(lambda (&rest args)
+               (with-temp-buffer
+                 (yank)
+                 (copy-to-register 'c (point-min) (point-max)))))
+
+(defun tvd-insert-c-register ()
+  (interactive)
+  (insert-register 'c))
+
+(global-set-key (kbd "C-v")             'tvd-insert-c-register)
+
+;; copy  a real  number  and  convert it  to  german punctuation  upon
+;; yanking, so  I can  do some calculations  in 'calculator,  copy the
+;; result NNN.NN and  paste it into my online  banking formular, where
+;; it appears as NNN,NN.
+(defun tvd-mcyt-copy-euro (&optional arg)
+  "Copy  euro  at point  into  kill-ring  and convert  to  german
+punctuation"
+  (interactive "P")
+  (mcyt--blink-and-copy-thing 'mcyt-beginning-of-ip 'mcyt-end-of-ip arg)
+  (with-temp-buffer
+    (yank)
+    (beginning-of-buffer)
+    (while (re-search-forward "\\." nil t)
+      (replace-match ","))
+    (kill-region (point-min) (point-max))))
+
+(eval-after-load "mark-copy-yank-things-mode"
+  '(progn
+     (add-hook 'mark-copy-yank-things-mode-hook
+               (lambda () ;; g like [G]eld
+                 (define-key mcyt-copy-map (kbd "g") 'tvd-mcyt-copy-euro)))))
+
+
+
+;; --------------------------------------------------------------------------------
+
 ;; *** change-inner
 
 ;; I use change-inner with a prefix key and some wrappers around
@@ -3990,81 +4076,6 @@ defun."
 (require 'which-key)
 (which-key-mode)
 (which-key-setup-side-window-right)
-
-;; --------------------------------------------------------------------------------
-
-;; *** Mark, Copy, Yank Things
-
-;; For a long time this stuff was  located here in my emacs config. As
-;; it grew larger  and larger I decided  to put it into  its own mode:
-;; mark-copy-yank-things-mode,  which can  be  found  on github  these
-;; days.
-
-;; With this,  you can quickly mark  or copy or copy+yank  things like
-;; words, ip's,  url's, lines or defun's  with one key binding.  I use
-;; this permanently and couldn't live without it anymore.
-
-;; A special feature is the copy+yanking, this is something vi offers:
-;; go to a line, press yy, then  p and the current line will be yanked
-;; below.  Prefix  with a  number and copy+yank  more lines.   This is
-;; really cool and (in  vi) often used. So, with this  mode, I can use
-;; it with  emacs as well. For  example, say you edit  a configuration
-;; file  and added  a  complicated  statement. Next  you  need to  add
-;; another very similar  statement. Instead of entering  it again, you
-;; just  hit  <C-c  y y>  and  the  current  line  appears as  a  copy
-;; below. Change the differences and you're done!
-
-(require 'mark-copy-yank-things-mode)
-(mark-copy-yank-things-global-mode)
-
-;; The mode  has a rather  impractical prefix since it's  published on
-;; github and therefore must be written  in a way not to disturb other
-;; modes. However, I myself need those simple prefixes:
-(define-key mark-copy-yank-things-mode-map (kbd "C-c")   'mcyt-copy-map)
-(define-key mark-copy-yank-things-mode-map (kbd "M-a")   'mcyt-mark-map)
-;; I use the default yank map
-
-;; With this I  put the last thing  copied into a register  'c.  I can
-;; then  later  yank  this  using C-v  anytime  without  browsing  the
-;; kill-ring if I kill things between yanking.  So, C-v always inserts
-;; the last copied thing, while C-y yanks the last thing killed, which
-;; might be something else.
-(advice-add 'mcyt--copy-thing
-            :after
-            '(lambda (&rest args)
-               (with-temp-buffer
-                 (yank)
-                 (copy-to-register 'c (point-min) (point-max)))))
-
-(defun tvd-insert-c-register ()
-  (interactive)
-  (insert-register 'c))
-
-(global-set-key (kbd "C-v")             'tvd-insert-c-register)
-
-;; copy  a real  number  and  convert it  to  german punctuation  upon
-;; yanking, so  I can  do some calculations  in 'calculator,  copy the
-;; result NNN.NN and  paste it into my online  banking formular, where
-;; it appears as NNN,NN.
-(defun tvd-mcyt-copy-euro (&optional arg)
-  "Copy  euro  at point  into  kill-ring  and convert  to  german
-punctuation"
-  (interactive "P")
-  (mcyt--blink-and-copy-thing 'mcyt-beginning-of-ip 'mcyt-end-of-ip arg)
-  (with-temp-buffer
-    (yank)
-    (beginning-of-buffer)
-    (while (re-search-forward "\\." nil t)
-      (replace-match ","))
-    (kill-region (point-min) (point-max))))
-
-(eval-after-load "mark-copy-yank-things-mode"
-  '(progn
-     (add-hook 'mark-copy-yank-things-mode-hook
-               (lambda () ;; g like [G]eld
-                 (define-key mcyt-copy-map (kbd "g") 'tvd-mcyt-copy-euro)))))
-
-
 
 ;; --------------------------------------------------------------------------------
 
