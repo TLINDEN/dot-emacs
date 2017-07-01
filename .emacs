@@ -397,6 +397,9 @@
 ;;    - added config for tabulated-list-mode
 ;;    - added config for help-mode
 ;;    - added default filename for outshine-to-html
+;;    - Info mode: C-left+C-right history keys
+;;    - added loader for el2markdown
+;;    - removed smart-forward, it annoys me
 
 
 ;; ** TODO
@@ -418,8 +421,6 @@
 
 ;; * System Specifics
 ;; ** Global init file+dir vars, portable
-;;    - Info mode: C-left+C-right history keys
-
 
 ;; since I  always use ~/.emacs as  my init file, this  results in the
 ;; correct emacs dir:
@@ -2123,13 +2124,8 @@ in between will be killed. If INS is non-nil, it will be inserted then."
 (defun tvd-ci-sexp ()
   "\"change inner\" a whole sexp."
   (interactive)
-  (let ((ign (er/mark-outside-pairs))
-        (beg (mark))
-        (end (point)))
-    (deactivate-mark)
-    (kill-region beg end)
-    (insert "()")
-    (backward-char 1)))
+  (er/mark-inside-pairs)
+  (call-interactively 'kill-region))
 
 ;; Define ALT_R (AltGR) + i as my prefix command for change-inner stuff.
 ;; Since I use a german keyboard, this translates to →.
@@ -2161,18 +2157,6 @@ in between will be killed. If INS is non-nil, it will be inserted then."
 (define-key ci-map (kbd "æ") 'tvd-ci-buffer) ;; <A-i A-a>
 
 ;; --------------------------------------------------------------------------------
-;; *** smart-forward
-
-;; smart-forward gives you semantic navigation, building on expand-region.
-;; [[https://github.com/magnars/smart-forward.el][github source]].
-
-(require 'smart-forward)
-
-(global-set-key (kbd "<S-up>")    'smart-up)
-(global-set-key (kbd "<S-down>")  'smart-down)
-(global-set-key (kbd "<S-left>")  'smart-backward)
-(global-set-key (kbd "<S-right>") 'smart-forward)
-
 ;; *** Rotate text
 
 ;; This one is great as well, I  use it to toggle flags and such stuff
@@ -2558,7 +2542,7 @@ a list symbol describing the command."
     (re-search-forward ";; .. Changelog")
     (next-line)
     (forward-paragraph)
-    (insert (format ";;    - %s\n\n" entry))))
+    (insert (format ";;    - %s\n" entry))))
 
 ;; elisp config
 (add-hook 'emacs-lisp-mode-hook
@@ -2567,7 +2551,8 @@ a list symbol describing the command."
             (local-set-key (kbd "C-x C-e")  'tvd-elisp-eval)
             ;; separate 'e' == separate buffer
             (local-set-key (kbd "C-x e")    'tvd-send-region-to-repl)
-            (setq mode-name "EL")
+            (setq mode-name "EL"
+                  show-trailing-whitespace t)
             (eldoc-mode t)
             ))
 
@@ -2597,6 +2582,18 @@ a list symbol describing the command."
  '(("'[-a-zA-Z_][-a-zA-Z0-9_]*\\>" 0 'font-lock-constant-face)))
 
 ;; --------------------------------------------------------------------------------
+;; *** el2markdown
+
+;; [[https://github.com/Lindydancer/el2markdown][el2markdown]] is a module which
+;; can be used to convert Commentary sections into markdown files. I use this to
+;; avoid maintaining the README.md and the Commentary section in parallel.
+
+(require 'el2markdown)
+
+;; To  use,   call  el2markdown-view-buffer   and  put  it   into  the
+;; README.md. Take care though: it doesn't convert the META section.
+
+;; FIXME: write a wrapper to circumvent these restrictions.
 
 ;; *** tramp mode
 
