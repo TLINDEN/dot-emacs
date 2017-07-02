@@ -400,10 +400,14 @@
 ;;    - Info mode: C-left+C-right history keys
 ;;    - added loader for el2markdown
 ;;    - removed smart-forward, it annoys me
+;;    - made tvd-outshine-jump more portable, do not use hardcoded
+;;      regexps anymore, use outshine functions
 
 
 ;; ** TODO
 
+;; - fix C-c C-j to work in non-elisp buffers too, see FIXMEs there
+;;   and make it recursive like a path or the like
 ;; - check helpful https://github.com/wilfred/helpful
 ;; - check no-littering https://github.com/tarsius/no-littering
 ;; - submit novel + mark-copy-yank-things-mode to MELPA
@@ -929,7 +933,7 @@ to next buffer otherwise."
     (with-current-buffer occur-b
       (occur-mode-clean-buffer)
       (setq occur-c (current-buffer))
-      (let ((inhibit-read-only t)) (set-text-properties (point-min) (point-max) ()))      
+      (let ((inhibit-read-only t)) (set-text-properties (point-min) (point-max) ()))
       (while (re-search-forward "[0-9]*:" nil t)
         (replace-match ""))
       (beginning-of-buffer)
@@ -1702,7 +1706,7 @@ col1, col2"
   "Create tags file."
   (interactive "DDirectory: ")
   (let* ((ctags "/usr/bin/ctags-exuberant")
-         (odir  (directory-file-name dir-name)) 
+         (odir  (directory-file-name dir-name))
          (ofile (concat odir "/TAGS"))
          (langs "lisp,python,perl,c,c++,shell")
          (shell-command
@@ -1739,7 +1743,7 @@ col1, col2"
 (setq sgml-omittag-transparent nil)
 (setq sgml-auto-insert-required-elements t)
 
-(setq sgml-markup-faces 
+(setq sgml-markup-faces
       '((start-tag . font-lock-function-name-face)
         (end-tag . font-lock-function-name-face)
         (comment . font-lock-comment-face)
@@ -1968,9 +1972,8 @@ col1, col2"
 ;; for config-general-mode (which inherits from conf-mode).
 (add-hook 'config-general-mode-hook 'electric-indent-mode)
 
-;; empty for now
-(add-hook 'config-general-mode-hook '(lambda ()
-                                       t))
+;; enable outshine
+(add-hook 'config-general-mode-hook 'outline-minor-mode)
 
 ;; --------------------------------------------------------------------------------
 ;; ** Text Manupilation
@@ -2098,7 +2101,7 @@ in between will be killed. If INS is non-nil, it will be inserted then."
           'mcyt-end-of-quote))
 
 (defun tvd-ci-word ()
-  "\"change inner\" a word (like cw in vi)." 
+  "\"change inner\" a word (like cw in vi)."
   (interactive)
   (tvd-ci 'mcyt-beginning-of-symbol
           'mcyt-end-of-symbol))
@@ -2474,7 +2477,7 @@ a list symbol describing the command."
       (let (  ;; save region and buffer
             (partb (buffer-substring-no-properties (region-beginning) (region-end)))
             (whole (buffer-substring-no-properties (point-min) (point-max)))
-            ) 
+            )
         (if (> (length partb) 0)
             partb
           whole
@@ -2485,7 +2488,7 @@ a list symbol describing the command."
 
 (defun tvd-send-region-to-repl ()
   "put region or buffer into elisp repl and eval"
-  (interactive)  
+  (interactive)
   (let ( ;; fetch region or buffer contents
         (code  (tvd-get-code)))
     (progn
@@ -2493,12 +2496,12 @@ a list symbol describing the command."
           ;; ielm not yet running, start it in split window but stay here
           (progn
             (split-window-horizontally)
-            (other-window 1) 
+            (other-window 1)
             (ielm)
             (other-window 1)))
       ;; finially, paste content into ielm and evaluate it
       ;; still we stay where we are
-      (with-current-buffer "*ielm*" 
+      (with-current-buffer "*ielm*"
         (goto-char (point-max))
         (insert code)
         (ielm-return)))))
@@ -2722,7 +2725,6 @@ down and unfold it, otherwise jump paragraph as usual."
                   org-fontify-done-headline t
                   org-pretty-entities t
                   org-confirm-babel-evaluate nil)
-                 
                                         ; shortcuts
                  (setq org-speed-commands-user
                        (quote (
@@ -2738,19 +2740,18 @@ down and unfold it, otherwise jump paragraph as usual."
                                ("z" . org-refile)            ; archive the (sub-)tree
                                ("a" . org-attach)            ; manage attachments
                                )))
-                 
                                         ; same as toggle
                  (local-set-key (kbd "C-t") 'org-todo)
 
                                         ; alt-enter = insert new subheading below current
                  (local-set-key (kbd "<M-return>") 'org-insert-subheading)
-                 
+
                                         ; search for tags (ends up in agenda view)
                  (local-set-key (kbd "C-f") 'org-tags-view)
 
                                         ; run presenter, org-present must be installed and loadedwhite
                  (local-set-key (kbd "C-p") 'org-present)
-                 
+
                                         ; todo colors
                  (setq org-todo-keyword-faces '(
                                                 ("TODO"   . (:foreground "#b70101"     :weight bold))
@@ -2782,7 +2783,7 @@ down and unfold it, otherwise jump paragraph as usual."
 
                                         ; use nicer bullets
                  (org-bullets-mode 1))
-                 
+
                (org-babel-do-load-languages
                 'org-babel-load-languages
                 '((python     . t)
@@ -2802,7 +2803,7 @@ down and unfold it, otherwise jump paragraph as usual."
 ;; I always want to be able to capture, even if no ORG is running
 (global-set-key (kbd "C-n")             (lambda () (interactive) (org-capture)))
 
-;; must be global since code edit sub buffers run their own major mode, not org 
+;; must be global since code edit sub buffers run their own major mode, not org
 (global-set-key (kbd "C-c C-#")         'org-edit-src-exit)
 
 ;; some org mode vars must be set globally
@@ -2814,10 +2815,10 @@ down and unfold it, otherwise jump paragraph as usual."
 (setq org-capture-templates
       '(("n" "Project" entry (file+headline tvd-org-file "Unsorted Tasks")
          "* TODO %^{title}\n%u\n** Kostenstelle\n** Contact Peer\n**Contact Customer\n**ARS\n**Daten\n** Notizen\n  %i%?\n")
-        
+
         ("j" "Journal" entry (file+headline tvd-org-file "Kurznotizen")
          "* TODO %^{title}\n%u\n  %i%?\n" :prepend t)
-        
+
         ("c" "Copy/Paste" entry (file+headline tvd-org-file "Kurznotizen")
          "* TODO %^{title}\n%u\n  %x\n" :immediate-finish t :prepend t)))
 
@@ -3057,7 +3058,7 @@ specify another regex for cell splitting."
                  (org-display-inline-images)
                  (org-present-hide-cursor)
                  (org-present-read-only)
-                 
+
                  ;; some opticals
                  (setq org-hide-emphasis-markers t)
                  (font-lock-add-keywords 'org-mode
@@ -3105,7 +3106,7 @@ specify another regex for cell splitting."
   | C-c r | enter window resize mode, use cursor keys, <ret> to finish |
   | C--   | (CTRL and minus) shrink font size                          |
   | C-+   | (CTRL and plus) increase font size                         |
-  
+
 ")))
 
 
@@ -3127,22 +3128,21 @@ specify another regex for cell splitting."
 (add-hook 'emacs-lisp-mode-hook '(lambda ()
                                    (outline-minor-mode)))
 
-;; I do have my own outshine parser here. It generates an alist of all
-;; headings with each position in buffer.
+;; Generate an alist of all headings  with each position in buffer and
+;; use this later to jump to those positions with IDO.
 (make-variable-buffer-local 'tvd-headings)
 
-(defun tvd-outshine-is-heading-p (&optional line)
-  "return t if current line or LINE is a heading"
-  (tvd-starts-with (or line (tvd-get-line)) ";; *"))
-
 (defun tvd-outshine-get-level (heading)
-  "return level of HEADING as number, or nil"
-  (if (string-match ";; \\(*+\\)" heading)
-      (length (match-string 1 heading))))
+  "Return level of HEADING as number, or nil"
+  (if (string-match " \\(*+\\) " heading) ; normal outline heading
+      (length (match-string 1 heading))
+    (when (string-match "^;;\\(;+\\) " heading) ; else look for elisp heading
+      (length (match-string 1 heading)))))
 
 (defun tvd-outshine-cl-heading (heading)
-  "clean HEADING"
-  (replace-regexp-in-string ";; \\*+ " "" heading))
+  (let ((regex (cadar outshine-imenu-preliminary-generic-expression)))
+    (when (string-match regex heading)
+      (match-string-no-properties 1 heading))))
 
 (defun tvd-outshine-parse-headings ()
   "extract outshine headings of current buffer"
@@ -3153,7 +3153,7 @@ specify another regex for cell splitting."
       (beginning-of-buffer)
       (while (not (eobp))
         (setq line (tvd-get-line))
-        (when (tvd-outshine-is-heading-p line)
+        (when (outline-on-heading-p t)
           (add-to-list 'tvd-headings (cons (tvd-outshine-cl-heading line) (point))))
         (forward-line)))))
 
@@ -3169,15 +3169,12 @@ specify another regex for cell splitting."
       (setq l (tvd-outshine-get-level (tvd-get-line)))
       (add-to-list 'tree (list (point) l))
       (when (eq l 1)
-        (setq done t))
-      )
+        (setq done t)))
     (outline-hide-other)
     (dolist (pos tree)
       (goto-char (car pos))
       (outline-cycle))))
 
-;; Using the  functions above I  now can just hit  C-c C-j and  IDO to
-;; some heading, which is damn fast and great.
 (defun tvd-outshine-jump ()
   "jump to an outshine heading with IDO prompt,
 update heading list if neccessary."
@@ -3209,6 +3206,11 @@ update heading list if neccessary."
                                ("v" . outshine-narrow-to-subtree)
                                ("q" . widen)
                                )))))))
+
+;; Narrowing now works within the headline rather than requiring to be on it
+(advice-add 'outshine-narrow-to-subtree :before
+            (lambda (&rest args) (unless (outline-on-heading-p t)
+                                   (outline-previous-visible-heading 1))))
 
 ;; convert outshine buffer  to org buffer using outorg,  which is part
 ;; of outshine.
@@ -3659,7 +3661,7 @@ last kbd-macro will be executed."
   (if (not (get-buffer "macros.el"))
       (find-file tvd-macro-file))
   (with-current-buffer "macros.el"
-    (goto-char (point-max)) 
+    (goto-char (point-max))
     (newline)
     (insert ";;")
     (newline)
@@ -3768,7 +3770,7 @@ defun."
 
 ;; *** Help Mode
 
-;; I even customize help windows! ... at least a little :) 
+;; I even customize help windows! ... at least a little :)
 
 (eval-after-load "Help"
   '(progn
@@ -3982,7 +3984,7 @@ defun."
            (insert "~/")
          (call-interactively 'self-insert-command))))))
 
-;; by howardism: [re]open non-writable file with sudo 
+;; by howardism: [re]open non-writable file with sudo
 (defadvice ido-find-file (after find-file-sudo activate)
   "Find file as root if necessary."
   (unless (and buffer-file-name
@@ -4039,7 +4041,7 @@ defun."
   '(("\t" . 'extra-whitespace-face)))
 
 (add-something-to-mode-hooks '(c c++ vala cperl emacs-lisp python shell-script)
-                             (lambda () (font-lock-add-keywords nil tvd-extra-keywords)))       
+                             (lambda () (font-lock-add-keywords nil tvd-extra-keywords)))
 
 ;; --------------------------------------------------------------------------------
 
@@ -4318,7 +4320,7 @@ converted to PDF at the same location."
                             "[REC]"
                           "")
                         'face 'rec-face))
-               
+
                mode-line-end-spaces))
 
 ;; --------------------------------------------------------------------------------
