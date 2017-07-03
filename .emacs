@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version (20170628.01)          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version (20170703.01)          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -402,8 +402,9 @@
 ;;    - removed smart-forward, it annoys me
 ;;    - made tvd-outshine-jump more portable, do not use hardcoded
 ;;      regexps anymore, use outshine functions
+;; 20170703.01:
 ;;    - fixed recentf-exclude list, now REALLY ignores unreadables
-
+;;    - added export for easier export and commit of dot-emacs
 
 ;; ** TODO
 
@@ -420,7 +421,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20170628.01")
+(defvar tvd-emacs-version "20170703.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -3240,6 +3241,8 @@ update heading list if neccessary."
       (org-export-to-file 'html file))))
 
 (defun export ()
+  "Export .emacs to git, do not use."
+  ;; FIXME: generate version number, add last changelog to git
   (interactive)
   (outshine-to-html "~/D/github/dot-emacs/emacs.html")
   (shell-command "cp ~/.emacs ~/D/github/dot-emacs/")
