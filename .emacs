@@ -402,6 +402,7 @@
 ;;    - removed smart-forward, it annoys me
 ;;    - made tvd-outshine-jump more portable, do not use hardcoded
 ;;      regexps anymore, use outshine functions
+;;    - fixed recentf-exclude list, now REALLY ignores unreadables
 
 
 ;; ** TODO
@@ -3238,6 +3239,12 @@ update heading list if neccessary."
       (outshine-to-org)
       (org-export-to-file 'html file))))
 
+(defun export ()
+  (interactive)
+  (outshine-to-html "~/D/github/dot-emacs/emacs.html")
+  (shell-command "cp ~/.emacs ~/D/github/dot-emacs/")
+  (shell-command "cd ~/D/github/dot-emacs && git ci +fixes .emacs emacs.html")
+  (shell-command "cd ~/D/github/dot-emacs && git push"))
 
 ;; --------------------------------------------------------------------------------
 
@@ -3903,7 +3910,7 @@ defun."
 (setq recentf-exclude (list "ido.last"
                             "/elpa/"
                             ".el.gz$"
-                            'file-readable-p
+                            '(not (file-readable-p))
                             ))
 
 ;; --------------------------------------------------------------------------------
