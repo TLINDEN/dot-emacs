@@ -873,6 +873,7 @@ to next buffer otherwise."
 (keyboard-translate ?\C-h ?\C-?)
 (keyboard-translate ?\C-? ?\C-h)
 ;;    - added 'change-inner and ci simulators'
+;;    - added suggest.el with my own reload function 
 
 
 ;; --------------------------------------------------------------------------------
@@ -3793,6 +3794,34 @@ defun."
                  (local-set-key (kbd "n") 'help-go-forward)
                  (local-set-key (kbd "f") 'help-go-forward)
                  ))))
+
+;; *** Suggest Mode
+
+;; [[https://github.com/Wilfred/suggest.el][suggest mode]] is a great
+;; elisp development tool. Execute `M-x suggest' and try it.
+
+(require 'suggest) ;; depends on dash, s, f, loop
+
+;; I use my own clearing function, since suggest doesn't provide this
+(defun tvd-suggest-reload ()
+  "Clear suggest buffer and re-paint it."
+  (interactive)
+  (let ((inhibit-read-only t))
+    (erase-buffer)
+    (suggest--insert-heading suggest--inputs-heading)
+    (insert "\n\n\n")
+    (suggest--insert-heading suggest--outputs-heading)
+    (insert "\n\n\n")
+    (suggest--insert-heading suggest--results-heading)
+    (insert "\n")
+    (suggest--nth-heading 1)
+    (forward-line 1)))
+
+(eval-after-load "suggest"
+  '(progn
+     (add-hook 'suggest-mode-hook
+               (lambda ()
+                 (local-set-key (kbd "C-l") 'tvd-suggest-reload)))))
 
 ;; ** Emacs Interface
 ;; *** Parens
