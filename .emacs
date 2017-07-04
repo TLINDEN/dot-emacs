@@ -415,6 +415,8 @@
 ;; - check no-littering https://github.com/tarsius/no-littering
 ;; - submit novel + mark-copy-yank-things-mode to MELPA
 ;; - put tvd-ci-* stuff into mcyt
+;; - check https://github.com/Wilfred/refine
+;;         https://github.com/Wilfred/emacs-refactor
 
 ;; --------------------------------------------------------------------------------
 ;; ** .emacs config version
@@ -428,6 +430,7 @@
 
 ;; * System Specifics
 ;; ** Global init file+dir vars, portable
+;;    - added dev function which opens a new development frame
 
 ;; since I  always use ~/.emacs as  my init file, this  results in the
 ;; correct emacs dir:
@@ -874,7 +877,8 @@ to next buffer otherwise."
 (keyboard-translate ?\C-h ?\C-?)
 (keyboard-translate ?\C-? ?\C-h)
 ;;    - added 'change-inner and ci simulators'
-;;    - added suggest.el with my own reload function 
+;;    - added suggest.el with my own reload function
+;;    - modified recentf: do not provide files already visited
 
 
 ;; --------------------------------------------------------------------------------
@@ -2588,6 +2592,38 @@ a list symbol describing the command."
  'emacs-lisp-mode
  '(("'[-a-zA-Z_][-a-zA-Z0-9_]*\\>" 0 'font-lock-constant-face)))
 
+;; I  hate it  when help,  debug,  ielm and  other peripheral  buffers
+;; litter  my emacs  window setup.  So, this  function fixes  this: it
+;; opens a new frame with all those buffers already opened and pinned.
+
+(defun dev ()
+  "Open a new emacs frame with some development peripheral buffers."
+  (interactive)
+  (let ((F (new-frame)))
+    (with-selected-frame F
+      (with-current-buffer (get-buffer-create "*Help*")
+        (help-mode))
+      (with-current-buffer (get-buffer-create "*ielm*")
+        (ielm))
+      (with-current-buffer (get-buffer-create "*suggest*")
+        (suggest))
+      (switch-to-buffer "*ielm*")
+      (split-window-horizontally)
+      (split-window-vertically)
+      (windmove-down)
+      (switch-to-buffer "*suggest*")
+      (tvd-suggest-reload)
+      (tvd-suggest-reload)
+      (calculator)
+      (windmove-right)
+      (switch-to-buffer "*Help*")
+      (split-window-vertically)
+      (windmove-down)
+      (switch-to-buffer "*scratch*")
+      (set-window-dedicated-p (selected-window) t)
+      (set-background-color "azure"))))
+
+
 ;; --------------------------------------------------------------------------------
 ;; *** el2markdown
 
@@ -3912,6 +3948,7 @@ defun."
 
 ;; setup
 (require 'recentf)
+(require 'cl-lib)
 (setq recentf-auto-cleanup 'never) ;; avoid stat() on tramp buffers
 (recentf-mode 1)
 
@@ -3921,10 +3958,16 @@ defun."
 
 ;; enable IDO completion
 ;; via [[http://emacsredux.com/blog/2013/04/05/recently-visited-files/][emacsredux]]
+;; modified to exclude already visited files
+(defun tvd-buffer-exists-p (bufname)
+  (not (eq nil (get-file-buffer bufname))))
+
 (defun recentf-ido-find-file ()
   "Find a recent file using ido."
   (interactive)
-  (let ((file (ido-completing-read "Choose recent file: " recentf-list nil t)))
+  (let ((file (ido-completing-read
+               "Choose recent file: "
+               (cl-remove-if 'tvd-buffer-exists-p recentf-list) nil t)))
     (when file
       (find-file file))))
 
@@ -3955,6 +3998,8 @@ defun."
                             ".el.gz$"
                             '(not (file-readable-p))
                             ))
+
+
 
 ;; --------------------------------------------------------------------------------
 
@@ -4047,6 +4092,7 @@ defun."
                         (concat "/sudo:localhost:" file-name))))
       (find-alternate-file file-root))))
 
+;; FIXME: add ido-ignore-files defun.
 
 ;; --------------------------------------------------------------------------------
 
