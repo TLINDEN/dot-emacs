@@ -405,6 +405,7 @@
 ;; 20170703.01:
 ;;    - fixed recentf-exclude list, now REALLY ignores unreadables
 ;;    - added export for easier export and commit of dot-emacs
+;;    - added tvd-suggest-jump to jump between input and output
 
 ;; ** TODO
 
@@ -3817,11 +3818,21 @@ defun."
     (suggest--nth-heading 1)
     (forward-line 1)))
 
+(defun tvd-suggest-jump ()
+  "Jump between input and output suggest buffer."
+  (interactive)
+  (forward-line -1)
+  (if (eq (line-number-at-pos) 1)
+      (suggest--nth-heading 2)
+    (suggest--nth-heading 1))
+  (forward-line 1))
+
 (eval-after-load "suggest"
   '(progn
      (add-hook 'suggest-mode-hook
                (lambda ()
-                 (local-set-key (kbd "C-l") 'tvd-suggest-reload)))))
+                 (local-set-key (kbd "C-l") 'tvd-suggest-reload)
+                 (local-set-key (kbd "<tab>") 'tvd-suggest-jump)))))
 
 ;; ** Emacs Interface
 ;; *** Parens
