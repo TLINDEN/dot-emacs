@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version (20170703.01)          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version (20170707.01)          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -33,7 +33,7 @@
 
 ;; Therefore I  use lots of  aliases in emacs for  not-so-regular used
 ;; functions, which turned out to be  sometimes easier to type than an
-;; actual key binding. 
+;; actual key binding.
 
 ;; The   html   export   has    been   created   with   the   function
 ;; outshine-to-html, written by myself, see below.
@@ -402,10 +402,17 @@
 ;;    - removed smart-forward, it annoys me
 ;;    - made tvd-outshine-jump more portable, do not use hardcoded
 ;;      regexps anymore, use outshine functions
+;;    - added 'change-inner and ci simulators'
+;;    - added suggest.el with my own reload function
+;;    - modified recentf: do not provide files already visited
 ;; 20170703.01:
 ;;    - fixed recentf-exclude list, now REALLY ignores unreadables
 ;;    - added export for easier export and commit of dot-emacs
 ;;    - added tvd-suggest-jump to jump between input and output
+;; 20170707.01:
+;;    - added C-x 4 to split fram into 4 windows
+;;    - fixed config-general-mode config
+;;    - fixed 'emacs-change-log (didn't expand trees before work)
 
 ;; ** TODO
 
@@ -424,7 +431,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20170703.01")
+(defvar tvd-emacs-version "20170707.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -663,10 +670,22 @@ to next buffer otherwise."
 ;; Use only in  X11 emacs - setting M-O inside console  causes <up> and
 ;; <down> to stop working properly, for whatever reasons.
 (if (display-graphic-p)
-(global-set-key (kbd "M-O")             'flip-windows)
-)
+(global-set-key (kbd "M-O")             'flip-windows))
 
 ;; --------------------------------------------------------------------------------
+;; *** Split window to 4 parts
+
+(defun tvd-quarter-windows ()
+  (interactive)
+  (split-window-vertically)
+  (split-window-horizontally)
+  (windmove-down)
+  (split-window-horizontally))
+
+(global-set-key (kbd "C-x 4")           'tvd-quarter-windows)
+
+;; --------------------------------------------------------------------------------
+
 ;; ** re-read a modified buffer
 
 ;; F5 == reload file if it has been modified by another process, shift
@@ -876,14 +895,9 @@ to next buffer otherwise."
 ;; ** c-h != delete
 (keyboard-translate ?\C-h ?\C-?)
 (keyboard-translate ?\C-? ?\C-h)
-;;    - added 'change-inner and ci simulators'
-;;    - added suggest.el with my own reload function
-;;    - modified recentf: do not provide files already visited
-
 
 ;; --------------------------------------------------------------------------------
 ;; ** general keys (re-)mappings
-(global-set-key (kbd "C-x C-4")         'set-selective-display-to-current-column)
 (global-set-key (kbd "C-s")             'isearch-forward-regexp)
 (global-set-key (kbd "C-r")             'isearch-backward-regexp)
 (global-set-key (kbd "M-C-s")           'isearch-forward)
@@ -901,6 +915,8 @@ to next buffer otherwise."
 (global-unset-key (kbd "C-z"))
 (global-set-key (kbd "C-x k")           'kill-this-buffer)                                ; C-x k  really kill current buffer w/o asking
 (global-set-key (kbd "C-x C-b")         'buffer-menu)
+
+
 
 ;; --------------------------------------------------------------------------------
 ;; ** display a list of my own global key bindings and aliases
@@ -1975,13 +1991,23 @@ col1, col2"
 
 (require 'config-general-mode)
 
-;; the mode enables  electric indent automatically, but  I disabled it
-;; for conf-mode (see tvd-disarm-conf-mode), therefore I re-enable it here
+;; I  use TAB  for completion  AND tab  and outshine.  Also, the  mode
+;; enables  electric  indent  automatically,  but I  disabled  it  for
+;; conf-mode (see tvd-disarm-conf-mode), therefore I re-enable it here
 ;; for config-general-mode (which inherits from conf-mode).
-(add-hook 'config-general-mode-hook 'electric-indent-mode)
+(add-hook 'config-general-mode-hook
+               (lambda ()
+                 (outline-minor-mode)
+                 (electric-indent-mode)
+                 ;; de-activate some senseless bindings
+                 (local-unset-key (kbd "C-c C-c"))
+                 (local-unset-key (kbd "C-c C-p"))
+                 (local-unset-key (kbd "C-c C-u"))
+                 (local-unset-key (kbd "C-c C-w"))
+                 (local-unset-key (kbd "C-c C-x"))
+                 (local-unset-key (kbd "C-c :"))
+                 (local-set-key (kbd "<tab>") 'config-general-tab-or-expand)))
 
-;; enable outshine
-(add-hook 'config-general-mode-hook 'outline-minor-mode)
 
 ;; --------------------------------------------------------------------------------
 ;; ** Text Manupilation
@@ -2549,6 +2575,7 @@ a list symbol describing the command."
   "Add a changelog entry to .emacs Changelog"
   (interactive "Menter change log entry: ")
   (save-excursion
+    (show-all)
     (beginning-of-buffer)
     (re-search-forward ";; .. Changelog")
     (next-line)
@@ -2614,7 +2641,6 @@ a list symbol describing the command."
       (switch-to-buffer "*suggest*")
       (tvd-suggest-reload)
       (tvd-suggest-reload)
-      (calculator)
       (windmove-right)
       (switch-to-buffer "*Help*")
       (split-window-vertically)
@@ -3996,10 +4022,7 @@ defun."
 (setq recentf-exclude (list "ido.last"
                             "/elpa/"
                             ".el.gz$"
-                            '(not (file-readable-p))
-                            ))
-
-
+                            '(not (file-readable-p))))
 
 ;; --------------------------------------------------------------------------------
 
