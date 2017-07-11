@@ -47,6 +47,7 @@
 ;;    - fixed tabs
 ;;    - reorganized keys
 ;;    - added new goto line func
+;;    - rm open-line-below
 
 ;; 20160421.01:
 ;;    - added smex
@@ -1521,8 +1522,11 @@ might be bad."
   (forward-line -1)
   (indent-for-tab-command))
 
-(global-set-key (kbd "<C-return>")      'open-line-below)
-(global-set-key (kbd "<C-S-return>")    'open-line-above)
+;; disabled, interferes with modes.
+
+;; (global-set-key (kbd "<C-return>")      'open-line-below)
+
+;; (global-set-key (kbd "<C-S-return>")    'open-line-above)
 
 ;; --------------------------------------------------------------------------------
 ;; ** Mouse Rectangle
@@ -2138,7 +2142,6 @@ col1, col2"
                  (local-unset-key (kbd "C-c C-x"))
                  (local-unset-key (kbd "C-c :"))
                  (local-set-key (kbd "<tab>") 'config-general-tab-or-expand)))
-
 
 ;; --------------------------------------------------------------------------------
 ;; *** Xmodmap Mode
