@@ -2143,7 +2143,7 @@ col1, col2"
 ;; --------------------------------------------------------------------------------
 ;; *** Xmodmap Mode
 
-;; the shortest mode ever, [https://www.emacswiki.org/emacs/XModMapMode][via emacswiki]].
+;; the shortest mode ever, [[https://www.emacswiki.org/emacs/XModMapMode][via emacswiki]].
 
 (define-generic-mode 'xmodmap-mode
   '(?!)
@@ -2153,7 +2153,7 @@ col1, col2"
   nil
   "Simple mode for xmodmap files.")
 
-;; [https://www.emacswiki.org/emacs/GenericMode][see GenericMode for more examples]].
+;; [[https://www.emacswiki.org/emacs/GenericMode][see GenericMode for more examples]].
 
 ;; ** Text Manupilation
 ;; *** expand-region
