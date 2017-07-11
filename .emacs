@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version (20170707.01)          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version (20170711.01)          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -41,216 +41,290 @@
 
 ;; * Config Log, Trivia, Notes, Changes
 ;; ** Changelog
+
 ;; 20160420.03:
 ;;    - started with Changelog and outshine mode
 ;;    - fixed tabs
 ;;    - reorganized keys
 ;;    - added new goto line func
+
 ;; 20160421.01:
 ;;    - added smex
 ;;    - added show-keys()
 ;;    - added redo
 ;;    - ssh et. al. interactive in eshell
 ;;    - added recompile()
+
 ;; 20160421.02:
 ;;    - added dividers
 ;;    - using org headers
 ;;    - better show-keys()
+
 ;; 20160421.03:
 ;;    - added windows support
+
 ;; 20160421.04:
 ;;    - added elisp repl support
+
 ;; 20160424.01:
 ;;    - added custom modeline
 ;;    - added which-func-mode
 ;;    - shortened some major mode names
 ;;    - added diminish for shorter minor mode names
 ;;    - added better printing menu
+
 ;; 20160425.01:
 ;;    - fixed ielm integration
 ;;    - C-x e    = eval (buffer|region)
 ;;    - C-x C-e  = send (buffer|region) to ielm and eval there
+
 ;; 20160425.02:
 ;;    - fix word wrapping
+
 ;; 20160426.01:
 ;;    - fixed mode-line config 4 win emacs
 ;;    - added M-<up|down> move-region
+
 ;; 20160426.01:
 ;;    - added markdown
+
 ;; 20160427.01+02:
 ;;    - cosmetics
+
 ;; 20160428.01:
 ;;    - fringe cursor
+
 ;; 20160429.01:
 ;;    - file name completion
 ;;    - C-#  finally, search for symbol at point
 ;;    - C-c C-c now comments or uncomments regios or line, whatever is current
+
 ;; 20160501.01:
 ;;    - no outshine minor in python
 ;;    - added recent files support
+
 ;; 20160501.02:
 ;;    - added margin() function, no key binding though
+
 ;; 20160503.01:
 ;;    - added C-q fill+justify paragraph macro
 ;;    - added alias 'i' for info manuals
+
 ;; 20160503.02:
 ;;    - added 'cp to create read-only buffer copy
+
 ;; 20160504.01:
 ;;    - better fringe, now also inversed with C-c i
+
 ;; 20160505.01:
 ;;    - added electric-align mode
 ;;    - better outline header colors
 ;;    - no more line numbers in sk occur buffer
+
 ;; 20160507.01:
 ;;    - disable electric-align-momde (broken), using M-x align instead
 ;;    - hightlighting TABs with extra font
+
 ;; 20160509.01:
 ;;    - fixed margin()
 ;;    - discovered that C-x 0 deletes current window, god did I miss this one!
+
 ;; 20160510.01:
 ;;    - added kill-all-buffers()
 ;;  20160510.02:
 ;;    - no more load-file
 ;;    - added C-c [wlpa]: easy copy things at point
 ;;      without marking them
+
 ;; 20160511.01:
 ;;    - better buffer names with uniquify
+
 ;; 20160511.02:
 ;;    - copy-* functions now blink region
 ;;    - added del-* functions, bound to C-d:
 ;;      press multiple times to delete word, line, paragraph, buffer
+
 ;; 20160513.01:
 ;;    - fixed END key func
+
 ;; 20160516.01:
 ;;    - removed C-d stuff, replaced with vikiing-mode
+
 ;; 20160517.01:
 ;;    - changed highlight face
 ;;    - enabled debug-on-error in lispmode
 ;;    - enabled IDO mode globally, I just tend to love love love it
+
 ;; 20160517.02:
 ;;    - added workgroup.el, started experimenting
 ;;    - enabled Super_L (for workgroups)
+
 ;; 20160519.01:
 ;;    - fixed write-file, now ido mode is disabled for this one.
+
 ;; 20160520.01:
 ;;    - no x-sel on windows (C-v+C-c => emacs doesn't work anymore otherwise)
 ;;    - added eldoc mode to elisp hook
+
 ;; 20160520.02:
 ;;    - added novel-mode, for better reading
+
 ;; 20160522.01:
 ;;    - added vi's % jump paren emulation
 ;;    - enhanced novel-mode
 ;;    - enabled save-place mode which is VERY useful in combination with
 ;;      novel-mode
+
 ;; 20160523.01:
 ;;    - detached novel-mode into its own module, maintain on github
 ;;      enabled with C-n
+
 ;; 20160526.01:
 ;;    - added toggle-melpa
+
 ;; 20160527.01:
 ;;    - added htmlize
+
 ;; 20160529.01:
 ;;    - added html-listify
+
 ;; 20160530.01:
 ;;    - added key chords
 ;;    - added open-line-above+below
+
 ;; 20160602.01:
 ;;    - C-q now fills and pressing it again un-fills
+
 ;; 20160606.01:
 ;;    - deactivated key-chords, I didn't use them and they were annoying.
+
 ;; 20160609.01:
 ;;    - added puppet mode
+
 ;; 20160614.01:
 ;;    - added rotate-text (C-t)
 ;;    - added macro math  (C-x-0) (0 used as =)
+
 ;; 20160713.01:
 ;;    - fixed indent for Makefiles
+
 ;; 20160729.01:
 ;;    - rm duplicate abbr defs
+
 ;; 20160916.01:
 ;;    - enable mouse mark to copy
+
 ;; 20160926.01:
 ;;    - Dont kill-buffer, kill-this-buffer instead
+
 ;; 20160928.01:
 ;;    - change macro math C-x 0 to C-x C-0 so that C-0 is
 ;;      usable again for close window
 ;;    - elisp mode: debug-on-error only on non-cygwin
+
 ;; 20161011.01:
 ;;    - added dos2unix and unix2dos
+
 ;; 20161014.01:
 ;;    - fix auto-indent in conf-mode
 ;;    - force C-c C-c comment-uncomment in conf-mode
+
 ;; 20161018.01:
 ;;    - more effective conf-mode disarming (own defun)
+
 ;; 20161022.01:
 ;;    - better paren mode
+
 ;; 20161024.01:
 ;;    - fixed org mode hook
+
 ;; 20161027.01:
 ;;    - turn off tramp stuff in kill-all-buffers as well,
 ;;      so that after executing it, no more ssh prompt
 ;;      appears on C-x f.
+
 ;; 20161106.01:
 ;;    - added iedit mode with C-c e
 ;;    - added file-open support to eshell (aliases: vi + emacs)
 ;;    - much better C-l behavior in eshell (eshell/clear)
+
 ;; 20161205.01:
 ;;    - added SLIME, sbcl and paredit support, only loaded when exists
+
 ;; 20161206.01:
 ;;    - elisp mode: debug-on-error finally completeley disabled
 ;;    - added alias 'table, which enables org-mode table support everywhere
+
 ;; 20170205.01:
 ;;    - started with ETAGS support
+
 ;; 20170212.01:
 ;;    - added copy-defun (C-c f) to copy whole functions as is
+
 ;; 20170212.02:
 ;;    - now using € (alt-r + e) as jump to etag
+
 ;; 20170215.02:
 ;;    - added goto-last-change (C-b)
 ;;    - +test section
 ;;    - paredit
+
 ;; 20170215.02:
 ;;    - disabled workgoups mode, don't use it, doesn't load correctly
 ;;    - fixed windows switch, no more printing popup on startup
+
 ;; 20170220.01:
 ;;    - finally disabled aggressive-indent, it annoys more than it helps
 ;;    - added some bookmark aliases (bm, to, bl, like apparix)
 ;;    - added C-c y [..] copy+yank functions so that I can copy and paste
 ;;      stuff very fast with one key commbo, like yy in vi.
 ;;    - added copy-parens, copy-quote, copy-help (help message)
+
 ;; 20170220.02:
 ;;    - fixed C-c y y: indent correctly
+
 ;; 20170220.03:
 ;;    - fixed C-y+mouse-2: both use primary selection
+
 ;; 20170221.01:
 ;;    - added which-key
+
 ;; 20170223.01:
 ;;    - org-mode enhancements, C-n capture from everywhere
 ;;    - fixed org-mode todo keywords
 ;;    - fixed duplicate yank on win32 on mouse2
+
 ;; 20170223.01:
 ;;    - forgot to mv novel-mode to C-c C-n
 ;;    - better org heading faces
+
 ;; 20170224.01:
 ;;    - finally fixed C-t, now works everywhere
 ;;    - added more org short commands
+
 ;; 20170224.02:
 ;;    - fixed org-mode M-return
 ;;    - added support for windmove (WINDOWS-Key+Arrow: switch window)
+
 ;; 20170224.03:
 ;;    - better org colours
+
 ;; 20170224.03:
 ;;    - better org capture tpl (DRAFT)
 ;;    - capturing works now globally, even if no org file is open
 ;;    - using org-indent 4
+
 ;; 20170224.05:
 ;;    - fixed org tpls
+
 ;; 20170227.01:
 ;;    - fix cut/paste org subtress
 ;;    - M-o now switch buffer if 1 window, else switch window
+
 ;; 20170227.02:
 ;;    - added alias 'dp which displays everything
 ;;      there is to know about point (like current face, mode, etc)
+
 ;; 20170228.01:
 ;;    - org-refile now works recursivly with completion
 ;;    - org-refile also now uses ido-mode and completes in minibuffer
@@ -261,17 +335,21 @@
 ;;    - hide emphasized markers in org mode
 ;;    - renamed 'recompile to 'recompile-el and fixed it
 ;;    - added 'info-find-file
+
 ;; 20170301.01:
 ;;    - added 'tvd-org-left-or-level-up bound to <C-left> in org mode
 ;;    - <C-up|down> in org mode now jump up on current level and
 ;;      fold current one and unfolds the target heading
 ;;    - enabled org-bullets
 ;;    - customized height of org-level faces
+
 ;; 20170301.02:
 ;;    - org mode emphasize shortcuts (C-c b...) expand region if
 ;;      theres no region active.
+
 ;; 20170301.03:
 ;;    - dis line num in org (faster)
+
 ;; 20170303.01:
 ;;    - elmacro support added, incl fix for org and outshine,
 ;;      F6 starts (or stops) a macro and displays the generated
@@ -279,6 +357,7 @@
 ;;      <ret> repeats, a repeats til EOF, q aborts, e  enter macro
 ;;      (with completion)
 ;;    - C-x C-s on * elmacro ... * buffer stores it to tvd-macro-file
+
 ;; 20170305.01:
 ;;    - added elmacro defadvice, run after done with macro, it will
 ;;      be evaluated and saved along with a repeater defun.
@@ -289,66 +368,85 @@
 ;;    - added flip-window (bound to M-O (ALT-shift-o)
 ;;    - added cleanup-buffer (alias cb)
 ;;    - fixed C-<ret> and C-S-<ret>
+
 ;; 20170306.01:
 ;;    - re-enabled linenum mode
 ;;    - fixed custom modeline
+
 ;; 20170306.01:
 ;;    - which-func not in elisp anymore
 ;;    - added alias 'ee for 'eval-expression
 ;;    - added 'sa (show-aliases)
 ;;    - some occur enhancements for 'sk and 'sa.
 ;;    - note: inside *Occur*: q:quit, g:reload, e:edit (buffer must be open)
+
 ;; 20170307.01:
 ;;    - fixed 'sk and 'sa
 ;;    - added key bindings to mark things. M-a is the prefix, followed by:
 ;;      a - all, p - paragraph, f - function, l - line, w - word.
 ;;    - disabled M-O (flip-windows) on console emacs
+
 ;; 20170309.01:
 ;;    - added C-c s,u,e and M-a s,u,e
+
 ;; 20170309.02:
 ;;    - re-enabled paredit, its better in ielm and slime
 ;;    - added alias 'pe to quickly enable/disable par-edit
 ;;    - added virtual eShell dev /dev/log which stores stuff in *LOG*
+
 ;; 20170313.01:
 ;;    - iedit to C-c C-e, so C-c e works again (copy email)
 ;;    - put eshell aliases into .emacs(here) no need for aliases file anymore
 ;;    - added copy-comment (C-c c), copy-and-yank-comment (C-c y c) and
 ;;      m-mark-comment (M-a c)
+
 ;; 20170314.01:
 ;;    - enhanced copy-comment (that is, rewrote it), it now supports
 ;;      indented multiline comments
+
 ;; 20170315.01:
 ;;    - fixed C-c y [cpwf]
 ;;    - fixed copy[+yank+mark] word, it now includes - _ .
 ;;    - added copy-ip (C-c i), yank-ip (C-c y i) and mark-ip (M-a i)
 ;;    - copy-url alternatively copies file-path if it's no url at point
 ;;    - added numerical arg support to yy
+
 ;; 20170321.01:
 ;;    - rewrote copy-comment stuff, now supports blocks of comment
 ;;      after code etc.
+
 ;; 20170323.01:
 ;;    - moved the mark,copy,yank stuff into its own mode
+
 ;; 20170327.01:
 ;;    - added defadvice for mcyt mode, so that I can use C-v to
 ;;      always yank the last thing copied.
+
 ;; 20170502.01:
 ;;    - added config for ibuffer
+
 ;; 20170503.01:
 ;;    - added ibuffer-vc support
+
 ;; 20170503.02:
 ;;    - added ibuffer-tramp support
 ;;    - disabled ibuffer tab-collaps stuff
+
 ;; 20170505.01:
 ;;    - generalized init-dir+file variables, now more portable, i hope
+
 ;; 20170508.01:
 ;;    - backup tramp files remote
 ;;    - do not backup emacs state files
+
 ;; 20170509.01:
 ;;    - version fix
+
 ;; 20170523.01:
 ;;    - commented ssh backup stuff, not working yet, destroys tramp
 ;;    - added inferior shells for perl, ruby and python (iperl, iruby, ipython)
 ;;      with ansi-term
+
 ;; 20170610.01:
 ;;    - org mode: added C-c C-# to edit src blocks in an extra window
 ;;    - org mode: <ret> opens link in eww
@@ -392,6 +490,7 @@
 ;;    - fixed outshine config
 ;;    - added (my) config-general-mode
 ;;    - fixed pod format inserters
+
 ;; 20170629.01:
 ;;    - added tablist-minor-mode (+config)
 ;;    - added config for tabulated-list-mode
@@ -405,19 +504,27 @@
 ;;    - added 'change-inner and ci simulators'
 ;;    - added suggest.el with my own reload function
 ;;    - modified recentf: do not provide files already visited
+
 ;; 20170703.01:
 ;;    - fixed recentf-exclude list, now REALLY ignores unreadables
 ;;    - added export for easier export and commit of dot-emacs
 ;;    - added tvd-suggest-jump to jump between input and output
+
 ;; 20170707.01:
 ;;    - added C-x 4 to split fram into 4 windows
 ;;    - fixed config-general-mode config
 ;;    - fixed 'emacs-change-log (didn't expand trees before work)
+;;    - fix python loading
+
+;; 20170711.01:
+;;    - fixed outshine: only loaded with elisp
+;;    - fixed tvd-outshine-jump: use imenu if outside outshine
+;;    - fixed kill-all-buffers: restore scratch after killing all buffers
+;;    - do not ask to save abbrevs on exit anymore
+;;    - reformat changelog
 
 ;; ** TODO
 
-;; - fix C-c C-j to work in non-elisp buffers too, see FIXMEs there
-;;   and make it recursive like a path or the like
 ;; - check helpful https://github.com/wilfred/helpful
 ;; - check no-littering https://github.com/tarsius/no-littering
 ;; - submit novel + mark-copy-yank-things-mode to MELPA
@@ -425,13 +532,24 @@
 ;; - check https://github.com/Wilfred/refine
 ;;         https://github.com/Wilfred/emacs-refactor
 
+;; ** Parking Lot / Snippets
+
+;; Snippets which maybe of use in the future
+
+;; *** buffer-local hook
+
+;; (with-current-buffer (get-buffer "*scratch*")
+;;   (add-hook 'kill-buffer-hook
+;;             (lambda () (error "DENIED! don't kill my precious *scratch*!!"))
+;;             nil t))
+
 ;; --------------------------------------------------------------------------------
 ;; ** .emacs config version
 
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20170707.01")
+(defvar tvd-emacs-version "20170711.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -849,6 +967,9 @@ to next buffer otherwise."
                                             ("<ul>" "<ul> </ul>" nil 0)
                                             ))
 
+;; do NOT ask to save abbrevs on exit
+(setq save-abbrevs nil)
+
 ;; ** meaningful names for buffers with the same name
 
 ;; from ([[https://github.com/bbatsov/prelude][prelude]])
@@ -885,7 +1006,8 @@ to next buffer otherwise."
 ;; ** More scratch space
 
 ;; Sometimes  I need  a  text  mode scratch  buffer  while scratch  is
-;; already in use. So let's prepare one
+;; already in use. So let's prepare one. I also add a buffer hook so that
+;; this never gets deleted, but cleaned instead.
 
 (with-current-buffer (get-buffer-create "*text*")
   (text-mode))
@@ -1343,15 +1465,18 @@ Version 2015-04-09"
 (defun kill-all-buffers ()
   "Kill all buffers, clean up, close all windows"
   (interactive)
-  (if (y-or-n-p "Close all windows and kill all buffers?")
-      (progn
-        (delete-other-windows)
-        (clean-buffer-list)
-        (dolist (buffer (buffer-list))
-          (kill-buffer buffer))
-        (delete-minibuffer-contents)
-        (if (fboundp 'tramp-cleanup-all-connections)
-            (tramp-cleanup-all-connections)))))
+  (when (y-or-n-p "Close all windows and kill all buffers?")
+    (delete-other-windows)
+    (clean-buffer-list)
+    (dolist (buffer (buffer-list))
+      (kill-buffer buffer))
+    (delete-minibuffer-contents)
+    (if (fboundp 'tramp-cleanup-all-connections)
+        (tramp-cleanup-all-connections))
+    (with-current-buffer (get-buffer-create "*text*")
+      (text-mode))
+    (with-current-buffer (get-buffer-create "*scratch*")
+      (emacs-lisp-mode))))
 
 ;; --------------------------------------------------------------------------------
 ;; ** Cleanup current buffer
@@ -1548,7 +1673,7 @@ col1, col2"
 ;; *** python mode
 
 ;; Not much configured for python, I'm happy with the defaults as it seems :)
-
+(require 'python)
 (autoload 'python-mode "python-mode" "Major mode for python scripts" t)
 
 (add-hook
@@ -1927,29 +2052,38 @@ col1, col2"
 ;; pod mode config
 (add-hook 'pod-mode-hook
           (lambda ()
+            ;; tune syntax table
+            (modify-syntax-entry ?= "w" pod-mode-syntax-table)
+
             ;; POD contains headers and I'm used to outlining if there are headers
             ;; so, enable outlining
             (setq outline-heading-alist '(("=head1" . 1)
                                           ("=head2" . 2)
                                           ("=head3" . 3)
                                           ("=head4" . 4)))
+
+            ;; outline alone, however, works well
             (outline-minor-mode)
 
             ;; my own abbrevs for POD using mode-specific abbrev table
             (c-define-abbrev-table 'pod-mode-abbrev-table '(
-                                                            ("ov" "=over\n\n=item\n\n=back\n")
-                                                            ("h1" "=head1 ")
-                                                            ("h2" "=head2 ")
-                                                            ("h3" "=head3 ")
-                                                            ("h4" "=head4 ")
+                                                            ("=o" "=over\n\n=item\n\n=back\n\n")
+                                                            ("=i" "=item ")
+                                                            ("=h1" "=head1 ")
+                                                            ("=h2" "=head2 ")
+                                                            ("=h3" "=head3 ")
+                                                            ("=h4" "=head4 ")
+                                                            ("=c"  "=cut")
+                                                            ("=b"  "=begin")
+                                                            ("=e"  "=end")
                                                             ("b"  "B<>")
                                                             ("c"  "C<>")
                                                             ("l"  "L<>")
                                                             ("i"  "I<>")
                                                             ("e"  "E<>")
                                                             ("f"  "F<>"))
-                                   "POD mode abbreviations, see .emacs"
-                                   )
+                                   "POD mode abbreviations, see .emacs")
+
             (abbrev-table-put pod-mode-abbrev-table :case-fixed t)
             (abbrev-table-put pod-mode-abbrev-table :system t)
 
@@ -1960,10 +2094,7 @@ col1, col2"
             ;; POD easy formatting
             (local-set-key (kbd "C-c b") 'pod-bold)
             (local-set-key (kbd "C-c /") 'pod-italic)
-            (local-set-key (kbd "C-c c") 'pod-code)
-            ))
-
-
+            (local-set-key (kbd "C-c c") 'pod-code)))
 
 ;; --------------------------------------------------------------------------------
 ;; *** conf-mode
@@ -2010,6 +2141,20 @@ col1, col2"
 
 
 ;; --------------------------------------------------------------------------------
+;; *** Xmodmap Mode
+
+;; the shortest mode ever, [https://www.emacswiki.org/emacs/XModMapMode][via emacswiki]].
+
+(define-generic-mode 'xmodmap-mode
+  '(?!)
+  '("add" "clear" "keycode" "keysym" "pointer" "remove")
+  '(("[0-9]+" . 'font-lock-variable-name-face))
+  '("[xX]modmap\\(rc\\)?\\'")
+  nil
+  "Simple mode for xmodmap files.")
+
+;; [https://www.emacswiki.org/emacs/GenericMode][see GenericMode for more examples]].
+
 ;; ** Text Manupilation
 ;; *** expand-region
 
@@ -2592,7 +2737,12 @@ a list symbol describing the command."
             (setq mode-name "EL"
                   show-trailing-whitespace t)
             (eldoc-mode t)
-            ))
+
+            ;; enable outline (with outshine)
+            (outline-minor-mode)
+
+            ;; enable outshine mode
+            (outshine-hook-function)))
 
 ;; use UP arrow for history in *ielm* as well, just as C-up
 (add-hook 'comint-mode-hook
@@ -3187,13 +3337,6 @@ specify another regex for cell splitting."
 
 (require 'outshine)
 
-;; enable when outline
-(add-hook 'outline-minor-mode-hook 'outshine-hook-function)
-
-;; use it for .emacs:
-(add-hook 'emacs-lisp-mode-hook '(lambda ()
-                                   (outline-minor-mode)))
-
 ;; Generate an alist of all headings  with each position in buffer and
 ;; use this later to jump to those positions with IDO.
 (make-variable-buffer-local 'tvd-headings)
@@ -3246,16 +3389,20 @@ specify another regex for cell splitting."
 update heading list if neccessary."
   (interactive)
   (let ((heading nil))
-    (when (or (not tvd-headings)
-              (buffer-modified-p))
-      (tvd-outshine-parse-headings))
-    (if (not tvd-headings)
-        (message "Current buffer doesn't contain any outshine headings!")
-      (setq heading (ido-completing-read "Jump to heading: " (tvd-alist-keys tvd-headings)))
-      (when heading
-        (show-all)
-        (goto-char (cdr (assoc heading tvd-headings)))
-        (tvd-outshine-sparse-tree)))))
+    (if (string= "" outshine-normalized-outline-regexp-base)
+        (call-interactively 'imenu) ;; use imenu outside outshine
+      (when (or (not tvd-headings)
+                (buffer-modified-p))
+        (tvd-outshine-parse-headings))
+      (if (not tvd-headings)
+          (message "Could not parse headings")
+        (setq heading (ido-completing-read
+                       "Jump to heading: "
+                       (tvd-alist-keys tvd-headings)))
+        (when heading
+          (show-all)
+          (goto-char (cdr (assoc heading tvd-headings)))
+          (tvd-outshine-sparse-tree))))))
 
 ;; outshine mode config (inside outline mode)
 (eval-after-load "outline"
