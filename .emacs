@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version (20170711.01)          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version (20170711.02)          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -47,7 +47,6 @@
 ;;    - fixed tabs
 ;;    - reorganized keys
 ;;    - added new goto line func
-;;    - rm open-line-below
 
 ;; 20160421.01:
 ;;    - added smex
@@ -523,6 +522,10 @@
 ;;    - fixed kill-all-buffers: restore scratch after killing all buffers
 ;;    - do not ask to save abbrevs on exit anymore
 ;;    - reformat changelog
+;;    - rm open-line-below
+
+;; 20170711.02:
+;;    - fixed POD abbrevs, added way to move point after expansion
 
 ;; ** TODO
 
@@ -550,7 +553,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20170711.01")
+(defvar tvd-emacs-version "20170711.02")
 
 ;; --------------------------------------------------------------------------------
 
@@ -1012,6 +1015,8 @@ to next buffer otherwise."
 
 (with-current-buffer (get-buffer-create "*text*")
   (text-mode))
+
+(setq initial-buffer-choice '(get-buffer "*text*"))
 
 ;; * Global Key Bindings
 ;; --------------------------------------------------------------------------------
@@ -2021,8 +2026,6 @@ col1, col2"
 ;; Source: [[https://github.com/renormalist/emacs-pod-mode][emacs-pod-mode]]
 
 (require 'pod-mode)
-(require 'cc-mode)
-
 (add-to-list 'auto-mode-alist '("\\.pod$" . pod-mode))
 (add-hook 'pod-mode-hook 'font-lock-mode)
 
@@ -2053,6 +2056,16 @@ col1, col2"
   (interactive)
   (tvd-outline-emphasize ?C))
 
+;; enhance abbrevs and jump into expanded area to the
+;; $ character (if it exists), which it also removes
+(setq tvd-abbrev-pos 0)
+(advice-add 'expand-abbrev :before
+            '(lambda () (setq tvd-abbrev-pos (point))))
+(advice-add 'expand-abbrev :after
+            '(lambda ()
+               (when (re-search-backward "\\$" (- tvd-abbrev-pos 0))
+                 (delete-char 1))))
+
 ;; pod mode config
 (add-hook 'pod-mode-hook
           (lambda ()
@@ -2062,16 +2075,21 @@ col1, col2"
             ;; POD contains headers and I'm used to outlining if there are headers
             ;; so, enable outlining
             (setq outline-heading-alist '(("=head1" . 1)
-                                          ("=head2" . 2)
-                                          ("=head3" . 3)
-                                          ("=head4" . 4)))
+                                           ("=head2" . 2)
+                                            ("=head3" . 3)
+                                             ("=head4" . 4)
+                                              ("=over" . 5)
+                                               ("=item" . 6)
+                                              ("=begin" . 5)
+                                              ("=pod" . 5)
+                                          ))
 
             ;; outline alone, however, works well
             (outline-minor-mode)
 
             ;; my own abbrevs for POD using mode-specific abbrev table
-            (c-define-abbrev-table 'pod-mode-abbrev-table '(
-                                                            ("=o" "=over\n\n=item\n\n=back\n\n")
+            (define-abbrev-table 'pod-mode-abbrev-table '(
+                                                            ("=o" "=over\n\n=item *$\n\n=back\n\n")
                                                             ("=i" "=item ")
                                                             ("=h1" "=head1 ")
                                                             ("=h2" "=head2 ")
@@ -2080,20 +2098,20 @@ col1, col2"
                                                             ("=c"  "=cut")
                                                             ("=b"  "=begin")
                                                             ("=e"  "=end")
-                                                            ("b"  "B<>")
-                                                            ("c"  "C<>")
-                                                            ("l"  "L<>")
-                                                            ("i"  "I<>")
-                                                            ("e"  "E<>")
-                                                            ("f"  "F<>"))
-                                   "POD mode abbreviations, see .emacs")
+                                                            ("b"  "B<$>")
+                                                            ("c"  "C<$>")
+                                                            ("l"  "L<$>")
+                                                            ("i"  "I<$>")
+                                                            ("e"  "E<$>")
+                                                            ("f"  "F<$>"))
+                                    "POD mode abbreviations, see .emacs")
 
             (abbrev-table-put pod-mode-abbrev-table :case-fixed t)
             (abbrev-table-put pod-mode-abbrev-table :system t)
 
             ;; enable abbreviations
-            (setq local-abbrev-table pod-mode-abbrev-table
-                  abbrev-mode t)
+            (setq local-abbrev-table pod-mode-abbrev-table)
+            (abbrev-mode 1)
 
             ;; POD easy formatting
             (local-set-key (kbd "C-c b") 'pod-bold)
