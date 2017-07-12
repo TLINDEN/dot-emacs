@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version (20170712.01)          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version (20170712.02)          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -534,6 +534,10 @@
 ;;    - fixed emacs-change-log
 ;;    - added tvd-outshine-end-of-section incl speed command
 
+;; 20170712.02:
+;;    - fixed tvd-outshine-end-of-section, it's way faster now and
+;;      works without narrowing.
+
 ;; ** TODO
 
 ;; - check helpful https://github.com/wilfred/helpful
@@ -562,7 +566,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20170712.01")
+(defvar tvd-emacs-version "20170712.02")
 
 ;; --------------------------------------------------------------------------------
 
@@ -3442,16 +3446,17 @@ update heading list if neccessary."
           (goto-char (cdr (assoc heading tvd-headings)))
           (tvd-outshine-sparse-tree))))))
 
+
 (defun tvd-outshine-end-of-section ()
   "Jump to the end of an outshine section."
   (interactive)
   (let ((end))
     (outline-show-subtree)
     (save-excursion
-      (outshine-narrow-to-subtree)
-      (goto-char (point-max))
-      (setq end (point))
-      (widen))
+      (outline-next-heading)
+      (when (outline-on-heading-p)
+        (backward-paragraph))
+      (setq end (point)))
     (goto-char end)))
 
 ;; outshine mode config (inside outline mode)
