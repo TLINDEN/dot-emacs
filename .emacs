@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version (20170711.02)          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version (20170712.01)          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -527,6 +527,13 @@
 ;; 20170711.02:
 ;;    - fixed POD abbrevs, added way to move point after expansion
 
+;; 20170712.01:
+;;    - disabled org mode superscripts
+;;    - + winner mode
+;;    - org mode 'code new binding: C-c 0
+;;    - fixed emacs-change-log
+;;    - added tvd-outshine-end-of-section incl speed command
+
 ;; ** TODO
 
 ;; - check helpful https://github.com/wilfred/helpful
@@ -535,6 +542,8 @@
 ;; - put tvd-ci-* stuff into mcyt
 ;; - check https://github.com/Wilfred/refine
 ;;         https://github.com/Wilfred/emacs-refactor
+;; - check https://github.com/Malabarba/speed-of-thought-lisp
+;; - https://github.com/tkf/emacs-jedi
 
 ;; ** Parking Lot / Snippets
 
@@ -553,7 +562,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20170711.02")
+(defvar tvd-emacs-version "20170712.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -807,6 +816,13 @@ to next buffer otherwise."
 (global-set-key (kbd "C-x 4")           'tvd-quarter-windows)
 
 ;; --------------------------------------------------------------------------------
+
+;; *** Remember and Restore Window Configurations - winner mode
+
+(winner-mode 1)
+
+;; keybindings: C-c left    - winner-undo
+;; keybindings: C-c right   - winner-redo
 
 ;; ** re-read a modified buffer
 
@@ -2745,7 +2761,7 @@ a list symbol describing the command."
     (beginning-of-buffer)
     (re-search-forward ";; .. Changelog")
     (next-line)
-    (forward-paragraph)
+    (tvd-outshine-end-of-section)
     (insert (format ";;    - %s\n" entry))))
 
 ;; elisp config
@@ -2961,6 +2977,7 @@ down and unfold it, otherwise jump paragraph as usual."
                   org-hide-emphasis-markers t
                   org-fontify-done-headline t
                   org-pretty-entities t
+                  org-use-sub-superscripts nil
                   org-confirm-babel-evaluate nil)
                                         ; shortcuts
                  (setq org-speed-commands-user
@@ -3000,7 +3017,7 @@ down and unfold it, otherwise jump paragraph as usual."
 
                  (local-set-key (kbd "C-c b") 'bold)
                  (local-set-key (kbd "C-c /") 'italic)
-                 (local-set-key (kbd "C-c c") 'code)
+                 (local-set-key (kbd "C-c 0") 'code) ; aka = without shift
                  (local-set-key (kbd "C-c _") 'underline)
 
                                         ; edit babel src block in extra buffer:
@@ -3425,6 +3442,18 @@ update heading list if neccessary."
           (goto-char (cdr (assoc heading tvd-headings)))
           (tvd-outshine-sparse-tree))))))
 
+(defun tvd-outshine-end-of-section ()
+  "Jump to the end of an outshine section."
+  (interactive)
+  (let ((end))
+    (outline-show-subtree)
+    (save-excursion
+      (outshine-narrow-to-subtree)
+      (goto-char (point-max))
+      (setq end (point))
+      (widen))
+    (goto-char end)))
+
 ;; outshine mode config (inside outline mode)
 (eval-after-load "outline"
   '(progn
@@ -3439,7 +3468,7 @@ update heading list if neccessary."
                        (quote (
                                ("v" . outshine-narrow-to-subtree)
                                ("q" . widen)
-                               )))))))
+                               ("e" . tvd-outshine-end-of-section))))))))
 
 ;; Narrowing now works within the headline rather than requiring to be on it
 (advice-add 'outshine-narrow-to-subtree :before
