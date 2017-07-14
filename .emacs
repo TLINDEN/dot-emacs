@@ -545,6 +545,7 @@
 ;;    - added here-doc support to config-general using mmm-mode
 ;;    - made outline faces a little bigger, added face for level 4
 ;;    - rm initial buffer, doesnt open commandline files anymore with this
+;;    - finally initial buffer works, opens command line file or text scratch
 
 ;; ** TODO
 
@@ -1045,6 +1046,17 @@ to next buffer otherwise."
 
 (with-current-buffer (get-buffer-create "*text*")
   (text-mode))
+
+(defun tvd-startup-scratch-or-file ()
+  "Jump to command line arg file, if any, or start with *text* buffer."
+  (interactive)
+  (let ((last-arg (find-buffer-visiting (replace-regexp-in-string "\\\\" "/" (car (last command-line-args))))))
+    (if last-arg
+        (switch-to-buffer last-arg)
+      (switch-to-buffer "*text*"))))
+
+(setq initial-buffer-choice 'tvd-startup-scratch-or-file)
+
 
 ;; * Global Key Bindings
 ;; --------------------------------------------------------------------------------
