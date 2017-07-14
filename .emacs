@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version (20170712.02)          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version (20170714.01)          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -538,6 +538,13 @@
 ;;    - fixed tvd-outshine-end-of-section, it's way faster now and
 ;;      works without narrowing.
 
+;; 20170714.01:
+;;    - fixed pod-mode abbrev cursor jumping if no jump pos exists
+;;    - fix initial-buffer-choice
+;;    - added mmm-mode
+;;    - added here-doc support to config-general using mmm-mode
+;;    - made outline faces a little bigger, added face for level 4
+
 ;; ** TODO
 
 ;; - check helpful https://github.com/wilfred/helpful
@@ -566,7 +573,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20170712.02")
+(defvar tvd-emacs-version "20170714.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -1036,7 +1043,7 @@ to next buffer otherwise."
 (with-current-buffer (get-buffer-create "*text*")
   (text-mode))
 
-(setq initial-buffer-choice '(get-buffer "*text*"))
+(setq initial-buffer-choice (switch-to-buffer (get-buffer "*text*")))
 
 ;; * Global Key Bindings
 ;; --------------------------------------------------------------------------------
@@ -2083,8 +2090,9 @@ col1, col2"
             '(lambda () (setq tvd-abbrev-pos (point))))
 (advice-add 'expand-abbrev :after
             '(lambda ()
-               (when (re-search-backward "\\$" (- tvd-abbrev-pos 0))
-                 (delete-char 1))))
+               (ignore-errors
+                 (when (re-search-backward "\\$" (- tvd-abbrev-pos 0))
+                   (delete-char 1)))))
 
 ;; pod mode config
 (add-hook 'pod-mode-hook
@@ -2195,6 +2203,49 @@ col1, col2"
   "Simple mode for xmodmap files.")
 
 ;; [[https://www.emacswiki.org/emacs/GenericMode][see GenericMode for more examples]].
+
+;; *** MMM Mode
+;; **** MMM configure:
+(add-to-list 'load-path (concat tvd-lisp-dir "/mmm-mode"))
+
+(require 'cl)
+(require 'mmm-auto)
+(require 'mmm-vars)
+
+(setq mmm-submode-decoration-level 2)
+
+
+;; [[https://github.com/purcell/mmm-mode][mmm-mode github]]
+;; see doc for class definition in var 'mmm-classes-alist
+
+;; **** MMM config for POD mode
+(mmm-add-classes
+ '((html-pod
+    :submode html-mode ;; web-mode doesnt work this way!
+    :delimiter-mode nil
+    :front "=begin html"
+    :back "=end html")))
+
+(mmm-add-mode-ext-class 'pod-mode nil 'html-pod)
+
+(add-hook 'pod-mode-hook 'mmm-mode-on)
+
+;; **** MMM config for config-general-mode
+
+;; highlight here-docs in configs as shell-scripts
+
+(mmm-add-classes
+ '((config-here
+    :submode shell-script-mode
+    :delimiter-mode nil
+    :save-matches 1
+    :front "<<[\"\'\`]?\\([a-zA-Z0-9_-]+\\)"
+    :front-offset (end-of-line 1)
+    :back "[ \t]*~1$")))
+
+(mmm-add-mode-ext-class 'config-general-mode nil 'config-here)
+
+(add-hook 'config-general-mode-hook 'mmm-mode-on)
 
 ;; ** Text Manupilation
 ;; *** expand-region
@@ -4679,6 +4730,7 @@ converted to PDF at the same location."
  '(info-title-2 ((t (:inherit outline-2))))
  '(info-title-3 ((t (:inherit outline-3))))
  '(info-title-4 ((t (:inherit outline-4))))
+ '(mmm-default-submode-face ((t nil)))
  '(mode-line ((t (:foreground "White" :background "Blue"))))
  '(mode-line-inactive ((t (:foreground "White" :background "DimGray"))))
  '(org-date ((t (:foreground "dark gray" :underline t))))
@@ -4687,10 +4739,10 @@ converted to PDF at the same location."
  '(org-level-3 ((t (:height 1.14 :foreground "saddle brown" :underline t))))
  '(org-level-4 ((t (:height 1.12 :foreground "OrangeRed2" :underline t))))
  '(org-level-5 ((t (:height 1.1 :inherit outline-5 :underline t))))
- '(outline-1 ((t (:inherit font-lock-function-name-face :underline t :weight bold))))
- '(outline-2 ((t (:inherit font-lock-variable-name-face :underline t :weight bold))))
- '(outline-3 ((t (:inherit font-lock-keyword-face :underline t :weight bold))))
- '(outline-4 ((t (:inherit font-lock-comment-face :underline t))))
+ '(outline-1 ((t (:height 1.2  :inherit font-lock-function-name-face :underline t :weight bold ))))
+ '(outline-2 ((t (:height 1.15 :inherit font-lock-variable-name-face :underline t :weight bold ))))
+ '(outline-3 ((t (:height 1.1  :inherit font-lock-keyword-face :underline t :weight bold))))
+ '(outline-4 ((t (:height 1.05 :foreground "DodgerBlue3" :underline t))))
  '(region ((t (:foreground "Aquamarine" :background "Darkblue"))))
  '(secondary-selection ((t (:foreground "Green" :background "darkslateblue"))))
  '(wg-command-face ((t nil)))
@@ -4721,7 +4773,7 @@ converted to PDF at the same location."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
-)
+ )
 
 
 ;; ** done
