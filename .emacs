@@ -544,6 +544,7 @@
 ;;    - added mmm-mode
 ;;    - added here-doc support to config-general using mmm-mode
 ;;    - made outline faces a little bigger, added face for level 4
+;;    - rm initial buffer, doesnt open commandline files anymore with this
 
 ;; ** TODO
 
@@ -1040,10 +1041,10 @@ to next buffer otherwise."
 ;; already in use. So let's prepare one. I also add a buffer hook so that
 ;; this never gets deleted, but cleaned instead.
 
+;; [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Startup-Summary.html][Startup Summary]]
+
 (with-current-buffer (get-buffer-create "*text*")
   (text-mode))
-
-(setq initial-buffer-choice (switch-to-buffer (get-buffer "*text*")))
 
 ;; * Global Key Bindings
 ;; --------------------------------------------------------------------------------
@@ -4734,11 +4735,11 @@ converted to PDF at the same location."
  '(mode-line ((t (:foreground "White" :background "Blue"))))
  '(mode-line-inactive ((t (:foreground "White" :background "DimGray"))))
  '(org-date ((t (:foreground "dark gray" :underline t))))
- '(org-level-1 ((t (:height 1.18 :inherit outline-1 :foreground "medium slate blue" :underline t))))
- '(org-level-2 ((t (:height 1.16 :inherit outline-2 :foreground "sea green" :underline t :weight normal))))
+ '(org-level-1 ((t (:height 1.18 :foreground "medium slate blue" :underline t))))
+ '(org-level-2 ((t (:height 1.16 :foreground "sea green" :underline t :weight normal))))
  '(org-level-3 ((t (:height 1.14 :foreground "saddle brown" :underline t))))
  '(org-level-4 ((t (:height 1.12 :foreground "OrangeRed2" :underline t))))
- '(org-level-5 ((t (:height 1.1 :inherit outline-5 :underline t))))
+ '(org-level-5 ((t (:height 1.1  :underline t))))
  '(outline-1 ((t (:height 1.2  :inherit font-lock-function-name-face :underline t :weight bold ))))
  '(outline-2 ((t (:height 1.15 :inherit font-lock-variable-name-face :underline t :weight bold ))))
  '(outline-3 ((t (:height 1.1  :inherit font-lock-keyword-face :underline t :weight bold))))
