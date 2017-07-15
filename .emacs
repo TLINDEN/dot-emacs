@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version (20170714.01)          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version (20170715.01)          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -547,6 +547,12 @@
 ;;    - rm initial buffer, doesnt open commandline files anymore with this
 ;;    - finally initial buffer works, opens command line file or text scratch
 
+;; 20170715.01:
+;;    - no more MMM for C::G, destroys indent
+;;    - incorporated my C::G customizations, Steve Purcell removed from
+;;      it because inappropriate,
+;;      [[https://github.com/TLINDEN/config-general-mode/commit/d7e8323][see d7e8323]]
+
 ;; ** TODO
 
 ;; - check helpful https://github.com/wilfred/helpful
@@ -1055,8 +1061,11 @@ to next buffer otherwise."
         (switch-to-buffer last-arg)
       (switch-to-buffer "*text*"))))
 
-(setq initial-buffer-choice 'tvd-startup-scratch-or-file)
+;;(setq initial-buffer-choice 'tvd-startup-scratch-or-file)
 
+(require 'autoscratch)
+(setq initial-major-mode 'autoscratch-mode)
+(add-hook 'autoscratch-hook '(lambda () (setq electric-indent-mode nil)))
 
 ;; * Global Key Bindings
 ;; --------------------------------------------------------------------------------
@@ -2175,7 +2184,7 @@ col1, col2"
 ;; --------------------------------------------------------------------------------
 
 ;; *** Config::General mode
-
+;; **** Config and doc
 ;; [[https://github.com/TLINDEN/config-general-mode][config-general-mode]] (also on Melpa).
 
 ;; My own mode for [[http://search.cpan.org/dist/Config-General/][Config::General]]
@@ -2184,23 +2193,137 @@ col1, col2"
 ;; both did not satisfy me. Now (as of 20170625) I solved this mess once and for all.
 
 (require 'config-general-mode)
+(require 'sh-script)
+
+;; **** Convenicence Wrappers
+(defun config-general-completion-at-point ()
+  "Complete word at point using hippie-expand, if not on a comment."
+  (interactive)
+  (when (looking-back "[-%$_a-zA-Z0-9]")
+    (unless (eq (get-text-property (point) 'face) 'font-lock-comment-face)
+      (hippie-expand nil))))
+
+(defun config-general-do-electric-tab ()
+  "Enter a <TAB> or goto current indentation."
+  (interactive)
+  (if (eq (point) (line-end-position))
+        (indent-for-tab-command)
+      (back-to-indentation)))
+
+(defun config-general-tab-or-expand ()
+  "Do electric TAB or completion depending where point is.
+
+This is just a convenience function, which can be mapped
+to `tab' by the user. .Not in use by default."
+  (interactive)
+  (unless (config-general-completion-at-point)
+    (config-general-do-electric-tab)))
+
+;; FIXME: Use this  patched version for older emacsen  and the default
+;; for version which contain the patch (if any, ever).
+;;
+;; The original  function try-expand-dabbrev-all-buffers  doesn't work
+;; correctly, it ignores a buffer-local configuration of the variables
+;; hippie-expand-only-buffers  and hippie-expand-ignore-buffers.  This
+;; is the patched version of the function.
+;;
+;; Bugreport: http://debbugs.gnu.org/cgi/bugreport.cgi?bug=27501
+(defun config-general--try-expand-dabbrev-all-buffers (old)
+    "Try to expand word \"dynamically\", searching all other buffers.
+The argument OLD has to be nil the first call of this function, and t
+for subsequent calls (for further possible expansions of the same
+string).  It returns t if a new expansion is found, nil otherwise."
+  (let ((expansion ())
+        (buf (current-buffer))
+        (orig-case-fold-search case-fold-search)
+        (heib hippie-expand-ignore-buffers)
+        (heob hippie-expand-only-buffers)
+        )
+    (if (not old)
+        (progn
+          (he-init-string (he-dabbrev-beg) (point))
+          (setq he-search-bufs (buffer-list))
+          (setq he-searched-n-bufs 0)
+          (set-marker he-search-loc 1 (car he-search-bufs))))
+
+    (if (not (equal he-search-string ""))
+        (while (and he-search-bufs
+                    (not expansion)
+                    (or (not hippie-expand-max-buffers)
+                        (< he-searched-n-bufs hippie-expand-max-buffers)))
+          (set-buffer (car he-search-bufs))
+          (if (and (not (eq (current-buffer) buf))
+                   (if heob
+                       (he-buffer-member heob)
+                     (not (he-buffer-member heib))))
+              (save-excursion
+                (save-restriction
+                  (if hippie-expand-no-restriction
+                      (widen))
+                  (goto-char he-search-loc)
+                  (setq expansion
+                        (let ((case-fold-search orig-case-fold-search))
+                          (he-dabbrev-search he-search-string nil)))
+                  (set-marker he-search-loc (point))
+                  (if (not expansion)
+                      (progn
+                        (setq he-search-bufs (cdr he-search-bufs))
+                        (setq he-searched-n-bufs (1+ he-searched-n-bufs))
+                        (set-marker he-search-loc 1 (car he-search-bufs))))))
+            (setq he-search-bufs (cdr he-search-bufs))
+            (set-marker he-search-loc 1 (car he-search-bufs)))))
+
+    (set-buffer buf)
+    (if (not expansion)
+        (progn
+          (if old (he-reset-string))
+          ())
+      (progn
+        (he-substitute-string expansion t)
+        t))))
+
+;; **** Mode Hook
 
 ;; I  use TAB  for completion  AND tab  and outshine.  Also, the  mode
 ;; enables  electric  indent  automatically,  but I  disabled  it  for
 ;; conf-mode (see tvd-disarm-conf-mode), therefore I re-enable it here
 ;; for config-general-mode (which inherits from conf-mode).
 (add-hook 'config-general-mode-hook
-               (lambda ()
-                 (outline-minor-mode)
-                 (electric-indent-mode)
-                 ;; de-activate some senseless bindings
-                 (local-unset-key (kbd "C-c C-c"))
-                 (local-unset-key (kbd "C-c C-p"))
-                 (local-unset-key (kbd "C-c C-u"))
-                 (local-unset-key (kbd "C-c C-w"))
-                 (local-unset-key (kbd "C-c C-x"))
-                 (local-unset-key (kbd "C-c :"))
-                 (local-set-key (kbd "<tab>") 'config-general-tab-or-expand)))
+          (lambda ()
+            (outline-minor-mode)
+            (electric-indent-mode)
+            ;; de-activate some senseless bindings
+            (local-unset-key (kbd "C-c C-c"))
+            (local-unset-key (kbd "C-c C-p"))
+            (local-unset-key (kbd "C-c C-u"))
+            (local-unset-key (kbd "C-c C-w"))
+            (local-unset-key (kbd "C-c C-x"))
+            (local-unset-key (kbd "C-c :"))
+            (local-set-key (kbd "<tab>") 'config-general-tab-or-expand)
+
+            ;; from shell-script-mode, turn << into here-doc
+            (sh-electric-here-document-mode 1)
+
+            ;; Inserting a brace or quote automatically inserts the matching pair
+            (electric-pair-mode t)
+            (setq-local hippie-expand-only-buffers '(config-general-mode))
+
+            ;; configure order of expansion functions
+            (if (version< emacs-version "25.1")
+                (set (make-local-variable 'hippie-expand-try-functions-list)
+                     '(try-expand-dabbrev ;; use patched version
+                       config-general--try-expand-dabbrev-all-buffers
+                       try-complete-file-name-partially
+                       try-complete-file-name))
+              (set (make-local-variable 'hippie-expand-try-functions-list)
+                   '(try-expand-dabbrev
+                     try-expand-dabbrev-all-buffers
+                     try-complete-file-name-partially
+                     try-complete-file-name)))
+            ;; enable
+            (add-hook 'completion-at-point-functions 'config-general-completion-at-point)
+            )
+          )
 
 ;; --------------------------------------------------------------------------------
 ;; *** Xmodmap Mode
@@ -2242,23 +2365,6 @@ col1, col2"
 (mmm-add-mode-ext-class 'pod-mode nil 'html-pod)
 
 (add-hook 'pod-mode-hook 'mmm-mode-on)
-
-;; **** MMM config for config-general-mode
-
-;; highlight here-docs in configs as shell-scripts
-
-(mmm-add-classes
- '((config-here
-    :submode shell-script-mode
-    :delimiter-mode nil
-    :save-matches 1
-    :front "<<[\"\'\`]?\\([a-zA-Z0-9_-]+\\)"
-    :front-offset (end-of-line 1)
-    :back "[ \t]*~1$")))
-
-(mmm-add-mode-ext-class 'config-general-mode nil 'config-here)
-
-(add-hook 'config-general-mode-hook 'mmm-mode-on)
 
 ;; ** Text Manupilation
 ;; *** expand-region
