@@ -552,6 +552,7 @@
 ;;    - incorporated my C::G customizations, Steve Purcell removed from
 ;;      it because inappropriate,
 ;;      [[https://github.com/TLINDEN/config-general-mode/commit/d7e8323][see d7e8323]]
+;;    - fixed autoscratch hook
 
 ;; ** TODO
 
@@ -581,7 +582,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20170714.01")
+(defvar tvd-emacs-version "20170715.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -1053,19 +1054,11 @@ to next buffer otherwise."
 (with-current-buffer (get-buffer-create "*text*")
   (text-mode))
 
-(defun tvd-startup-scratch-or-file ()
-  "Jump to command line arg file, if any, or start with *text* buffer."
-  (interactive)
-  (let ((last-arg (find-buffer-visiting (replace-regexp-in-string "\\\\" "/" (car (last command-line-args))))))
-    (if last-arg
-        (switch-to-buffer last-arg)
-      (switch-to-buffer "*text*"))))
-
-;;(setq initial-buffer-choice 'tvd-startup-scratch-or-file)
-
 (require 'autoscratch)
 (setq initial-major-mode 'autoscratch-mode)
-(add-hook 'autoscratch-hook '(lambda () (setq electric-indent-mode nil)))
+(add-hook 'autoscratch-mode-hook '(lambda ()
+                                    (setq electric-indent-mode nil
+                                          autoscratch-trigger-on-first-char t)))
 
 ;; * Global Key Bindings
 ;; --------------------------------------------------------------------------------
