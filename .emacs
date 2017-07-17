@@ -553,6 +553,7 @@
 ;;      it because inappropriate,
 ;;      [[https://github.com/TLINDEN/config-general-mode/commit/d7e8323][see d7e8323]]
 ;;    - fixed autoscratch hook
+;;    - add scratch alias
 
 ;; ** TODO
 
@@ -1059,6 +1060,7 @@ to next buffer otherwise."
 (add-hook 'autoscratch-mode-hook '(lambda ()
                                     (setq electric-indent-mode nil
                                           autoscratch-trigger-on-first-char t)))
+(defalias 'scratch 'autoscratch-buffer)
 
 ;; * Global Key Bindings
 ;; --------------------------------------------------------------------------------
