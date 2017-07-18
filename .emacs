@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version (20170715.01)          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version (20170718.01)          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -555,6 +555,10 @@
 ;;    - fixed autoscratch hook
 ;;    - add scratch alias
 
+;; 20170718.01:
+;;    - better autoscratch config
+;;    - added persistent-scratch mode
+
 ;; ** TODO
 
 ;; - check helpful https://github.com/wilfred/helpful
@@ -583,7 +587,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20170715.01")
+(defvar tvd-emacs-version "20170718.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -1045,22 +1049,36 @@ to next buffer otherwise."
 
 ;; --------------------------------------------------------------------------------
 ;; ** More scratch space
-
+;; *** Text scratch
 ;; Sometimes  I need  a  text  mode scratch  buffer  while scratch  is
 ;; already in use. So let's prepare one. I also add a buffer hook so that
 ;; this never gets deleted, but cleaned instead.
 
-;; [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Startup-Summary.html][Startup Summary]]
-
 (with-current-buffer (get-buffer-create "*text*")
   (text-mode))
 
+;; *** Autoscratch
+;; use autoscratch otherwise
+;; [[https://github.com/TLINDEN/autoscratch][autoscratch github]]
 (require 'autoscratch)
 (setq initial-major-mode 'autoscratch-mode)
 (add-hook 'autoscratch-mode-hook '(lambda ()
                                     (setq electric-indent-mode nil
                                           autoscratch-trigger-on-first-char t)))
 (defalias 'scratch 'autoscratch-buffer)
+
+;; *** Persistent Scratch
+;; I also like to be scratch buffers persistent with
+;; [[https://github.com/Fanael/persistent-scratch][persistent-scratch]]
+(require 'persistent-scratch)
+(setq persistent-scratch-save-file (expand-file-name "scratches.el" user-init-dir))
+(persistent-scratch-setup-default)
+
+(defun tvd-autoscratch-p ()
+  "Return non-nil if the current buffer is a scratch buffer"
+  (string-match "scratch*" (buffer-name)))
+
+(setq persistent-scratch-scratch-buffer-p-function 'tvd-autoscratch-p)
 
 ;; * Global Key Bindings
 ;; --------------------------------------------------------------------------------
