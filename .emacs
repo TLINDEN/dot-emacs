@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version (20170718.01)          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version (20170719.01)          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -559,6 +559,11 @@
 ;;    - better autoscratch config
 ;;    - added persistent-scratch mode
 
+;; 20170719.01:
+;;    - fixed electric-indent in autoscratch config
+;;    - use my own autoscratch triggers
+;;    - kill-all-buffers now uses 'autoscratch-buffer
+
 ;; ** TODO
 
 ;; - check helpful https://github.com/wilfred/helpful
@@ -587,7 +592,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20170718.01")
+(defvar tvd-emacs-version "20170719.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -1063,8 +1068,20 @@ to next buffer otherwise."
 (require 'autoscratch)
 (setq initial-major-mode 'autoscratch-mode)
 (add-hook 'autoscratch-mode-hook '(lambda ()
-                                    (setq electric-indent-mode nil
-                                          autoscratch-trigger-on-first-char t)))
+                                    (setq autoscratch-triggers-alist
+                                          '(("[(;]"         . (lambda ()
+                                                                (emacs-lisp-mode)
+                                                                (electric-indent-local-mode t)))
+                                            ("#"            . (lambda ()
+                                                                (config-general-mode)
+                                                                (electric-indent-local-mode t)))
+                                            ("[-a-zA-Z0-9]" . (text-mode))
+                                            ("/"            . (c-mode))
+                                            ("*"            . (progn (insert " ") (org-mode)))
+                                            ("."            . (fundamental-mode)))
+                                          autoscratch-trigger-on-first-char t)
+                                    (electric-indent-local-mode nil)
+                                    ))
 (defalias 'scratch 'autoscratch-buffer)
 
 ;; *** Persistent Scratch
@@ -1543,8 +1560,7 @@ Version 2015-04-09"
         (tramp-cleanup-all-connections))
     (with-current-buffer (get-buffer-create "*text*")
       (text-mode))
-    (with-current-buffer (get-buffer-create "*scratch*")
-      (emacs-lisp-mode))))
+    (autoscratch-buffer)))
 
 ;; --------------------------------------------------------------------------------
 ;; ** Cleanup current buffer
@@ -2966,7 +2982,9 @@ a list symbol describing the command."
             (outline-minor-mode)
 
             ;; enable outshine mode
-            (outshine-hook-function)))
+            (outshine-hook-function)
+
+            (electric-indent-mode t)))
 
 ;; use UP arrow for history in *ielm* as well, just as C-up
 (add-hook 'comint-mode-hook
