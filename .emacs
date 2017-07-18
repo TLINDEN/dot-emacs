@@ -563,6 +563,7 @@
 ;;    - fixed electric-indent in autoscratch config
 ;;    - use my own autoscratch triggers
 ;;    - kill-all-buffers now uses 'autoscratch-buffer
+;;    - renamce autoscratch
 
 ;; ** TODO
 
@@ -1065,7 +1066,7 @@ to next buffer otherwise."
 ;; *** Autoscratch
 ;; use autoscratch otherwise
 ;; [[https://github.com/TLINDEN/autoscratch][autoscratch github]]
-(require 'autoscratch)
+(require 'autoscratch-mode)
 (setq initial-major-mode 'autoscratch-mode)
 (add-hook 'autoscratch-mode-hook '(lambda ()
                                     (setq autoscratch-triggers-alist
