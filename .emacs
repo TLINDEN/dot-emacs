@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version (20170719.01)          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version (20170722.01)          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -565,6 +565,9 @@
 ;;    - kill-all-buffers now uses 'autoscratch-buffer
 ;;    - renamce autoscratch
 
+;; 20170722.01:
+;;    - added followcursor-mode
+
 ;; ** TODO
 
 ;; - check helpful https://github.com/wilfred/helpful
@@ -593,7 +596,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20170719.01")
+(defvar tvd-emacs-version "20170722.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -4299,6 +4302,24 @@ defun."
                (lambda ()
                  (local-set-key (kbd "C-l") 'tvd-suggest-reload)
                  (local-set-key (kbd "<tab>") 'tvd-suggest-jump)))))
+
+;; *** Followcursor Mode
+
+;; [[https://github.com/TLINDEN/followcursor-mode][source on github]]
+
+;; From time to time I need to  refactor configs and the like based on
+;; lists. For example  in the left window  I have a list  of bgp peers
+;; and in the right window a config file for all peers which I have to
+;; modify based on current settings.  With followcursor-mode I can put
+;; point on an  ip address and the line in  the config containing this
+;; ip address  will be highlighted. If  I move on to  the next address
+;; the next line on the right will be highlighted.
+
+;; The mode is a work-in-progress...
+
+(require 'followcursor-mode)
+
+
 
 ;; ** Emacs Interface
 ;; *** Parens
