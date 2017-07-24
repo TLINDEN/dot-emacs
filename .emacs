@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version (20170722.01)          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version (20170724.01)          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -568,6 +568,10 @@
 ;; 20170722.01:
 ;;    - added followcursor-mode
 
+;; 20170724.01:
+;;    - added ido completion for tramp hostnames
+
+
 ;; ** TODO
 
 ;; - check helpful https://github.com/wilfred/helpful
@@ -596,7 +600,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20170722.01")
+(defvar tvd-emacs-version "20170724.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -3067,8 +3071,12 @@ a list symbol describing the command."
 ;; Sample: C-x-f /$host:/$file ($host as of .ssh/config or direct, $file including completion)
 
 ;; doku: [[http://www.gnu.org/software/tramp/][gnu.org]]
-(setq tramp-default-method "ssh")
-(setq tramp-default-user nil)
+(setq tramp-default-method "ssh"
+      tramp-default-user nil
+      ido-enable-tramp-completion t)
+
+;; see also backup section
+
 ;; --------------------------------------------------------------------------------
 
 ;; *** org mode
