@@ -564,6 +564,7 @@
 ;;    - use my own autoscratch triggers
 ;;    - kill-all-buffers now uses 'autoscratch-buffer
 ;;    - renamce autoscratch
+;;    - tuned recenter-positions
 
 ;; 20170722.01:
 ;;    - added followcursor-mode
@@ -1104,6 +1105,17 @@ to next buffer otherwise."
   (string-match "scratch*" (buffer-name)))
 
 (setq persistent-scratch-scratch-buffer-p-function 'tvd-autoscratch-p)
+
+;; ** Recenter config
+
+;; [[http://oremacs.com/2015/03/28/recenter/][via abo abo]]
+
+;; However, I set the first position  to 1, which causes the window to
+;; be recentered on the second line, that is, I can see one line above
+;; the current one. It works the same with bottom, which I intend, but
+;; I think this is a recenter calculation bug.
+
+(setq recenter-positions '(1 middle bottom))
 
 ;; * Global Key Bindings
 ;; --------------------------------------------------------------------------------
