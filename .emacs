@@ -574,6 +574,8 @@
 
 ;; 20170725.01:
 ;;    - autoscratch lambda=>progn
+;;    - added sort-table-ip[desc] and fixed auto-alignment so
+;;      that ip's are left aligned
 
 ;; ** TODO
 
@@ -3372,6 +3374,36 @@ specify another regex for cell splitting."
   (interactive)
   (org-table-sort-lines nil ?T))
 
+;; [[http://irreal.org/blog/?p=3542][via jcs/irreal.org]]
+;; however, I renamed the actual sort wrappers to match my
+;; naming scheme
+(defun jcs-ip-lessp (ip1 ip2 &optional op)
+  "Compare two IP addresses.
+Unless the optional argument OP is provided, this function will return T
+if IP1 is less than IP2 or NIL otherwise. The optional argument OP is
+intended to be #'> to support reverse sorting."
+  (setq cmp (or op #'<))
+  (cl-labels ((compare (l1 l2)
+                       (if (or (null l1) (null l2))
+                           nil
+                         (let ((n1 (string-to-number (car l1)))
+                               (n2 (string-to-number (car l2))))
+                           (cond
+                            ((funcall cmp n1 n2) t)
+                            ((= n1 n2) (compare (cdr l1) (cdr l2)))
+                            (t nil))))))
+    (compare (split-string ip1 "\\.") (split-string ip2 "\\."))))
+
+(defun sort-table-ip ()
+  (interactive)
+  (org-table-sort-lines nil ?f #'org-sort-remove-invisible #'jcs-ip-lessp))
+
+(defun sort-table-ip-desc ()
+  (interactive)
+  (org-table-sort-lines nil ?F #'org-sort-remove-invisible
+                        (lambda (ip1 ip2) (jcs-ip-lessp ip1 ip2 #'>))))
+
+
 ;; easy access for the shortcuts
 (defalias 'stn       'sort-table-numeric)
 (defalias 'stnd      'sort-table-numeric-desc)
@@ -3379,6 +3411,8 @@ specify another regex for cell splitting."
 (defalias 'stad      'sort-table-alphanumeric-desc)
 (defalias 'stt       'sort-table-time)
 (defalias 'sttd      'sort-table-time-desc)
+(defalias 'sti       'sort-table-ip)
+(defalias 'stid      'sort-table-ip-desc)
 
 ;; generic table exporter
 (defun tvd-export-org-table (fmt)
@@ -3507,8 +3541,11 @@ specify another regex for cell splitting."
      (add-hook 'org-mode-hook
                (lambda ()
                  (local-set-key (kbd "C-c o") 'org-table-copy-col)
-                 (local-set-key (kbd "C-c t") 'tvd-copy-org-table-cell)))))
+                 (local-set-key (kbd "C-c t") 'tvd-copy-org-table-cell)
+                 ))))
 
+;; integers, reals, positives, set via custom
+(setq org-table-number-regexp "^[-+]?\\([0-9]*\\.[0-9]+\\|[0-9]+\\.?[0-9]*\\)$")
 
 ;; *** org mode slideshows
 
@@ -4932,10 +4969,10 @@ converted to PDF at the same location."
  '(org-level-2 ((t (:height 1.16 :foreground "sea green" :underline t :weight normal))))
  '(org-level-3 ((t (:height 1.14 :foreground "saddle brown" :underline t))))
  '(org-level-4 ((t (:height 1.12 :foreground "OrangeRed2" :underline t))))
- '(org-level-5 ((t (:height 1.1  :underline t))))
- '(outline-1 ((t (:height 1.2  :inherit font-lock-function-name-face :underline t :weight bold ))))
- '(outline-2 ((t (:height 1.15 :inherit font-lock-variable-name-face :underline t :weight bold ))))
- '(outline-3 ((t (:height 1.1  :inherit font-lock-keyword-face :underline t :weight bold))))
+ '(org-level-5 ((t (:height 1.1 :underline t))))
+ '(outline-1 ((t (:height 1.2 :inherit font-lock-function-name-face :underline t :weight bold))))
+ '(outline-2 ((t (:height 1.15 :inherit font-lock-variable-name-face :underline t :weight bold))))
+ '(outline-3 ((t (:height 1.1 :inherit font-lock-keyword-face :underline t :weight bold))))
  '(outline-4 ((t (:height 1.05 :foreground "DodgerBlue3" :underline t))))
  '(region ((t (:foreground "Aquamarine" :background "Darkblue"))))
  '(secondary-selection ((t (:foreground "Green" :background "darkslateblue"))))
