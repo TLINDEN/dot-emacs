@@ -576,6 +576,7 @@
 ;;    - autoscratch lambda=>progn
 ;;    - added sort-table-ip[desc] and fixed auto-alignment so
 ;;      that ip's are left aligned
+;;    - +req org-table
 
 ;; ** TODO
 
@@ -3323,6 +3324,7 @@ down and unfold it, otherwise jump paragraph as usual."
 ;; *** org table mode
 
 ;; I'm so used to lovely org mode tables, I need them everywhere!
+(require 'org-table)
 
 ;; allow me to insert org tables everywhere on request
 (defalias 'table     'orgtbl-mode)
