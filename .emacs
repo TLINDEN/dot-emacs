@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version (20170725.01)          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version (20170727.01)          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -578,6 +578,9 @@
 ;;      that ip's are left aligned
 ;;    - +req org-table
 
+;; 20170727.01:
+;;    - +magit
+
 ;; ** TODO
 
 ;; - check helpful https://github.com/wilfred/helpful
@@ -606,7 +609,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20170725.01")
+(defvar tvd-emacs-version "20170727.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -751,6 +754,7 @@
 (add-to-list 'load-path (concat tvd-lisp-dir "/er"))
 (add-to-list 'load-path (concat tvd-lisp-dir "/org/lisp"))
 (add-to-list 'load-path (concat tvd-lisp-dir "/doremi"))
+(add-to-list 'load-path (concat tvd-lisp-dir "/magit-20170725.1153"))
 (add-to-list 'load-path (concat tvd-lisp-dir "/org/contrib/lisp"))
 
 ;; --------------------------------------------------------------------------------
@@ -4382,6 +4386,34 @@ defun."
 
 
 
+;; *** Magit
+
+;; Not much to  say about Magit
+
+(require 'magit)
+
+(with-eval-after-load 'info
+  (info-initialize)
+  (add-to-list 'Info-directory-list
+               "~/.emacs.d/magit/Documentation/")
+  (setq magit-view-git-manual-method 'woman))
+
+(defalias 'git       'magit-status)
+(defalias 'gitlog    'magit-log-buffer-file)
+
+;; one thing though:  on startup it bitches about git  version, but it
+;; works nevertheless. So I disable this specific warning.
+
+(defun tvd-ignore-magit-warnings-if-any ()
+  (interactive)
+  (when (get-buffer "*Warnings*")
+    (with-current-buffer "*Warnings*"
+      (goto-char (point-min))
+      (when (re-search-forward "Magit requires Git >=")
+        (kill-buffer-and-window)))))
+
+(add-hook 'after-init-hook 'tvd-ignore-magit-warnings-if-any t)
+
 ;; ** Emacs Interface
 ;; *** Parens
 
@@ -5007,7 +5039,6 @@ converted to PDF at the same location."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
-
 
 ;; ** done
 
