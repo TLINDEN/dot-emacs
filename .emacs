@@ -580,6 +580,7 @@
 
 ;; 20170727.01:
 ;;    - +magit
+;;    - configured magit dirs
 
 ;; ** TODO
 
@@ -4400,6 +4401,14 @@ defun."
 
 (defalias 'git       'magit-status)
 (defalias 'gitlog    'magit-log-buffer-file)
+
+;; configure magit
+(with-eval-after-load 'magit
+  (setq tvd-git-dirs)
+  (dolist (dir (list (expand-file-name "~/D/github")
+                     (expand-file-name "~/dev/git")))
+    (when (file-exists-p dir)
+      (add-to-list 'magit-repository-directories (cons dir 1)))))
 
 ;; one thing though:  on startup it bitches about git  version, but it
 ;; works nevertheless. So I disable this specific warning.
