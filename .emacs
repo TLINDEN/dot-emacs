@@ -582,6 +582,7 @@
 ;;    - +magit
 ;;    - configured magit dirs
 ;;    - +magit ido
+;;    - fix magit info dir
 
 ;; ** TODO
 
@@ -4397,7 +4398,7 @@ defun."
 (with-eval-after-load 'info
   (info-initialize)
   (add-to-list 'Info-directory-list
-               "~/.emacs.d/magit/Documentation/")
+               "~/.emacs.d/lisp/magit/Documentation/")
   (setq magit-view-git-manual-method 'woman))
 
 (defalias 'git       'magit-status)
