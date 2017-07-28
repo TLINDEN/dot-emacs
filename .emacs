@@ -757,7 +757,6 @@
 (add-to-list 'load-path (concat tvd-lisp-dir "/er"))
 (add-to-list 'load-path (concat tvd-lisp-dir "/org/lisp"))
 (add-to-list 'load-path (concat tvd-lisp-dir "/doremi"))
-(add-to-list 'load-path (concat tvd-lisp-dir "/magit-20170725.1153"))
 (add-to-list 'load-path (concat tvd-lisp-dir "/org/contrib/lisp"))
 
 ;; --------------------------------------------------------------------------------
@@ -4393,12 +4392,18 @@ defun."
 
 ;; Not much to  say about Magit
 
+(setq tvd-magit-revision "20170725.1153")
+
+(add-to-list 'load-path (concat tvd-lisp-dir (concat "/magit-" tvd-magit-revision)))
+
 (require 'magit)
 
 (with-eval-after-load 'info
   (info-initialize)
   (add-to-list 'Info-directory-list
-               "~/.emacs.d/lisp/magit/Documentation/")
+               (expand-file-name (concat "~/.emacs.d/lisp/magit-"
+                                         tvd-magit-revision
+                                         "/Documentation/")))
   (setq magit-view-git-manual-method 'woman))
 
 (defalias 'git       'magit-status)
