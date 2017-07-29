@@ -67,3 +67,5 @@ update heading list if neccessary."
       'outline-minor-mode-hook
       (lambda ()
         (define-key outline-minor-mode-map (kbd "C-c C-j")  'tvd-outshine-jump)))))
+
+;; test
