@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version (20170727.01)          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version (20170730.01)          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -584,6 +584,9 @@
 ;;    - +magit ido
 ;;    - fix magit info dir
 
+;; 20170730.01
+;;    - +some magit navigation keys
+
 ;; ** TODO
 
 ;; - check helpful https://github.com/wilfred/helpful
@@ -612,7 +615,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20170727.01")
+(defvar tvd-emacs-version "20170730.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -4415,7 +4418,14 @@ defun."
                      (expand-file-name "~/dev/git")))
     (when (file-exists-p dir)
       (add-to-list 'magit-repository-directories (cons dir 1))))
-  (setq magit-completing-read-function 'ido-completing-read))
+  (setq magit-completing-read-function 'ido-completing-read)
+  ;; navigate magit buffers as I do everywhere else, I do not automatically
+  ;; cycle/decycle though, the magit defaults are absolutely sufficient.
+  (define-key magit-mode-map (kbd "<C-down>")   'magit-section-forward)
+  (define-key magit-mode-map (kbd "<C-up>")     'magit-section-backward)
+  (define-key magit-mode-map (kbd "<C-M-down>") 'magit-section-forward-sibling)
+  (define-key magit-mode-map (kbd "<C-M-up>")   'magit-section-backward-sibling)
+  (define-key magit-mode-map (kbd "<delete>")   'magit-delete-thing))
 
 ;; one thing though:  on startup it bitches about git  version, but it
 ;; works nevertheless. So I disable this specific warning.
