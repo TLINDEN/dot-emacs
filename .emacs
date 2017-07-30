@@ -4440,6 +4440,10 @@ defun."
 
 (add-hook 'after-init-hook 'tvd-ignore-magit-warnings-if-any t)
 
+;; HINT: how to add a popup action:
+;;    (magit-define-popup-action 'magit-commit-popup
+;;      ?n "Reshelve" 'magit-reshelve)
+
 ;; ** Emacs Interface
 ;; *** Parens
 
