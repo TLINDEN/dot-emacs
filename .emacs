@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version (20170730.01)          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version (20170731.01)          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -587,6 +587,9 @@
 ;; 20170730.01
 ;;    - +some magit navigation keys
 
+;; 20170731.01
+;;    - do not load magit on w32
+
 ;; ** TODO
 
 ;; - check helpful https://github.com/wilfred/helpful
@@ -615,7 +618,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20170730.01")
+(defvar tvd-emacs-version "20170731.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -4394,51 +4397,51 @@ defun."
 ;; *** Magit
 
 ;; Not much to  say about Magit
+(unless tvd-win-home
+  (setq tvd-magit-revision "20170725.1153")
 
-(setq tvd-magit-revision "20170725.1153")
+  (add-to-list 'load-path (concat tvd-lisp-dir (concat "/magit-" tvd-magit-revision)))
 
-(add-to-list 'load-path (concat tvd-lisp-dir (concat "/magit-" tvd-magit-revision)))
+  (require 'magit)
 
-(require 'magit)
+  (with-eval-after-load 'info
+    (info-initialize)
+    (add-to-list 'Info-directory-list
+                 (expand-file-name (concat "~/.emacs.d/lisp/magit-"
+                                           tvd-magit-revision
+                                           "/Documentation/")))
+    (setq magit-view-git-manual-method 'woman))
 
-(with-eval-after-load 'info
-  (info-initialize)
-  (add-to-list 'Info-directory-list
-               (expand-file-name (concat "~/.emacs.d/lisp/magit-"
-                                         tvd-magit-revision
-                                         "/Documentation/")))
-  (setq magit-view-git-manual-method 'woman))
+  (defalias 'git       'magit-status)
+  (defalias 'gitlog    'magit-log-buffer-file)
 
-(defalias 'git       'magit-status)
-(defalias 'gitlog    'magit-log-buffer-file)
+  ;; configure magit
+  (with-eval-after-load 'magit
+    (dolist (dir (list (expand-file-name "~/D/github")
+                       (expand-file-name "~/dev/git")))
+      (when (file-exists-p dir)
+        (add-to-list 'magit-repository-directories (cons dir 1))))
+    (setq magit-completing-read-function 'ido-completing-read)
+    ;; navigate magit buffers as I do everywhere else, I do not automatically
+    ;; cycle/decycle though, the magit defaults are absolutely sufficient.
+    (define-key magit-mode-map (kbd "<C-down>")   'magit-section-forward)
+    (define-key magit-mode-map (kbd "<C-up>")     'magit-section-backward)
+    (define-key magit-mode-map (kbd "<C-M-down>") 'magit-section-forward-sibling)
+    (define-key magit-mode-map (kbd "<C-M-up>")   'magit-section-backward-sibling)
+    (define-key magit-mode-map (kbd "<delete>")   'magit-delete-thing))
 
-;; configure magit
-(with-eval-after-load 'magit
-  (dolist (dir (list (expand-file-name "~/D/github")
-                     (expand-file-name "~/dev/git")))
-    (when (file-exists-p dir)
-      (add-to-list 'magit-repository-directories (cons dir 1))))
-  (setq magit-completing-read-function 'ido-completing-read)
-  ;; navigate magit buffers as I do everywhere else, I do not automatically
-  ;; cycle/decycle though, the magit defaults are absolutely sufficient.
-  (define-key magit-mode-map (kbd "<C-down>")   'magit-section-forward)
-  (define-key magit-mode-map (kbd "<C-up>")     'magit-section-backward)
-  (define-key magit-mode-map (kbd "<C-M-down>") 'magit-section-forward-sibling)
-  (define-key magit-mode-map (kbd "<C-M-up>")   'magit-section-backward-sibling)
-  (define-key magit-mode-map (kbd "<delete>")   'magit-delete-thing))
+  ;; one thing though:  on startup it bitches about git  version, but it
+  ;; works nevertheless. So I disable this specific warning.
 
-;; one thing though:  on startup it bitches about git  version, but it
-;; works nevertheless. So I disable this specific warning.
+  (defun tvd-ignore-magit-warnings-if-any ()
+    (interactive)
+    (when (get-buffer "*Warnings*")
+      (with-current-buffer "*Warnings*"
+        (goto-char (point-min))
+        (when (re-search-forward "Magit requires Git >=")
+          (kill-buffer-and-window)))))
 
-(defun tvd-ignore-magit-warnings-if-any ()
-  (interactive)
-  (when (get-buffer "*Warnings*")
-    (with-current-buffer "*Warnings*"
-      (goto-char (point-min))
-      (when (re-search-forward "Magit requires Git >=")
-        (kill-buffer-and-window)))))
-
-(add-hook 'after-init-hook 'tvd-ignore-magit-warnings-if-any t)
+  (add-hook 'after-init-hook 'tvd-ignore-magit-warnings-if-any t))
 
 ;; HINT: how to add a popup action:
 ;;    (magit-define-popup-action 'magit-commit-popup
