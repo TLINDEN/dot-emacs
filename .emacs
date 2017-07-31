@@ -589,6 +589,8 @@
 
 ;; 20170731.01
 ;;    - do not load magit on w32
+;;    - Always call `magit-status' with prefix arg
+;;    - do bigger jumps in magit with just C-<up|down>
 
 ;; ** TODO
 
@@ -4404,6 +4406,12 @@ defun."
 
   (require 'magit)
 
+  (defun tvd-magit-status ()
+    "Always call `magit-status' with prefix arg."
+    (interactive)
+    (let ((current-prefix-arg t))
+      (call-interactively 'magit-status)))
+
   (with-eval-after-load 'info
     (info-initialize)
     (add-to-list 'Info-directory-list
@@ -4412,7 +4420,7 @@ defun."
                                            "/Documentation/")))
     (setq magit-view-git-manual-method 'woman))
 
-  (defalias 'git       'magit-status)
+  (defalias 'git       'tvd-magit-status)
   (defalias 'gitlog    'magit-log-buffer-file)
 
   ;; configure magit
@@ -4421,14 +4429,12 @@ defun."
                        (expand-file-name "~/dev/git")))
       (when (file-exists-p dir)
         (add-to-list 'magit-repository-directories (cons dir 1))))
-    (setq magit-completing-read-function 'ido-completing-read)
+    (setq magit-completing-read-function 'magit-ido-completing-read)
     ;; navigate magit buffers as I do everywhere else, I do not automatically
     ;; cycle/decycle though, the magit defaults are absolutely sufficient.
-    (define-key magit-mode-map (kbd "<C-down>")   'magit-section-forward)
-    (define-key magit-mode-map (kbd "<C-up>")     'magit-section-backward)
-    (define-key magit-mode-map (kbd "<C-M-down>") 'magit-section-forward-sibling)
-    (define-key magit-mode-map (kbd "<C-M-up>")   'magit-section-backward-sibling)
-    (define-key magit-mode-map (kbd "<delete>")   'magit-delete-thing))
+    (define-key magit-mode-map (kbd "<C-down>") 'magit-section-forward-sibling)
+    (define-key magit-mode-map (kbd "<C-up>")   'magit-section-backward-sibling)
+    (define-key magit-mode-map (kbd "<delete>") 'magit-delete-thing))
 
   ;; one thing though:  on startup it bitches about git  version, but it
   ;; works nevertheless. So I disable this specific warning.
