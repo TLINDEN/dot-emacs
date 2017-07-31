@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2017-07-31 Mon 10:00 -->
+<!-- 2017-07-31 Mon 11:28 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title></title>
@@ -232,192 +232,192 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgb04d804">1. Introduction</a></li>
-<li><a href="#org6ed7748">2. Config Log, Trivia, Notes, Changes</a>
+<li><a href="#orgb77bae2">1. Introduction</a></li>
+<li><a href="#orgf398ee1">2. Config Log, Trivia, Notes, Changes</a>
 <ul>
-<li><a href="#org610acc4">2.1. Changelog</a></li>
-<li><a href="#orge5560e5">2.2. <span class="todo TODO">TODO</span> </a></li>
-<li><a href="#org5b758df">2.3. Parking Lot / Snippets</a>
+<li><a href="#org4fa592a">2.1. Changelog</a></li>
+<li><a href="#org51d48e8">2.2. <span class="todo TODO">TODO</span> </a></li>
+<li><a href="#org119a78e">2.3. Parking Lot / Snippets</a>
 <ul>
-<li><a href="#orgf5f781e">2.3.1. buffer-local hook</a></li>
+<li><a href="#org99546a6">2.3.1. buffer-local hook</a></li>
 </ul>
 </li>
-<li><a href="#org5a39296">2.4. .emacs config version</a></li>
+<li><a href="#org8afe11d">2.4. .emacs config version</a></li>
 </ul>
 </li>
-<li><a href="#org5c98bb7">3. System Specifics</a>
+<li><a href="#org1ea8c11">3. System Specifics</a>
 <ul>
-<li><a href="#org2d3fe60">3.1. Global init file+dir vars, portable</a></li>
-<li><a href="#orgc63f926">3.2. Fontlock-mode - use syntax highlighting on graphical displays</a></li>
-<li><a href="#orge64a22b">3.3. line-cursor in console</a></li>
-<li><a href="#org5b62e0d">3.4. Backup Config</a></li>
-<li><a href="#orgeb63895">3.5. console backspace fix</a></li>
-<li><a href="#orgcd42e24">3.6. hide menu- and tool-bar</a></li>
-<li><a href="#org788411e">3.7. stay silent on startup</a></li>
-<li><a href="#org7eae7b7">3.8. y means yes</a></li>
-<li><a href="#orge2a0098">3.9. show col in modeline</a></li>
-<li><a href="#orgc23d85b">3.10. file or buffer in title</a></li>
-<li><a href="#org3727503">3.11. avoid invalid files</a></li>
-<li><a href="#orgd965150">3.12. prepare load-path</a></li>
-<li><a href="#orgc47d3cd">3.13. byte-compile all of them, if needed</a></li>
-<li><a href="#orgd14deea">3.14. increase fontsize with ctrl-+ and ctrl--</a></li>
-<li><a href="#org637ac3a">3.15. WINDOW management stuff</a>
+<li><a href="#orgc9b8814">3.1. Global init file+dir vars, portable</a></li>
+<li><a href="#orgab48572">3.2. Fontlock-mode - use syntax highlighting on graphical displays</a></li>
+<li><a href="#org575984f">3.3. line-cursor in console</a></li>
+<li><a href="#orgc80e8bc">3.4. Backup Config</a></li>
+<li><a href="#org28a4abe">3.5. console backspace fix</a></li>
+<li><a href="#org50f2cfa">3.6. hide menu- and tool-bar</a></li>
+<li><a href="#orge8cf187">3.7. stay silent on startup</a></li>
+<li><a href="#orge96e8ed">3.8. y means yes</a></li>
+<li><a href="#orga57394f">3.9. show col in modeline</a></li>
+<li><a href="#orgfb1d55e">3.10. file or buffer in title</a></li>
+<li><a href="#orgf8540e4">3.11. avoid invalid files</a></li>
+<li><a href="#org0e738a6">3.12. prepare load-path</a></li>
+<li><a href="#org9feedab">3.13. byte-compile all of them, if needed</a></li>
+<li><a href="#org0e100da">3.14. increase fontsize with ctrl-+ and ctrl--</a></li>
+<li><a href="#org554270e">3.15. WINDOW management stuff</a>
 <ul>
-<li><a href="#orgd328797">3.15.1. resize windows by keyboard</a></li>
-<li><a href="#orgda33650">3.15.2. switch windows with MS-WINDOWS key</a></li>
-<li><a href="#orga8905b2">3.15.3. M-o switch window or buffer</a></li>
-<li><a href="#org59c34ee">3.15.4. Split window to 4 parts</a></li>
-<li><a href="#orgf546a89">3.15.5. Remember and Restore Window Configurations - winner mode</a></li>
+<li><a href="#org935f2df">3.15.1. resize windows by keyboard</a></li>
+<li><a href="#org7e93a56">3.15.2. switch windows with MS-WINDOWS key</a></li>
+<li><a href="#org906465d">3.15.3. M-o switch window or buffer</a></li>
+<li><a href="#org66da4c5">3.15.4. Split window to 4 parts</a></li>
+<li><a href="#org6d56a82">3.15.5. Remember and Restore Window Configurations - winner mode</a></li>
 </ul>
 </li>
-<li><a href="#orgee33e6f">3.16. re-read a modified buffer</a></li>
-<li><a href="#org1259eed">3.17. global TAB/Indent config</a></li>
-<li><a href="#org6b7247b">3.18. handy aliases</a></li>
-<li><a href="#orgeddfe7e">3.19. various settings</a></li>
-<li><a href="#org0b17ebf">3.20. load imenu</a></li>
-<li><a href="#org45b7228">3.21. copy/paste Config</a></li>
-<li><a href="#orgebc4572">3.22. use more mem</a></li>
-<li><a href="#orgf6ac561">3.23. better file name completion</a></li>
-<li><a href="#org0d33cfb">3.24. abbreviations</a></li>
-<li><a href="#org49f13ce">3.25. meaningful names for buffers with the same name</a></li>
-<li><a href="#orgf9c5941">3.26. packages</a></li>
-<li><a href="#org65f0860">3.27. My own global variables</a></li>
-<li><a href="#org4a843bc">3.28. More scratch space</a>
+<li><a href="#org01d67e0">3.16. re-read a modified buffer</a></li>
+<li><a href="#org4648335">3.17. global TAB/Indent config</a></li>
+<li><a href="#org3a88b30">3.18. handy aliases</a></li>
+<li><a href="#org8bc77eb">3.19. various settings</a></li>
+<li><a href="#orga44cd0d">3.20. load imenu</a></li>
+<li><a href="#orgbda9640">3.21. copy/paste Config</a></li>
+<li><a href="#org2474b30">3.22. use more mem</a></li>
+<li><a href="#org6d2284c">3.23. better file name completion</a></li>
+<li><a href="#orgc1abe99">3.24. abbreviations</a></li>
+<li><a href="#orgca0150d">3.25. meaningful names for buffers with the same name</a></li>
+<li><a href="#orgee3fb58">3.26. packages</a></li>
+<li><a href="#orgd79d926">3.27. My own global variables</a></li>
+<li><a href="#org5be14e0">3.28. More scratch space</a>
 <ul>
-<li><a href="#org1bd4fe6">3.28.1. Text scratch</a></li>
-<li><a href="#org7e7c565">3.28.2. Autoscratch</a></li>
-<li><a href="#orga8c1f12">3.28.3. Persistent Scratch</a></li>
+<li><a href="#orgab1558c">3.28.1. Text scratch</a></li>
+<li><a href="#orge9b0276">3.28.2. Autoscratch</a></li>
+<li><a href="#orgff5b268">3.28.3. Persistent Scratch</a></li>
 </ul>
 </li>
-<li><a href="#orgb14c95d">3.29. Recenter config</a></li>
+<li><a href="#org0d57f72">3.29. Recenter config</a></li>
 </ul>
 </li>
-<li><a href="#org4a6b47b">4. Global Key Bindings</a>
+<li><a href="#org230c05f">4. Global Key Bindings</a>
 <ul>
-<li><a href="#org03ce1a0">4.1. c-h != delete</a></li>
-<li><a href="#org8659a02">4.2. general keys (re-)mappings</a></li>
-<li><a href="#org4eb7c19">4.3. display a list of my own global key bindings and aliases</a></li>
+<li><a href="#org48a58c3">4.1. c-h != delete</a></li>
+<li><a href="#org9bc119b">4.2. general keys (re-)mappings</a></li>
+<li><a href="#orgdfb8a0b">4.3. display a list of my own global key bindings and aliases</a></li>
 </ul>
 </li>
-<li><a href="#orgd9567c7">5. Productivity Functions</a>
+<li><a href="#org6077906">5. Productivity Functions</a>
 <ul>
-<li><a href="#org3a77883">5.1. goto line with tmp line numbers</a></li>
-<li><a href="#orgb91b15a">5.2. invert fore- and background</a></li>
-<li><a href="#org5e258ed">5.3. Some useful bindings  for Home and End keys Hit  the key once to</a></li>
-<li><a href="#org3f5a5a6">5.4. percent function</a></li>
-<li><a href="#org576ef79">5.5. Simulate vi's % function</a></li>
-<li><a href="#org9d21a68">5.6. Move region</a></li>
-<li><a href="#org4ddab2d">5.7. comment-uncomment region with one key binding</a></li>
-<li><a href="#orgc953501">5.8. search for symbol at point</a></li>
-<li><a href="#org863c918">5.9. Window Margin</a></li>
-<li><a href="#org10cbf05">5.10. Fill and justify a paragraph</a></li>
-<li><a href="#orgbdb6bb1">5.11. Make a read-only copy of the current buffer</a></li>
-<li><a href="#org2bf158c">5.12. Cleanup, close all windows and kill all buffers</a></li>
-<li><a href="#org740e583">5.13. Cleanup current buffer</a></li>
-<li><a href="#org43e0115">5.14. Better newline(s)</a></li>
-<li><a href="#org5733c98">5.15. Mouse Rectangle</a></li>
-<li><a href="#org6c24f40">5.16. DOS &lt;=&gt; UNIX conversion helpers</a></li>
-<li><a href="#org8191fb3">5.17. helper do add the same thing to multiple mode hooks</a></li>
-<li><a href="#org50376de">5.18. helper to catch load errors</a></li>
-<li><a href="#orgad507eb">5.19. Alignment Wrappers</a></li>
-<li><a href="#org351a543">5.20. String Helpers</a></li>
+<li><a href="#org46af389">5.1. goto line with tmp line numbers</a></li>
+<li><a href="#org33c2fcc">5.2. invert fore- and background</a></li>
+<li><a href="#org446659c">5.3. Some useful bindings  for Home and End keys Hit  the key once to</a></li>
+<li><a href="#org4b0f1f5">5.4. percent function</a></li>
+<li><a href="#orgd7e449d">5.5. Simulate vi's % function</a></li>
+<li><a href="#org7e9782e">5.6. Move region</a></li>
+<li><a href="#orgec73dcb">5.7. comment-uncomment region with one key binding</a></li>
+<li><a href="#org8299554">5.8. search for symbol at point</a></li>
+<li><a href="#org55919f4">5.9. Window Margin</a></li>
+<li><a href="#org221e573">5.10. Fill and justify a paragraph</a></li>
+<li><a href="#org40694bc">5.11. Make a read-only copy of the current buffer</a></li>
+<li><a href="#org4adebb6">5.12. Cleanup, close all windows and kill all buffers</a></li>
+<li><a href="#orgf8ad0ea">5.13. Cleanup current buffer</a></li>
+<li><a href="#orga01c2ff">5.14. Better newline(s)</a></li>
+<li><a href="#org0cd245d">5.15. Mouse Rectangle</a></li>
+<li><a href="#org59840bb">5.16. DOS &lt;=&gt; UNIX conversion helpers</a></li>
+<li><a href="#org4cec669">5.17. helper do add the same thing to multiple mode hooks</a></li>
+<li><a href="#org9c54c41">5.18. helper to catch load errors</a></li>
+<li><a href="#org6afe5c9">5.19. Alignment Wrappers</a></li>
+<li><a href="#orgedcd3ca">5.20. String Helpers</a></li>
 </ul>
 </li>
-<li><a href="#org2432091">6. Modes</a>
+<li><a href="#org1dfb33e">6. Modes</a>
 <ul>
-<li><a href="#orgb9f551c">6.1. Programming Languages</a>
+<li><a href="#org95b26d6">6.1. Programming Languages</a>
 <ul>
-<li><a href="#org0d7bad3">6.1.1. VALA</a></li>
-<li><a href="#org11897ad">6.1.2. python mode</a></li>
-<li><a href="#orge31dded">6.1.3. cperl mode</a></li>
-<li><a href="#orge61ee0c">6.1.4. Paredit for lisp only</a></li>
-<li><a href="#org6ad07c1">6.1.5. ETAGS</a></li>
+<li><a href="#org5998720">6.1.1. VALA</a></li>
+<li><a href="#org8eeaed9">6.1.2. python mode</a></li>
+<li><a href="#org58f4124">6.1.3. cperl mode</a></li>
+<li><a href="#orgdf28519">6.1.4. Paredit for lisp only</a></li>
+<li><a href="#org8de0669">6.1.5. ETAGS</a></li>
 </ul>
 </li>
-<li><a href="#org5ce70b8">6.2. Text Modes</a>
+<li><a href="#org31fbc8f">6.2. Text Modes</a>
 <ul>
-<li><a href="#orge55fcfb">6.2.1. sgml</a></li>
-<li><a href="#orgaeb3460">6.2.2. web-mode (JS, HTML, CSS combined)</a></li>
-<li><a href="#org806985c">6.2.3. Cisco Mode</a></li>
-<li><a href="#orgc28f31c">6.2.4. Markdown</a></li>
-<li><a href="#orgd4d070b">6.2.5. POD mode</a></li>
-<li><a href="#org594ca91">6.2.6. conf-mode</a></li>
-<li><a href="#orgacc3758">6.2.7. Config::General mode</a></li>
-<li><a href="#orgad66c1a">6.2.8. Xmodmap Mode</a></li>
-<li><a href="#orgde40be0">6.2.9. MMM Mode</a></li>
+<li><a href="#orgc29524b">6.2.1. sgml</a></li>
+<li><a href="#orgd9ccd6e">6.2.2. web-mode (JS, HTML, CSS combined)</a></li>
+<li><a href="#org867c450">6.2.3. Cisco Mode</a></li>
+<li><a href="#org91acd58">6.2.4. Markdown</a></li>
+<li><a href="#org9f8e50c">6.2.5. POD mode</a></li>
+<li><a href="#org9f60fba">6.2.6. conf-mode</a></li>
+<li><a href="#org155a6ed">6.2.7. Config::General mode</a></li>
+<li><a href="#orge4155f1">6.2.8. Xmodmap Mode</a></li>
+<li><a href="#org82aa168">6.2.9. MMM Mode</a></li>
 </ul>
 </li>
-<li><a href="#org58e05c2">6.3. Text Manupilation</a>
+<li><a href="#orgae84f93">6.3. Text Manupilation</a>
 <ul>
-<li><a href="#org27bee4c">6.3.1. expand-region</a></li>
-<li><a href="#orgfa7c248">6.3.2. Mark, Copy, Yank Things</a></li>
-<li><a href="#orgc1ff81c">6.3.3. change-inner</a></li>
-<li><a href="#org22c1064">6.3.4. Rotate text</a></li>
-<li><a href="#orgeff862d">6.3.5. Word wrapping</a></li>
-<li><a href="#org623c311">6.3.6. Viking Mode</a></li>
-<li><a href="#org08cfb4e">6.3.7. HTMLize</a></li>
-<li><a href="#org9d0a3f0">6.3.8. iEdit (inline edit multiple searches)</a></li>
+<li><a href="#org5689377">6.3.1. expand-region</a></li>
+<li><a href="#org3300d2d">6.3.2. Mark, Copy, Yank Things</a></li>
+<li><a href="#orgebad629">6.3.3. change-inner</a></li>
+<li><a href="#org0b6aa5e">6.3.4. Rotate text</a></li>
+<li><a href="#org2969fa1">6.3.5. Word wrapping</a></li>
+<li><a href="#org6f8cf6d">6.3.6. Viking Mode</a></li>
+<li><a href="#org8d93358">6.3.7. HTMLize</a></li>
+<li><a href="#orga3c41d1">6.3.8. iEdit (inline edit multiple searches)</a></li>
 </ul>
 </li>
-<li><a href="#orgcebaf93">6.4. Interactives</a>
+<li><a href="#orga33ad97">6.4. Interactives</a>
 <ul>
-<li><a href="#org8ded26e">6.4.1. eShell stuff, or if interactive stuff is needed, use ansi-term</a></li>
-<li><a href="#org2cbdc45">6.4.2. Emacs LISP interactive</a></li>
-<li><a href="#org798cbbd">6.4.3. el2markdown</a></li>
-<li><a href="#org5eccfb8">6.4.4. tramp mode</a></li>
-<li><a href="#orgb9640fa">6.4.5. org mode</a></li>
-<li><a href="#org99635a9">6.4.6. org table mode</a></li>
-<li><a href="#org6dfbf25">6.4.7. org mode slideshows</a></li>
-<li><a href="#orgd29a43e">6.4.8. outshine mode</a></li>
-<li><a href="#org79b5bfd">6.4.9. outline mode</a></li>
-<li><a href="#orgfb0a2ea">6.4.10. narrowing (no mode but fits here)</a></li>
-<li><a href="#orgdee3e1f">6.4.11. ANSI-TERM (inferior shells/interpreters and REPLs)</a></li>
-<li><a href="#orgc55d827">6.4.12. Puppet</a></li>
-<li><a href="#org3d0721a">6.4.13. Novel Mode - Screen Reader</a></li>
-<li><a href="#org0f17e10">6.4.14. Macro Math</a></li>
-<li><a href="#orgdd4d35e">6.4.15. Common-Lisp (SLIME)</a></li>
-<li><a href="#orgc3d4e4b">6.4.16. INFO Mode</a></li>
-<li><a href="#orgd9b9b3e">6.4.17. calc et al.</a></li>
-<li><a href="#org54df3e5">6.4.18. MACROs</a></li>
-<li><a href="#orgfbba60f">6.4.19. EWW browser stuff</a></li>
-<li><a href="#org34a9792">6.4.20. Firestarter</a></li>
-<li><a href="#org6274efc">6.4.21. Tabulated List Mode</a></li>
-<li><a href="#org0b7e489">6.4.22. Help Mode</a></li>
-<li><a href="#orgefa546a">6.4.23. Suggest Mode</a></li>
-<li><a href="#org636b326">6.4.24. Followcursor Mode</a></li>
-<li><a href="#org3b8fc25">6.4.25. Magit</a></li>
+<li><a href="#org9595d4e">6.4.1. eShell stuff, or if interactive stuff is needed, use ansi-term</a></li>
+<li><a href="#orga3317e7">6.4.2. Emacs LISP interactive</a></li>
+<li><a href="#org473a586">6.4.3. el2markdown</a></li>
+<li><a href="#org91e51ed">6.4.4. tramp mode</a></li>
+<li><a href="#orgfa1dc0f">6.4.5. org mode</a></li>
+<li><a href="#org0310264">6.4.6. org table mode</a></li>
+<li><a href="#orga33956a">6.4.7. org mode slideshows</a></li>
+<li><a href="#org10e21a1">6.4.8. outshine mode</a></li>
+<li><a href="#org7c877e0">6.4.9. outline mode</a></li>
+<li><a href="#org1e7fef3">6.4.10. narrowing (no mode but fits here)</a></li>
+<li><a href="#orgd35e948">6.4.11. ANSI-TERM (inferior shells/interpreters and REPLs)</a></li>
+<li><a href="#orgaba9496">6.4.12. Puppet</a></li>
+<li><a href="#orgf7daa64">6.4.13. Novel Mode - Screen Reader</a></li>
+<li><a href="#org35abb1d">6.4.14. Macro Math</a></li>
+<li><a href="#orgfb8cd01">6.4.15. Common-Lisp (SLIME)</a></li>
+<li><a href="#orgcfa2941">6.4.16. INFO Mode</a></li>
+<li><a href="#org36a9d5f">6.4.17. calc et al.</a></li>
+<li><a href="#org9300cfe">6.4.18. MACROs</a></li>
+<li><a href="#orga6e3b07">6.4.19. EWW browser stuff</a></li>
+<li><a href="#org03aad87">6.4.20. Firestarter</a></li>
+<li><a href="#orgca3975f">6.4.21. Tabulated List Mode</a></li>
+<li><a href="#orga46b17d">6.4.22. Help Mode</a></li>
+<li><a href="#org980e6a5">6.4.23. Suggest Mode</a></li>
+<li><a href="#org7610483">6.4.24. Followcursor Mode</a></li>
+<li><a href="#org7b092a3">6.4.25. Magit</a></li>
 </ul>
 </li>
-<li><a href="#org88a7238">6.5. Emacs Interface</a>
+<li><a href="#orga8fa542">6.5. Emacs Interface</a>
 <ul>
-<li><a href="#orge60e233">6.5.1. Parens</a></li>
-<li><a href="#org3eda1d7">6.5.2. highlight todo keywords (such as <i>FIXME</i>)</a></li>
-<li><a href="#orge17f87f">6.5.3. UNDO Tree Mode</a></li>
-<li><a href="#orgb8db313">6.5.4. Smarter M-x Mode (smex)</a></li>
-<li><a href="#org8866f01">6.5.5. Which Func</a></li>
-<li><a href="#orge5bd207">6.5.6. Show current-line in the Fringe</a></li>
-<li><a href="#org25227f6">6.5.7. Recent Files</a></li>
-<li><a href="#orgf0364c4">6.5.8. IDO mode</a></li>
-<li><a href="#org7a81907">6.5.9. Save cursor position</a></li>
-<li><a href="#org2a4fb33">6.5.10. DoReMi experimentation</a></li>
-<li><a href="#orga54c7e1">6.5.11. Hightligt TABs</a></li>
-<li><a href="#org35fdd43">6.5.12. Browse kill-ring</a></li>
-<li><a href="#org3825157">6.5.13. goto-last-change</a></li>
-<li><a href="#orgd077464">6.5.14. Bookmarks</a></li>
-<li><a href="#org3028c8b">6.5.15. which-key</a></li>
-<li><a href="#orgfbf3f4d">6.5.16. iBuffer mode</a></li>
-<li><a href="#orgc74fa98">6.5.17. Printing</a></li>
-<li><a href="#org88aad90">6.5.18. Beacon mode (pointer blink)</a></li>
+<li><a href="#org3e20186">6.5.1. Parens</a></li>
+<li><a href="#orge60ba1a">6.5.2. highlight todo keywords (such as <i>FIXME</i>)</a></li>
+<li><a href="#org54e4f22">6.5.3. UNDO Tree Mode</a></li>
+<li><a href="#orgec0c8fd">6.5.4. Smarter M-x Mode (smex)</a></li>
+<li><a href="#orgcf647f0">6.5.5. Which Func</a></li>
+<li><a href="#org584e613">6.5.6. Show current-line in the Fringe</a></li>
+<li><a href="#orga0ca64a">6.5.7. Recent Files</a></li>
+<li><a href="#orgb8fc2b7">6.5.8. IDO mode</a></li>
+<li><a href="#org6e0b76a">6.5.9. Save cursor position</a></li>
+<li><a href="#orgce37712">6.5.10. DoReMi experimentation</a></li>
+<li><a href="#org6b0a518">6.5.11. Hightligt TABs</a></li>
+<li><a href="#orgd4299b6">6.5.12. Browse kill-ring</a></li>
+<li><a href="#orgf4defa3">6.5.13. goto-last-change</a></li>
+<li><a href="#org471bd24">6.5.14. Bookmarks</a></li>
+<li><a href="#orgc529521">6.5.15. which-key</a></li>
+<li><a href="#org14bf47f">6.5.16. iBuffer mode</a></li>
+<li><a href="#org9c86f40">6.5.17. Printing</a></li>
+<li><a href="#org10a4c82">6.5.18. Beacon mode (pointer blink)</a></li>
 </ul>
 </li>
-<li><a href="#org063d0a4">6.6. mode-line setup (must be the last mode)</a></li>
+<li><a href="#org567c4c3">6.6. mode-line setup (must be the last mode)</a></li>
 </ul>
 </li>
-<li><a href="#org8030e11">7. Emacs Autoconfig / Customizegroup stuff</a>
+<li><a href="#orgb2cfcf2">7. Emacs Autoconfig / Customizegroup stuff</a>
 <ul>
-<li><a href="#org1d72aa1">7.1. font faces</a></li>
-<li><a href="#org9da8d82">7.2. variables</a></li>
-<li><a href="#org2c33e99">7.3. done</a></li>
+<li><a href="#org87de9e5">7.1. font faces</a></li>
+<li><a href="#org8a8b4ae">7.2. variables</a></li>
+<li><a href="#orgfc836a8">7.3. done</a></li>
 </ul>
 </li>
 </ul>
@@ -426,8 +426,8 @@ for the JavaScript code in this tag.
 <p>
 Toms Emacs Config - portable - version (20170731.01)          -*-emacs-lisp-*-
 </p>
-<div id="outline-container-orgb04d804" class="outline-2">
-<h2 id="orgb04d804"><span class="section-number-2">1</span> Introduction</h2>
+<div id="outline-container-orgb77bae2" class="outline-2">
+<h2 id="orgb77bae2"><span class="section-number-2">1</span> Introduction</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -481,11 +481,11 @@ outshine-to-html, written by myself, see below.
 </div>
 
 
-<div id="outline-container-org6ed7748" class="outline-2">
-<h2 id="org6ed7748"><span class="section-number-2">2</span> Config Log, Trivia, Notes, Changes</h2>
+<div id="outline-container-orgf398ee1" class="outline-2">
+<h2 id="orgf398ee1"><span class="section-number-2">2</span> Config Log, Trivia, Notes, Changes</h2>
 <div class="outline-text-2" id="text-2">
-</div><div id="outline-container-org610acc4" class="outline-3">
-<h3 id="org610acc4"><span class="section-number-3">2.1</span> Changelog</h3>
+</div><div id="outline-container-org4fa592a" class="outline-3">
+<h3 id="org4fa592a"><span class="section-number-3">2.1</span> Changelog</h3>
 <div class="outline-text-3" id="text-2-1">
 <p>
 20160420.03:
@@ -1499,12 +1499,13 @@ that ip's are left aligned</li>
 <li>do not load magit on w32</li>
 <li>Always call `magit-status' with prefix arg</li>
 <li>do bigger jumps in magit with just C-&lt;up|down&gt;</li>
+<li>add "ls" to magit-status leading to dired</li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-orge5560e5" class="outline-3">
-<h3 id="orge5560e5"><span class="section-number-3">2.2</span> <span class="todo TODO">TODO</span> </h3>
+<div id="outline-container-org51d48e8" class="outline-3">
+<h3 id="org51d48e8"><span class="section-number-3">2.2</span> <span class="todo TODO">TODO</span> </h3>
 <div class="outline-text-3" id="text-2-2">
 <ul class="org-ul">
 <li>check helpful <a href="https://github.com/wilfred/helpful">https://github.com/wilfred/helpful</a></li>
@@ -1519,16 +1520,16 @@ that ip's are left aligned</li>
 </div>
 </div>
 
-<div id="outline-container-org5b758df" class="outline-3">
-<h3 id="org5b758df"><span class="section-number-3">2.3</span> Parking Lot / Snippets</h3>
+<div id="outline-container-org119a78e" class="outline-3">
+<h3 id="org119a78e"><span class="section-number-3">2.3</span> Parking Lot / Snippets</h3>
 <div class="outline-text-3" id="text-2-3">
 <p>
 Snippets which maybe of use in the future
 </p>
 </div>
 
-<div id="outline-container-orgf5f781e" class="outline-4">
-<h4 id="orgf5f781e"><span class="section-number-4">2.3.1</span> buffer-local hook</h4>
+<div id="outline-container-org99546a6" class="outline-4">
+<h4 id="org99546a6"><span class="section-number-4">2.3.1</span> buffer-local hook</h4>
 <div class="outline-text-4" id="text-2-3-1">
 <p>
 (with-current-buffer (get-buffer "<b>scratch</b>")
@@ -1541,8 +1542,8 @@ Snippets which maybe of use in the future
 </div>
 </div>
 </div>
-<div id="outline-container-org5a39296" class="outline-3">
-<h3 id="org5a39296"><span class="section-number-3">2.4</span> .emacs config version</h3>
+<div id="outline-container-org8afe11d" class="outline-3">
+<h3 id="org8afe11d"><span class="section-number-3">2.4</span> .emacs config version</h3>
 <div class="outline-text-3" id="text-2-4">
 <p>
 My emacs  config has a  version (consisting  of a timestamp  with a
@@ -1559,11 +1560,11 @@ I'm using an outdated config somewhere.
 </div>
 </div>
 
-<div id="outline-container-org5c98bb7" class="outline-2">
-<h2 id="org5c98bb7"><span class="section-number-2">3</span> System Specifics</h2>
+<div id="outline-container-org1ea8c11" class="outline-2">
+<h2 id="org1ea8c11"><span class="section-number-2">3</span> System Specifics</h2>
 <div class="outline-text-2" id="text-3">
-</div><div id="outline-container-org2d3fe60" class="outline-3">
-<h3 id="org2d3fe60"><span class="section-number-3">3.1</span> Global init file+dir vars, portable</h3>
+</div><div id="outline-container-orgc9b8814" class="outline-3">
+<h3 id="orgc9b8814"><span class="section-number-3">3.1</span> Global init file+dir vars, portable</h3>
 <div class="outline-text-3" id="text-3-1">
 <ul class="org-ul">
 <li>added dev function which opens a new development frame</li>
@@ -1601,8 +1602,8 @@ all modes and extensions are located here
 <hr />
 </div>
 </div>
-<div id="outline-container-orgc63f926" class="outline-3">
-<h3 id="orgc63f926"><span class="section-number-3">3.2</span> Fontlock-mode - use syntax highlighting on graphical displays</h3>
+<div id="outline-container-orgab48572" class="outline-3">
+<h3 id="orgab48572"><span class="section-number-3">3.2</span> Fontlock-mode - use syntax highlighting on graphical displays</h3>
 <div class="outline-text-3" id="text-3-2">
 <p>
 look: <a href="https://www.emacswiki.org/emacs/CustomizingBoth">emacswiki</a>
@@ -1619,8 +1620,8 @@ look: <a href="https://www.emacswiki.org/emacs/CustomizingBoth">emacswiki</a>
 <hr />
 </div>
 </div>
-<div id="outline-container-orge64a22b" class="outline-3">
-<h3 id="orge64a22b"><span class="section-number-3">3.3</span> line-cursor in console</h3>
+<div id="outline-container-org575984f" class="outline-3">
+<h3 id="org575984f"><span class="section-number-3">3.3</span> line-cursor in console</h3>
 <div class="outline-text-3" id="text-3-3">
 <p>
 better visibility of cursor in console sessions
@@ -1636,8 +1637,8 @@ better visibility of cursor in console sessions
 <hr />
 </div>
 </div>
-<div id="outline-container-org5b62e0d" class="outline-3">
-<h3 id="org5b62e0d"><span class="section-number-3">3.4</span> Backup Config</h3>
+<div id="outline-container-orgc80e8bc" class="outline-3">
+<h3 id="orgc80e8bc"><span class="section-number-3">3.4</span> Backup Config</h3>
 <div class="outline-text-3" id="text-3-4">
 <p>
 I save backup files in a  central location below the init dir, that
@@ -1708,8 +1709,8 @@ This is system specific and only matches special host names.
 <hr />
 </div>
 </div>
-<div id="outline-container-orgeb63895" class="outline-3">
-<h3 id="orgeb63895"><span class="section-number-3">3.5</span> console backspace fix</h3>
+<div id="outline-container-org28a4abe" class="outline-3">
+<h3 id="org28a4abe"><span class="section-number-3">3.5</span> console backspace fix</h3>
 <div class="outline-text-3" id="text-3-5">
 <p>
 make backspace work in console sessions
@@ -1722,8 +1723,8 @@ make backspace work in console sessions
 <hr />
 </div>
 </div>
-<div id="outline-container-orgcd42e24" class="outline-3">
-<h3 id="orgcd42e24"><span class="section-number-3">3.6</span> hide menu- and tool-bar</h3>
+<div id="outline-container-org50f2cfa" class="outline-3">
+<h3 id="org50f2cfa"><span class="section-number-3">3.6</span> hide menu- and tool-bar</h3>
 <div class="outline-text-3" id="text-3-6">
 <p>
 I prefer a bare bones emacs window without any distractions, so turn them off.
@@ -1739,8 +1740,8 @@ I prefer a bare bones emacs window without any distractions, so turn them off.
 <hr />
 </div>
 </div>
-<div id="outline-container-org788411e" class="outline-3">
-<h3 id="org788411e"><span class="section-number-3">3.7</span> stay silent on startup</h3>
+<div id="outline-container-orge8cf187" class="outline-3">
+<h3 id="orge8cf187"><span class="section-number-3">3.7</span> stay silent on startup</h3>
 <div class="outline-text-3" id="text-3-7">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #0000ff;">setq</span> initial-scratch-message <span style="color: #ff0000;">""</span>)
@@ -1753,8 +1754,8 @@ I prefer a bare bones emacs window without any distractions, so turn them off.
 <hr />
 </div>
 </div>
-<div id="outline-container-org7eae7b7" class="outline-3">
-<h3 id="org7eae7b7"><span class="section-number-3">3.8</span> y means yes</h3>
+<div id="outline-container-orge96e8ed" class="outline-3">
+<h3 id="orge96e8ed"><span class="section-number-3">3.8</span> y means yes</h3>
 <div class="outline-text-3" id="text-3-8">
 <p>
 y is shorter than yes and less error prone.
@@ -1767,8 +1768,8 @@ y is shorter than yes and less error prone.
 <hr />
 </div>
 </div>
-<div id="outline-container-orge2a0098" class="outline-3">
-<h3 id="orge2a0098"><span class="section-number-3">3.9</span> show col in modeline</h3>
+<div id="outline-container-orga57394f" class="outline-3">
+<h3 id="orga57394f"><span class="section-number-3">3.9</span> show col in modeline</h3>
 <div class="outline-text-3" id="text-3-9">
 <p>
 very useful to know current column
@@ -1781,8 +1782,8 @@ very useful to know current column
 <hr />
 </div>
 </div>
-<div id="outline-container-orgc23d85b" class="outline-3">
-<h3 id="orgc23d85b"><span class="section-number-3">3.10</span> file or buffer in title</h3>
+<div id="outline-container-orgfb1d55e" class="outline-3">
+<h3 id="orgfb1d55e"><span class="section-number-3">3.10</span> file or buffer in title</h3>
 <div class="outline-text-3" id="text-3-10">
 <p>
 this can be seen in xmobar
@@ -1796,8 +1797,8 @@ this can be seen in xmobar
 <hr />
 </div>
 </div>
-<div id="outline-container-org3727503" class="outline-3">
-<h3 id="org3727503"><span class="section-number-3">3.11</span> avoid invalid files</h3>
+<div id="outline-container-orgf8540e4" class="outline-3">
+<h3 id="orgf8540e4"><span class="section-number-3">3.11</span> avoid invalid files</h3>
 <div class="outline-text-3" id="text-3-11">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #0000ff;">setq</span> require-final-newline t)
@@ -1807,8 +1808,8 @@ this can be seen in xmobar
 <hr />
 </div>
 </div>
-<div id="outline-container-orgd965150" class="outline-3">
-<h3 id="orgd965150"><span class="section-number-3">3.12</span> prepare load-path</h3>
+<div id="outline-container-org0e738a6" class="outline-3">
+<h3 id="org0e738a6"><span class="section-number-3">3.12</span> prepare load-path</h3>
 <div class="outline-text-3" id="text-3-12">
 <p>
 where to look for extensions:
@@ -1835,8 +1836,8 @@ modules
 <hr />
 </div>
 </div>
-<div id="outline-container-orgc47d3cd" class="outline-3">
-<h3 id="orgc47d3cd"><span class="section-number-3">3.13</span> byte-compile all of them, if needed</h3>
+<div id="outline-container-org9feedab" class="outline-3">
+<h3 id="org9feedab"><span class="section-number-3">3.13</span> byte-compile all of them, if needed</h3>
 <div class="outline-text-3" id="text-3-13">
 <p>
 handy function to recompile all lisp files
@@ -1851,8 +1852,8 @@ handy function to recompile all lisp files
 <hr />
 </div>
 </div>
-<div id="outline-container-orgd14deea" class="outline-3">
-<h3 id="orgd14deea"><span class="section-number-3">3.14</span> increase fontsize with ctrl-+ and ctrl--</h3>
+<div id="outline-container-org0e100da" class="outline-3">
+<h3 id="org0e100da"><span class="section-number-3">3.14</span> increase fontsize with ctrl-+ and ctrl--</h3>
 <div class="outline-text-3" id="text-3-14">
 <p>
 I use  those bindings everywhere  (firefox, terminal, etc),  and in
@@ -1878,11 +1879,11 @@ emacs as well.
 <hr />
 </div>
 </div>
-<div id="outline-container-org637ac3a" class="outline-3">
-<h3 id="org637ac3a"><span class="section-number-3">3.15</span> WINDOW management stuff</h3>
+<div id="outline-container-org554270e" class="outline-3">
+<h3 id="org554270e"><span class="section-number-3">3.15</span> WINDOW management stuff</h3>
 <div class="outline-text-3" id="text-3-15">
-</div><div id="outline-container-orgd328797" class="outline-4">
-<h4 id="orgd328797"><span class="section-number-4">3.15.1</span> resize windows by keyboard</h4>
+</div><div id="outline-container-org935f2df" class="outline-4">
+<h4 id="org935f2df"><span class="section-number-4">3.15.1</span> resize windows by keyboard</h4>
 <div class="outline-text-4" id="text-3-15-1">
 <p>
 Very practical: resize windows easily.
@@ -1899,8 +1900,8 @@ hit C-c C-r then use cursor keys to resize, &lt;ret&gt; to finish
 </div>
 </div>
 
-<div id="outline-container-orgda33650" class="outline-4">
-<h4 id="orgda33650"><span class="section-number-4">3.15.2</span> switch windows with MS-WINDOWS key</h4>
+<div id="outline-container-org7e93a56" class="outline-4">
+<h4 id="org7e93a56"><span class="section-number-4">3.15.2</span> switch windows with MS-WINDOWS key</h4>
 <div class="outline-text-4" id="text-3-15-2">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #0000ff;">require</span> <span style="color: #ff00ff;">'windmove</span>)
@@ -1911,8 +1912,8 @@ hit C-c C-r then use cursor keys to resize, &lt;ret&gt; to finish
 </div>
 </div>
 
-<div id="outline-container-orga8905b2" class="outline-4">
-<h4 id="orga8905b2"><span class="section-number-4">3.15.3</span> M-o switch window or buffer</h4>
+<div id="outline-container-org906465d" class="outline-4">
+<h4 id="org906465d"><span class="section-number-4">3.15.3</span> M-o switch window or buffer</h4>
 <div class="outline-text-4" id="text-3-15-3">
 <p>
 via <a href="http://mbork.pl/2017-02-26_other-window-or-switch-buffer">mbork</a>
@@ -1990,8 +1991,8 @@ Use only in  X11 emacs - setting M-O inside console  causes &lt;up&gt; and
 <hr />
 </div>
 </div>
-<div id="outline-container-org59c34ee" class="outline-4">
-<h4 id="org59c34ee"><span class="section-number-4">3.15.4</span> Split window to 4 parts</h4>
+<div id="outline-container-org66da4c5" class="outline-4">
+<h4 id="org66da4c5"><span class="section-number-4">3.15.4</span> Split window to 4 parts</h4>
 <div class="outline-text-4" id="text-3-15-4">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #0000ff;">defun</span> <span style="color: #9932cc;">tvd-quarter-windows</span> ()
@@ -2009,8 +2010,8 @@ Use only in  X11 emacs - setting M-O inside console  causes &lt;up&gt; and
 </div>
 </div>
 
-<div id="outline-container-orgf546a89" class="outline-4">
-<h4 id="orgf546a89"><span class="section-number-4">3.15.5</span> Remember and Restore Window Configurations - winner mode</h4>
+<div id="outline-container-org6d56a82" class="outline-4">
+<h4 id="org6d56a82"><span class="section-number-4">3.15.5</span> Remember and Restore Window Configurations - winner mode</h4>
 <div class="outline-text-4" id="text-3-15-5">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(winner-mode 1)
@@ -2025,8 +2026,8 @@ keybindings: C-c right   - winner-redo
 </div>
 </div>
 
-<div id="outline-container-orgee33e6f" class="outline-3">
-<h3 id="orgee33e6f"><span class="section-number-3">3.16</span> re-read a modified buffer</h3>
+<div id="outline-container-org01d67e0" class="outline-3">
+<h3 id="org01d67e0"><span class="section-number-3">3.16</span> re-read a modified buffer</h3>
 <div class="outline-text-3" id="text-3-16">
 <p>
 F5 == reload file if it has been modified by another process, shift
@@ -2051,8 +2052,8 @@ because Xmonad
 <hr />
 </div>
 </div>
-<div id="outline-container-org1259eed" class="outline-3">
-<h3 id="org1259eed"><span class="section-number-3">3.17</span> global TAB/Indent config</h3>
+<div id="outline-container-org4648335" class="outline-3">
+<h3 id="org4648335"><span class="section-number-3">3.17</span> global TAB/Indent config</h3>
 <div class="outline-text-3" id="text-3-17">
 <p>
 I  use spaces  everywhere  but  Makefiles. If  I  encounter TABs  I
@@ -2092,8 +2093,8 @@ Use normal tabs in makefiles
 <hr />
 </div>
 </div>
-<div id="outline-container-org6b7247b" class="outline-3">
-<h3 id="org6b7247b"><span class="section-number-3">3.18</span> handy aliases</h3>
+<div id="outline-container-org3a88b30" class="outline-3">
+<h3 id="org3a88b30"><span class="section-number-3">3.18</span> handy aliases</h3>
 <div class="outline-text-3" id="text-3-18">
 <p>
 M-x q r &lt;ret&gt; is short enough  for me, no need for key bindings for
@@ -2125,8 +2126,8 @@ those
 <hr />
 </div>
 </div>
-<div id="outline-container-orgeddfe7e" class="outline-3">
-<h3 id="orgeddfe7e"><span class="section-number-3">3.19</span> various settings</h3>
+<div id="outline-container-org8bc77eb" class="outline-3">
+<h3 id="org8bc77eb"><span class="section-number-3">3.19</span> various settings</h3>
 <div class="outline-text-3" id="text-3-19">
 <p>
 point stays while scrolling
@@ -2179,8 +2180,8 @@ I'm grown up!
 <hr />
 </div>
 </div>
-<div id="outline-container-org0b17ebf" class="outline-3">
-<h3 id="org0b17ebf"><span class="section-number-3">3.20</span> load imenu</h3>
+<div id="outline-container-orga44cd0d" class="outline-3">
+<h3 id="orga44cd0d"><span class="section-number-3">3.20</span> load imenu</h3>
 <div class="outline-text-3" id="text-3-20">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(define-key global-map [C-down-mouse-2] <span style="color: #ff00ff;">'imenu</span>)
@@ -2190,8 +2191,8 @@ I'm grown up!
 <hr />
 </div>
 </div>
-<div id="outline-container-org45b7228" class="outline-3">
-<h3 id="org45b7228"><span class="section-number-3">3.21</span> copy/paste Config</h3>
+<div id="outline-container-orgbda9640" class="outline-3">
+<h3 id="orgbda9640"><span class="section-number-3">3.21</span> copy/paste Config</h3>
 <div class="outline-text-3" id="text-3-21">
 <p>
 Related:
@@ -2258,8 +2259,8 @@ marked region automatically copied, also on win
 <hr />
 </div>
 </div>
-<div id="outline-container-orgebc4572" class="outline-3">
-<h3 id="orgebc4572"><span class="section-number-3">3.22</span> use more mem</h3>
+<div id="outline-container-org2474b30" class="outline-3">
+<h3 id="org2474b30"><span class="section-number-3">3.22</span> use more mem</h3>
 <div class="outline-text-3" id="text-3-22">
 <p>
 are you from the past?
@@ -2272,8 +2273,8 @@ are you from the past?
 <hr />
 </div>
 </div>
-<div id="outline-container-orgf6ac561" class="outline-3">
-<h3 id="orgf6ac561"><span class="section-number-3">3.23</span> better file name completion</h3>
+<div id="outline-container-org6d2284c" class="outline-3">
+<h3 id="org6d2284c"><span class="section-number-3">3.23</span> better file name completion</h3>
 <div class="outline-text-3" id="text-3-23">
 <p>
 Complete filenames case insensitive and ignore certain files during completion.
@@ -2303,8 +2304,8 @@ via <a href="http://endlessparentheses.com/improving-emacs-file-name-completion.
 <hr />
 </div>
 </div>
-<div id="outline-container-org0d33cfb" class="outline-3">
-<h3 id="org0d33cfb"><span class="section-number-3">3.24</span> abbreviations</h3>
+<div id="outline-container-orgc1abe99" class="outline-3">
+<h3 id="orgc1abe99"><span class="section-number-3">3.24</span> abbreviations</h3>
 <div class="outline-text-3" id="text-3-24">
 <p>
 Do I really need those anymore? Added ca 1999&#x2026;
@@ -2334,8 +2335,8 @@ do NOT ask to save abbrevs on exit
 </div>
 </div>
 
-<div id="outline-container-org49f13ce" class="outline-3">
-<h3 id="org49f13ce"><span class="section-number-3">3.25</span> meaningful names for buffers with the same name</h3>
+<div id="outline-container-orgca0150d" class="outline-3">
+<h3 id="orgca0150d"><span class="section-number-3">3.25</span> meaningful names for buffers with the same name</h3>
 <div class="outline-text-3" id="text-3-25">
 <p>
 from (<a href="https://github.com/bbatsov/prelude">prelude</a>)
@@ -2353,8 +2354,8 @@ from (<a href="https://github.com/bbatsov/prelude">prelude</a>)
 <hr />
 </div>
 </div>
-<div id="outline-container-orgf9c5941" class="outline-3">
-<h3 id="orgf9c5941"><span class="section-number-3">3.26</span> packages</h3>
+<div id="outline-container-orgee3fb58" class="outline-3">
+<h3 id="orgee3fb58"><span class="section-number-3">3.26</span> packages</h3>
 <div class="outline-text-3" id="text-3-26">
 <p>
 I dont need  it all the time and only  for experimentation, so lets
@@ -2377,8 +2378,8 @@ only use melpa on demand
 <hr />
 </div>
 </div>
-<div id="outline-container-org65f0860" class="outline-3">
-<h3 id="org65f0860"><span class="section-number-3">3.27</span> My own global variables</h3>
+<div id="outline-container-orgd79d926" class="outline-3">
+<h3 id="orgd79d926"><span class="section-number-3">3.27</span> My own global variables</h3>
 <div class="outline-text-3" id="text-3-27">
 <p>
 narrowed fringe background
@@ -2391,11 +2392,11 @@ narrowed fringe background
 <hr />
 </div>
 </div>
-<div id="outline-container-org4a843bc" class="outline-3">
-<h3 id="org4a843bc"><span class="section-number-3">3.28</span> More scratch space</h3>
+<div id="outline-container-org5be14e0" class="outline-3">
+<h3 id="org5be14e0"><span class="section-number-3">3.28</span> More scratch space</h3>
 <div class="outline-text-3" id="text-3-28">
-</div><div id="outline-container-org1bd4fe6" class="outline-4">
-<h4 id="org1bd4fe6"><span class="section-number-4">3.28.1</span> Text scratch</h4>
+</div><div id="outline-container-orgab1558c" class="outline-4">
+<h4 id="orgab1558c"><span class="section-number-4">3.28.1</span> Text scratch</h4>
 <div class="outline-text-4" id="text-3-28-1">
 <p>
 Sometimes  I need  a  text  mode scratch  buffer  while scratch  is
@@ -2411,8 +2412,8 @@ this never gets deleted, but cleaned instead.
 </div>
 </div>
 
-<div id="outline-container-org7e7c565" class="outline-4">
-<h4 id="org7e7c565"><span class="section-number-4">3.28.2</span> Autoscratch</h4>
+<div id="outline-container-orge9b0276" class="outline-4">
+<h4 id="orge9b0276"><span class="section-number-4">3.28.2</span> Autoscratch</h4>
 <div class="outline-text-4" id="text-3-28-2">
 <p>
 use autoscratch otherwise
@@ -2442,8 +2443,8 @@ use autoscratch otherwise
 </div>
 </div>
 
-<div id="outline-container-orga8c1f12" class="outline-4">
-<h4 id="orga8c1f12"><span class="section-number-4">3.28.3</span> Persistent Scratch</h4>
+<div id="outline-container-orgff5b268" class="outline-4">
+<h4 id="orgff5b268"><span class="section-number-4">3.28.3</span> Persistent Scratch</h4>
 <div class="outline-text-4" id="text-3-28-3">
 <p>
 I also like to be scratch buffers persistent with
@@ -2465,8 +2466,8 @@ I also like to be scratch buffers persistent with
 </div>
 </div>
 
-<div id="outline-container-orgb14c95d" class="outline-3">
-<h3 id="orgb14c95d"><span class="section-number-3">3.29</span> Recenter config</h3>
+<div id="outline-container-org0d57f72" class="outline-3">
+<h3 id="org0d57f72"><span class="section-number-3">3.29</span> Recenter config</h3>
 <div class="outline-text-3" id="text-3-29">
 <p>
 <a href="http://oremacs.com/2015/03/28/recenter/">via abo abo</a>
@@ -2487,13 +2488,13 @@ I think this is a recenter calculation bug.
 </div>
 </div>
 
-<div id="outline-container-org4a6b47b" class="outline-2">
-<h2 id="org4a6b47b"><span class="section-number-2">4</span> Global Key Bindings</h2>
+<div id="outline-container-org230c05f" class="outline-2">
+<h2 id="org230c05f"><span class="section-number-2">4</span> Global Key Bindings</h2>
 <div class="outline-text-2" id="text-4">
 <hr />
 </div>
-<div id="outline-container-org03ce1a0" class="outline-3">
-<h3 id="org03ce1a0"><span class="section-number-3">4.1</span> c-h != delete</h3>
+<div id="outline-container-org48a58c3" class="outline-3">
+<h3 id="org48a58c3"><span class="section-number-3">4.1</span> c-h != delete</h3>
 <div class="outline-text-3" id="text-4-1">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(keyboard-translate ?\C-h ?\C-?)
@@ -2504,8 +2505,8 @@ I think this is a recenter calculation bug.
 <hr />
 </div>
 </div>
-<div id="outline-container-org8659a02" class="outline-3">
-<h3 id="org8659a02"><span class="section-number-3">4.2</span> general keys (re-)mappings</h3>
+<div id="outline-container-org9bc119b" class="outline-3">
+<h3 id="org9bc119b"><span class="section-number-3">4.2</span> general keys (re-)mappings</h3>
 <div class="outline-text-3" id="text-4-2">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(global-set-key (<span style="color: #0000ff;">kbd</span> <span style="color: #ff0000;">"C-s"</span>)             <span style="color: #ff00ff;">'isearch-forward-regexp</span>)
@@ -2533,8 +2534,8 @@ I think this is a recenter calculation bug.
 <hr />
 </div>
 </div>
-<div id="outline-container-org4eb7c19" class="outline-3">
-<h3 id="org4eb7c19"><span class="section-number-3">4.3</span> display a list of my own global key bindings and aliases</h3>
+<div id="outline-container-orgdfb8a0b" class="outline-3">
+<h3 id="orgdfb8a0b"><span class="section-number-3">4.3</span> display a list of my own global key bindings and aliases</h3>
 <div class="outline-text-3" id="text-4-3">
 <p>
 via <a href="https://www.emacswiki.org/emacs/OccurMode#toc9">emacswiki</a>
@@ -2611,13 +2612,13 @@ more help with: describe-function occur-mode
 </div>
 </div>
 </div>
-<div id="outline-container-orgd9567c7" class="outline-2">
-<h2 id="orgd9567c7"><span class="section-number-2">5</span> Productivity Functions</h2>
+<div id="outline-container-org6077906" class="outline-2">
+<h2 id="org6077906"><span class="section-number-2">5</span> Productivity Functions</h2>
 <div class="outline-text-2" id="text-5">
 <hr />
 </div>
-<div id="outline-container-org3a77883" class="outline-3">
-<h3 id="org3a77883"><span class="section-number-3">5.1</span> goto line with tmp line numbers</h3>
+<div id="outline-container-org46af389" class="outline-3">
+<h3 id="org46af389"><span class="section-number-3">5.1</span> goto line with tmp line numbers</h3>
 <div class="outline-text-3" id="text-5-1">
 <p>
 I stole this somewhere, as far as I remember, emacswiki, however, I
@@ -2641,8 +2642,8 @@ always had F7 for goto-line
 <hr />
 </div>
 </div>
-<div id="outline-container-orgb91b15a" class="outline-3">
-<h3 id="orgb91b15a"><span class="section-number-3">5.2</span> invert fore- and background</h3>
+<div id="outline-container-org33c2fcc" class="outline-3">
+<h3 id="org33c2fcc"><span class="section-number-3">5.2</span> invert fore- and background</h3>
 <div class="outline-text-3" id="text-5-2">
 <p>
 Sometimes when  sitting in a  very dark enviroment, my  usual light
@@ -2685,8 +2686,8 @@ fast
 <hr />
 </div>
 </div>
-<div id="outline-container-org5e258ed" class="outline-3">
-<h3 id="org5e258ed"><span class="section-number-3">5.3</span> Some useful bindings  for Home and End keys Hit  the key once to</h3>
+<div id="outline-container-org446659c" class="outline-3">
+<h3 id="org446659c"><span class="section-number-3">5.3</span> Some useful bindings  for Home and End keys Hit  the key once to</h3>
 <div class="outline-text-3" id="text-5-3">
 <p>
 Go to the beginning/end  of a line, hit it twice in a  row to go to
@@ -2750,8 +2751,8 @@ This is the most natural use for those keys
 <hr />
 </div>
 </div>
-<div id="outline-container-org3f5a5a6" class="outline-3">
-<h3 id="org3f5a5a6"><span class="section-number-3">5.4</span> percent function</h3>
+<div id="outline-container-org4b0f1f5" class="outline-3">
+<h3 id="org4b0f1f5"><span class="section-number-3">5.4</span> percent function</h3>
 <div class="outline-text-3" id="text-5-4">
 <p>
 by Jens Heunemann: jump to percent position into current buffer
@@ -2772,8 +2773,8 @@ by Jens Heunemann: jump to percent position into current buffer
 <hr />
 </div>
 </div>
-<div id="outline-container-org576ef79" class="outline-3">
-<h3 id="org576ef79"><span class="section-number-3">5.5</span> Simulate vi's % function</h3>
+<div id="outline-container-orgd7e449d" class="outline-3">
+<h3 id="orgd7e449d"><span class="section-number-3">5.5</span> Simulate vi's % function</h3>
 <div class="outline-text-3" id="text-5-5">
 <p>
 There's not  a lot  about vi[m]  I like,  but jumping  with %  to a
@@ -2805,8 +2806,8 @@ just insert a literal ?%. Only make sense if bound to %.
 <hr />
 </div>
 </div>
-<div id="outline-container-org9d21a68" class="outline-3">
-<h3 id="org9d21a68"><span class="section-number-3">5.6</span> Move region</h3>
+<div id="outline-container-org7e9782e" class="outline-3">
+<h3 id="org7e9782e"><span class="section-number-3">5.6</span> Move region</h3>
 <div class="outline-text-3" id="text-5-6">
 <p>
 Mark a region, then use M-up|down to move it around
@@ -2905,8 +2906,8 @@ code from <a href="https://github.com/targzeta/move-lines/blob/master/move-lines
 <hr />
 </div>
 </div>
-<div id="outline-container-org4ddab2d" class="outline-3">
-<h3 id="org4ddab2d"><span class="section-number-3">5.7</span> comment-uncomment region with one key binding</h3>
+<div id="outline-container-orgec73dcb" class="outline-3">
+<h3 id="orgec73dcb"><span class="section-number-3">5.7</span> comment-uncomment region with one key binding</h3>
 <div class="outline-text-3" id="text-5-7">
 <p>
 via <a href="http://stackoverflow.com/a/9697222/3350881">stackoverflow</a>
@@ -2928,8 +2929,8 @@ via <a href="http://stackoverflow.com/a/9697222/3350881">stackoverflow</a>
 <hr />
 </div>
 </div>
-<div id="outline-container-orgc953501" class="outline-3">
-<h3 id="orgc953501"><span class="section-number-3">5.8</span> search for symbol at point</h3>
+<div id="outline-container-org8299554" class="outline-3">
+<h3 id="org8299554"><span class="section-number-3">5.8</span> search for symbol at point</h3>
 <div class="outline-text-3" id="text-5-8">
 <p>
 Simulate the # function of vi,  marks the symbol at point, C-s then
@@ -2973,8 +2974,8 @@ via <a href="http://ergoemacs.org/emacs/modernization_isearch.html">ergomacs</a>
 <hr />
 </div>
 </div>
-<div id="outline-container-org863c918" class="outline-3">
-<h3 id="org863c918"><span class="section-number-3">5.9</span> Window Margin</h3>
+<div id="outline-container-org55919f4" class="outline-3">
+<h3 id="org55919f4"><span class="section-number-3">5.9</span> Window Margin</h3>
 <div class="outline-text-3" id="text-5-9">
 <p>
 Kinda screen reader  for the poor.  I use this  sometimes with info
@@ -3000,8 +3001,8 @@ left+right margin on demand (but nothing else)
 <hr />
 </div>
 </div>
-<div id="outline-container-org10cbf05" class="outline-3">
-<h3 id="org10cbf05"><span class="section-number-3">5.10</span> Fill and justify a paragraph</h3>
+<div id="outline-container-org221e573" class="outline-3">
+<h3 id="org221e573"><span class="section-number-3">5.10</span> Fill and justify a paragraph</h3>
 <div class="outline-text-3" id="text-5-10">
 <p>
 this is just a shortcut for:
@@ -3030,8 +3031,8 @@ idea via: <a href="http://endlessparentheses.com/fill-and-unfill-paragraphs-with
 <hr />
 </div>
 </div>
-<div id="outline-container-orgbdb6bb1" class="outline-3">
-<h3 id="orgbdb6bb1"><span class="section-number-3">5.11</span> Make a read-only copy of the current buffer</h3>
+<div id="outline-container-org40694bc" class="outline-3">
+<h3 id="org40694bc"><span class="section-number-3">5.11</span> Make a read-only copy of the current buffer</h3>
 <div class="outline-text-3" id="text-5-11">
 <p>
 I just create  a new read-only buffer and copy  the contents of the
@@ -3080,8 +3081,8 @@ a file is not maintained via VC anyway.
 <hr />
 </div>
 </div>
-<div id="outline-container-org2bf158c" class="outline-3">
-<h3 id="org2bf158c"><span class="section-number-3">5.12</span> Cleanup, close all windows and kill all buffers</h3>
+<div id="outline-container-org4adebb6" class="outline-3">
+<h3 id="org4adebb6"><span class="section-number-3">5.12</span> Cleanup, close all windows and kill all buffers</h3>
 <div class="outline-text-3" id="text-5-12">
 <p>
 From  time  to  time  I  get annoyed  by  the  many  dozen  buffers
@@ -3114,8 +3115,8 @@ setup accidentally.
 <hr />
 </div>
 </div>
-<div id="outline-container-org740e583" class="outline-3">
-<h3 id="org740e583"><span class="section-number-3">5.13</span> Cleanup current buffer</h3>
+<div id="outline-container-orgf8ad0ea" class="outline-3">
+<h3 id="orgf8ad0ea"><span class="section-number-3">5.13</span> Cleanup current buffer</h3>
 <div class="outline-text-3" id="text-5-13">
 <p>
 Remove TABs, leading and trailing spaces, re-indent a buffer.
@@ -3145,8 +3146,8 @@ via <a href="http://whattheemacsd.com/buffer-defuns.el-01.html">whattheemacs.d</
 <hr />
 </div>
 </div>
-<div id="outline-container-org43e0115" class="outline-3">
-<h3 id="org43e0115"><span class="section-number-3">5.14</span> Better newline(s)</h3>
+<div id="outline-container-orga01c2ff" class="outline-3">
+<h3 id="orga01c2ff"><span class="section-number-3">5.14</span> Better newline(s)</h3>
 <div class="outline-text-3" id="text-5-14">
 <p>
 Add newline  and jump to indent  from wherever I am  in the current
@@ -3189,8 +3190,8 @@ disabled, interferes with modes.
 <hr />
 </div>
 </div>
-<div id="outline-container-org5733c98" class="outline-3">
-<h3 id="org5733c98"><span class="section-number-3">5.15</span> Mouse Rectangle</h3>
+<div id="outline-container-org0cd245d" class="outline-3">
+<h3 id="org0cd245d"><span class="section-number-3">5.15</span> Mouse Rectangle</h3>
 <div class="outline-text-3" id="text-5-15">
 <p>
 There's not  much use for  the mouse in  emacs, but this  gimick is
@@ -3220,8 +3221,8 @@ via <a href="http://emacs.stackexchange.com/a/7261">stackoverflow</a>
 <hr />
 </div>
 </div>
-<div id="outline-container-org6c24f40" class="outline-3">
-<h3 id="org6c24f40"><span class="section-number-3">5.16</span> DOS &lt;=&gt; UNIX conversion helpers</h3>
+<div id="outline-container-org59840bb" class="outline-3">
+<h3 id="org59840bb"><span class="section-number-3">5.16</span> DOS &lt;=&gt; UNIX conversion helpers</h3>
 <div class="outline-text-3" id="text-5-16">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #0000ff;">defun</span> <span style="color: #9932cc;">dos2unix</span> ()
@@ -3239,8 +3240,8 @@ via <a href="http://emacs.stackexchange.com/a/7261">stackoverflow</a>
 <hr />
 </div>
 </div>
-<div id="outline-container-org8191fb3" class="outline-3">
-<h3 id="org8191fb3"><span class="section-number-3">5.17</span> helper do add the same thing to multiple mode hooks</h3>
+<div id="outline-container-org4cec669" class="outline-3">
+<h3 id="org4cec669"><span class="section-number-3">5.17</span> helper do add the same thing to multiple mode hooks</h3>
 <div class="outline-text-3" id="text-5-17">
 <p>
 via <a href="http://stackoverflow.com/posts/3900056/revisions">stackoverflow</a>
@@ -3258,8 +3259,8 @@ usage samples below.
 </div>
 </div>
 
-<div id="outline-container-org50376de" class="outline-3">
-<h3 id="org50376de"><span class="section-number-3">5.18</span> helper to catch load errors</h3>
+<div id="outline-container-org9c54c41" class="outline-3">
+<h3 id="org9c54c41"><span class="section-number-3">5.18</span> helper to catch load errors</h3>
 <div class="outline-text-3" id="text-5-18">
 <p>
 Try to  eval 'fn,  catch errors,  if any but  make it  possible for
@@ -3281,8 +3282,8 @@ emacs to continue undisturbed, used with SMEX, see below.
 <hr />
 </div>
 </div>
-<div id="outline-container-orgad507eb" class="outline-3">
-<h3 id="orgad507eb"><span class="section-number-3">5.19</span> Alignment Wrappers</h3>
+<div id="outline-container-org6afe5c9" class="outline-3">
+<h3 id="org6afe5c9"><span class="section-number-3">5.19</span> Alignment Wrappers</h3>
 <div class="outline-text-3" id="text-5-19">
 <p>
 align-regexp is already  a very usefull tool,  however, sometimes I
@@ -3332,8 +3333,8 @@ wrappers to make this easier.
 </div>
 
 
-<div id="outline-container-org351a543" class="outline-3">
-<h3 id="org351a543"><span class="section-number-3">5.20</span> String Helpers</h3>
+<div id="outline-container-orgedcd3ca" class="outline-3">
+<h3 id="orgedcd3ca"><span class="section-number-3">5.20</span> String Helpers</h3>
 <div class="outline-text-3" id="text-5-20">
 <p>
 Some helper functions I use here and there.
@@ -3372,14 +3373,14 @@ Some helper functions I use here and there.
 </div>
 </div>
 
-<div id="outline-container-org2432091" class="outline-2">
-<h2 id="org2432091"><span class="section-number-2">6</span> Modes</h2>
+<div id="outline-container-org1dfb33e" class="outline-2">
+<h2 id="org1dfb33e"><span class="section-number-2">6</span> Modes</h2>
 <div class="outline-text-2" id="text-6">
-</div><div id="outline-container-orgb9f551c" class="outline-3">
-<h3 id="orgb9f551c"><span class="section-number-3">6.1</span> Programming Languages</h3>
+</div><div id="outline-container-org95b26d6" class="outline-3">
+<h3 id="org95b26d6"><span class="section-number-3">6.1</span> Programming Languages</h3>
 <div class="outline-text-3" id="text-6-1">
-</div><div id="outline-container-org0d7bad3" class="outline-4">
-<h4 id="org0d7bad3"><span class="section-number-4">6.1.1</span> VALA</h4>
+</div><div id="outline-container-org5998720" class="outline-4">
+<h4 id="org5998720"><span class="section-number-4">6.1.1</span> VALA</h4>
 <div class="outline-text-4" id="text-6-1-1">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(autoload <span style="color: #ff00ff;">'vala-mode</span> <span style="color: #ff0000;">"vala-mode"</span> <span style="color: #cd6600;">"Major mode for editing Vala code."</span> t)
@@ -3394,8 +3395,8 @@ Some helper functions I use here and there.
 </div>
 </div>
 
-<div id="outline-container-org11897ad" class="outline-4">
-<h4 id="org11897ad"><span class="section-number-4">6.1.2</span> python mode</h4>
+<div id="outline-container-org8eeaed9" class="outline-4">
+<h4 id="org8eeaed9"><span class="section-number-4">6.1.2</span> python mode</h4>
 <div class="outline-text-4" id="text-6-1-2">
 <p>
 Not much configured for python, I'm happy with the defaults as it seems :)
@@ -3423,8 +3424,8 @@ Not much configured for python, I'm happy with the defaults as it seems :)
 </div>
 </div>
 
-<div id="outline-container-orge31dded" class="outline-4">
-<h4 id="orge31dded"><span class="section-number-4">6.1.3</span> cperl mode</h4>
+<div id="outline-container-org58f4124" class="outline-4">
+<h4 id="org58f4124"><span class="section-number-4">6.1.3</span> cperl mode</h4>
 <div class="outline-text-4" id="text-6-1-3">
 <p>
 I am  a perl addict. I  love it, therefore, emacs  must be prepared
@@ -3571,8 +3572,8 @@ and hook them into cperl
 </div>
 </div>
 
-<div id="outline-container-orge61ee0c" class="outline-4">
-<h4 id="orge61ee0c"><span class="section-number-4">6.1.4</span> Paredit for lisp only</h4>
+<div id="outline-container-orgdf28519" class="outline-4">
+<h4 id="orgdf28519"><span class="section-number-4">6.1.4</span> Paredit for lisp only</h4>
 <div class="outline-text-4" id="text-6-1-4">
 <p>
 I use paredit in lisp a lot, but are mostly happy with the defaults.
@@ -3615,8 +3616,8 @@ sometimes I need to be able to turn it off fast:
 </div>
 </div>
 
-<div id="outline-container-org6ad07c1" class="outline-4">
-<h4 id="org6ad07c1"><span class="section-number-4">6.1.5</span> ETAGS</h4>
+<div id="outline-container-org8de0669" class="outline-4">
+<h4 id="org8de0669"><span class="section-number-4">6.1.5</span> ETAGS</h4>
 <div class="outline-text-4" id="text-6-1-5">
 <p>
 I use ETAGS for some projects. With  etags I can easily jump to the
@@ -3693,11 +3694,11 @@ some handy aliases
 </div>
 </div>
 
-<div id="outline-container-org5ce70b8" class="outline-3">
-<h3 id="org5ce70b8"><span class="section-number-3">6.2</span> Text Modes</h3>
+<div id="outline-container-org31fbc8f" class="outline-3">
+<h3 id="org31fbc8f"><span class="section-number-3">6.2</span> Text Modes</h3>
 <div class="outline-text-3" id="text-6-2">
-</div><div id="outline-container-orge55fcfb" class="outline-4">
-<h4 id="orge55fcfb"><span class="section-number-4">6.2.1</span> sgml</h4>
+</div><div id="outline-container-orgc29524b" class="outline-4">
+<h4 id="orgc29524b"><span class="section-number-4">6.2.1</span> sgml</h4>
 <div class="outline-text-4" id="text-6-2-1">
 <p>
 Used for XML and the likes.
@@ -3724,8 +3725,8 @@ Used for XML and the likes.
 </div>
 </div>
 
-<div id="outline-container-orgaeb3460" class="outline-4">
-<h4 id="orgaeb3460"><span class="section-number-4">6.2.2</span> web-mode (JS, HTML, CSS combined)</h4>
+<div id="outline-container-orgd9ccd6e" class="outline-4">
+<h4 id="orgd9ccd6e"><span class="section-number-4">6.2.2</span> web-mode (JS, HTML, CSS combined)</h4>
 <div class="outline-text-4" id="text-6-2-2">
 <p>
 Web development is shit. Tech involved is a mess, and in most cases
@@ -3819,8 +3820,8 @@ convert a text list into a html list.
 </div>
 </div>
 
-<div id="outline-container-org806985c" class="outline-4">
-<h4 id="org806985c"><span class="section-number-4">6.2.3</span> Cisco Mode</h4>
+<div id="outline-container-org867c450" class="outline-4">
+<h4 id="org867c450"><span class="section-number-4">6.2.3</span> Cisco Mode</h4>
 <div class="outline-text-4" id="text-6-2-3">
 <p>
 Written by myself  many years ago, but I'm still  using it daily to
@@ -3838,8 +3839,8 @@ view and prepare cisco configs.
 </div>
 </div>
 
-<div id="outline-container-orgc28f31c" class="outline-4">
-<h4 id="orgc28f31c"><span class="section-number-4">6.2.4</span> Markdown</h4>
+<div id="outline-container-org91acd58" class="outline-4">
+<h4 id="org91acd58"><span class="section-number-4">6.2.4</span> Markdown</h4>
 <div class="outline-text-4" id="text-6-2-4">
 <p>
 I rarely use markdown, but sometimes I stumble upon such a file and
@@ -3875,8 +3876,8 @@ parens and quotes constraints check on save
 </div>
 </div>
 
-<div id="outline-container-orgd4d070b" class="outline-4">
-<h4 id="orgd4d070b"><span class="section-number-4">6.2.5</span> POD mode</h4>
+<div id="outline-container-org9f8e50c" class="outline-4">
+<h4 id="org9f8e50c"><span class="section-number-4">6.2.5</span> POD mode</h4>
 <div class="outline-text-4" id="text-6-2-5">
 <p>
 I LOVE POD!  POD is the  documentation format of perl and there's a
@@ -4010,8 +4011,8 @@ pod mode config
 <hr />
 </div>
 </div>
-<div id="outline-container-org594ca91" class="outline-4">
-<h4 id="org594ca91"><span class="section-number-4">6.2.6</span> conf-mode</h4>
+<div id="outline-container-org9f60fba" class="outline-4">
+<h4 id="org9f60fba"><span class="section-number-4">6.2.6</span> conf-mode</h4>
 <div class="outline-text-4" id="text-6-2-6">
 <p>
 conf-mode annoyingly overwrites the  global keybinding C-c C-c with
@@ -4032,10 +4033,10 @@ configs. Applies for derivates as well.
 </div>
 </div>
 
-<div id="outline-container-orgacc3758" class="outline-4">
-<h4 id="orgacc3758"><span class="section-number-4">6.2.7</span> Config::General mode</h4>
+<div id="outline-container-org155a6ed" class="outline-4">
+<h4 id="org155a6ed"><span class="section-number-4">6.2.7</span> Config::General mode</h4>
 <div class="outline-text-4" id="text-6-2-7">
-</div><ol class="org-ol"><li><a id="orgf1ec3f2"></a>Config and doc<br /><div class="outline-text-5" id="text-6-2-7-1">
+</div><ol class="org-ol"><li><a id="org9032199"></a>Config and doc<br /><div class="outline-text-5" id="text-6-2-7-1">
 <p>
 <a href="https://github.com/TLINDEN/config-general-mode">config-general-mode</a> (also on Melpa).
 </p>
@@ -4054,7 +4055,7 @@ both did not satisfy me. Now (as of 20170625) I solved this mess once and for al
 </div>
 </div></li>
 
-<li><a id="org2af566d"></a>Convenicence Wrappers<br /><div class="outline-text-5" id="text-6-2-7-2">
+<li><a id="org4e9d464"></a>Convenicence Wrappers<br /><div class="outline-text-5" id="text-6-2-7-2">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #0000ff;">defun</span> <span style="color: #9932cc;">config-general-completion-at-point</span> ()
   <span style="color: #cd6600;">"Complete word at point using hippie-expand, if not on a comment."</span>
@@ -4154,7 +4155,7 @@ Bugreport: <a href="http://debbugs.gnu.org/cgi/bugreport.cgi?bug=27501">http://d
 </div>
 </div></li>
 
-<li><a id="org80cd3de"></a>Mode Hook<br /><div class="outline-text-5" id="text-6-2-7-3">
+<li><a id="org6b08958"></a>Mode Hook<br /><div class="outline-text-5" id="text-6-2-7-3">
 <p>
 I  use TAB  for completion  AND tab  and outshine.  Also, the  mode
 enables  electric  indent  automatically,  but I  disabled  it  for
@@ -4204,8 +4205,8 @@ for config-general-mode (which inherits from conf-mode).
 <hr />
 </div></li></ol>
 </div>
-<div id="outline-container-orgad66c1a" class="outline-4">
-<h4 id="orgad66c1a"><span class="section-number-4">6.2.8</span> Xmodmap Mode</h4>
+<div id="outline-container-orge4155f1" class="outline-4">
+<h4 id="orge4155f1"><span class="section-number-4">6.2.8</span> Xmodmap Mode</h4>
 <div class="outline-text-4" id="text-6-2-8">
 <p>
 the shortest mode ever, <a href="https://www.emacswiki.org/emacs/XModMapMode">via emacswiki</a>.
@@ -4228,10 +4229,10 @@ the shortest mode ever, <a href="https://www.emacswiki.org/emacs/XModMapMode">vi
 </div>
 </div>
 
-<div id="outline-container-orgde40be0" class="outline-4">
-<h4 id="orgde40be0"><span class="section-number-4">6.2.9</span> MMM Mode</h4>
+<div id="outline-container-org82aa168" class="outline-4">
+<h4 id="org82aa168"><span class="section-number-4">6.2.9</span> MMM Mode</h4>
 <div class="outline-text-4" id="text-6-2-9">
-</div><ol class="org-ol"><li><a id="org04f1853"></a>MMM configure:<br /><div class="outline-text-5" id="text-6-2-9-1">
+</div><ol class="org-ol"><li><a id="orgfe6d83d"></a>MMM configure:<br /><div class="outline-text-5" id="text-6-2-9-1">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(add-to-list <span style="color: #ff00ff;">'load-path</span> (concat tvd-lisp-dir <span style="color: #ff0000;">"/mmm-mode"</span>))
 
@@ -4250,7 +4251,7 @@ see doc for class definition in var 'mmm-classes-alist
 </p>
 </div></li>
 
-<li><a id="org0741b07"></a>MMM config for POD mode<br /><div class="outline-text-5" id="text-6-2-9-2">
+<li><a id="orgaad8fc5"></a>MMM config for POD mode<br /><div class="outline-text-5" id="text-6-2-9-2">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(mmm-add-classes
  '((html-pod
@@ -4268,11 +4269,11 @@ see doc for class definition in var 'mmm-classes-alist
 </div>
 </div>
 
-<div id="outline-container-org58e05c2" class="outline-3">
-<h3 id="org58e05c2"><span class="section-number-3">6.3</span> Text Manupilation</h3>
+<div id="outline-container-orgae84f93" class="outline-3">
+<h3 id="orgae84f93"><span class="section-number-3">6.3</span> Text Manupilation</h3>
 <div class="outline-text-3" id="text-6-3">
-</div><div id="outline-container-org27bee4c" class="outline-4">
-<h4 id="org27bee4c"><span class="section-number-4">6.3.1</span> expand-region</h4>
+</div><div id="outline-container-org5689377" class="outline-4">
+<h4 id="org5689377"><span class="section-number-4">6.3.1</span> expand-region</h4>
 <div class="outline-text-4" id="text-6-3-1">
 <p>
 One of the  best modes I ever discovered. Press  C-= multiple times
@@ -4291,8 +4292,8 @@ related to ER:
 </p>
 </div>
 </div>
-<div id="outline-container-orgfa7c248" class="outline-4">
-<h4 id="orgfa7c248"><span class="section-number-4">6.3.2</span> Mark, Copy, Yank Things</h4>
+<div id="outline-container-org3300d2d" class="outline-4">
+<h4 id="org3300d2d"><span class="section-number-4">6.3.2</span> Mark, Copy, Yank Things</h4>
 <div class="outline-text-4" id="text-6-3-2">
 <p>
 For a long time this stuff was  located here in my emacs config. As
@@ -4395,8 +4396,8 @@ it appears as NNN,NN.
 </div>
 </div>
 
-<div id="outline-container-orgc1ff81c" class="outline-4">
-<h4 id="orgc1ff81c"><span class="section-number-4">6.3.3</span> change-inner</h4>
+<div id="outline-container-orgebad629" class="outline-4">
+<h4 id="orgebad629"><span class="section-number-4">6.3.3</span> change-inner</h4>
 <div class="outline-text-4" id="text-6-3-3">
 <p>
 I use change-inner with a prefix key and some wrappers around
@@ -4518,8 +4519,8 @@ typing the prefix key twice calls the real change-inner
 <hr />
 </div>
 </div>
-<div id="outline-container-org22c1064" class="outline-4">
-<h4 id="org22c1064"><span class="section-number-4">6.3.4</span> Rotate text</h4>
+<div id="outline-container-org0b6aa5e" class="outline-4">
+<h4 id="org0b6aa5e"><span class="section-number-4">6.3.4</span> Rotate text</h4>
 <div class="outline-text-4" id="text-6-3-4">
 <p>
 This one is great as well, I  use it to toggle flags and such stuff
@@ -4575,8 +4576,8 @@ short command anymore, so C-t would be free now, wouldn't it?
 </div>
 </div>
 
-<div id="outline-container-orgeff862d" class="outline-4">
-<h4 id="orgeff862d"><span class="section-number-4">6.3.5</span> Word wrapping</h4>
+<div id="outline-container-org2969fa1" class="outline-4">
+<h4 id="org2969fa1"><span class="section-number-4">6.3.5</span> Word wrapping</h4>
 <div class="outline-text-4" id="text-6-3-5">
 <p>
 same as word-wrap but without the fringe which I hate the most!
@@ -4598,8 +4599,8 @@ overwritten by visual-line-mode above for specifics
 </div>
 </div>
 
-<div id="outline-container-org623c311" class="outline-4">
-<h4 id="org623c311"><span class="section-number-4">6.3.6</span> Viking Mode</h4>
+<div id="outline-container-org6f8cf6d" class="outline-4">
+<h4 id="org6f8cf6d"><span class="section-number-4">6.3.6</span> Viking Mode</h4>
 <div class="outline-text-4" id="text-6-3-6">
 <p>
 Delete  stuff fast.  Press the  key  multiple times  - delete  more
@@ -4617,8 +4618,8 @@ things. Inspired by expand-region. Written by myself.
 </div>
 </div>
 
-<div id="outline-container-org08cfb4e" class="outline-4">
-<h4 id="org08cfb4e"><span class="section-number-4">6.3.7</span> HTMLize</h4>
+<div id="outline-container-org8d93358" class="outline-4">
+<h4 id="org8d93358"><span class="section-number-4">6.3.7</span> HTMLize</h4>
 <div class="outline-text-4" id="text-6-3-7">
 <p>
 extracted  from  debian package  emacs-goodies-el-35.2+nmu1,  since
@@ -4635,8 +4636,8 @@ the current buffer, however it looks.
 </div>
 
 
-<div id="outline-container-org9d0a3f0" class="outline-4">
-<h4 id="org9d0a3f0"><span class="section-number-4">6.3.8</span> iEdit (inline edit multiple searches)</h4>
+<div id="outline-container-orga3c41d1" class="outline-4">
+<h4 id="orga3c41d1"><span class="section-number-4">6.3.8</span> iEdit (inline edit multiple searches)</h4>
 <div class="outline-text-4" id="text-6-3-8">
 <p>
 Edit all occurences of something at once. Great for re-factoring.
@@ -4677,11 +4678,11 @@ behavior, so, I modify it myself using defadvice.
 </div>
 </div>
 
-<div id="outline-container-orgcebaf93" class="outline-3">
-<h3 id="orgcebaf93"><span class="section-number-3">6.4</span> Interactives</h3>
+<div id="outline-container-orga33ad97" class="outline-3">
+<h3 id="orga33ad97"><span class="section-number-3">6.4</span> Interactives</h3>
 <div class="outline-text-3" id="text-6-4">
-</div><div id="outline-container-org8ded26e" class="outline-4">
-<h4 id="org8ded26e"><span class="section-number-4">6.4.1</span> eShell stuff, or if interactive stuff is needed, use ansi-term</h4>
+</div><div id="outline-container-org9595d4e" class="outline-4">
+<h4 id="org9595d4e"><span class="section-number-4">6.4.1</span> eShell stuff, or if interactive stuff is needed, use ansi-term</h4>
 <div class="outline-text-4" id="text-6-4-1">
 <p>
 I am  a hardcore bash  user, but from time  to time eshell  is good
@@ -4961,8 +4962,8 @@ no need for less or more, this is emacs, isn't it?
 </div>
 </div>
 
-<div id="outline-container-org2cbdc45" class="outline-4">
-<h4 id="org2cbdc45"><span class="section-number-4">6.4.2</span> Emacs LISP interactive</h4>
+<div id="outline-container-orga3317e7" class="outline-4">
+<h4 id="orga3317e7"><span class="section-number-4">6.4.2</span> Emacs LISP interactive</h4>
 <div class="outline-text-4" id="text-6-4-2">
 <p>
 General configuration for all things elisp.
@@ -5173,8 +5174,8 @@ opens a new frame with all those buffers already opened and pinned.
 <hr />
 </div>
 </div>
-<div id="outline-container-org798cbbd" class="outline-4">
-<h4 id="org798cbbd"><span class="section-number-4">6.4.3</span> el2markdown</h4>
+<div id="outline-container-org473a586" class="outline-4">
+<h4 id="org473a586"><span class="section-number-4">6.4.3</span> el2markdown</h4>
 <div class="outline-text-4" id="text-6-4-3">
 <p>
 <a href="https://github.com/Lindydancer/el2markdown">el2markdown</a> is a module which
@@ -5198,8 +5199,8 @@ README.md. Take care though: it doesn't convert the META section.
 </div>
 </div>
 
-<div id="outline-container-org5eccfb8" class="outline-4">
-<h4 id="org5eccfb8"><span class="section-number-4">6.4.4</span> tramp mode</h4>
+<div id="outline-container-org91e51ed" class="outline-4">
+<h4 id="org91e51ed"><span class="section-number-4">6.4.4</span> tramp mode</h4>
 <div class="outline-text-4" id="text-6-4-4">
 <p>
 Edit remote files, one of the best things in emacs. I use it every day heavily.
@@ -5227,8 +5228,8 @@ see also backup section
 </div>
 </div>
 
-<div id="outline-container-orgb9640fa" class="outline-4">
-<h4 id="orgb9640fa"><span class="section-number-4">6.4.5</span> org mode</h4>
+<div id="outline-container-orgfa1dc0f" class="outline-4">
+<h4 id="orgfa1dc0f"><span class="section-number-4">6.4.5</span> org mode</h4>
 <div class="outline-text-4" id="text-6-4-5">
 <p>
 I use org mode to take notes  mostly at work. I also track projects
@@ -5530,8 +5531,8 @@ is in the outline section.
 <hr />
 </div>
 </div>
-<div id="outline-container-org99635a9" class="outline-4">
-<h4 id="org99635a9"><span class="section-number-4">6.4.6</span> org table mode</h4>
+<div id="outline-container-org0310264" class="outline-4">
+<h4 id="org0310264"><span class="section-number-4">6.4.6</span> org table mode</h4>
 <div class="outline-text-4" id="text-6-4-6">
 <p>
 I'm so used to lovely org mode tables, I need them everywhere!
@@ -5826,8 +5827,8 @@ integers, reals, positives, set via custom
 </div>
 </div>
 
-<div id="outline-container-org6dfbf25" class="outline-4">
-<h4 id="org6dfbf25"><span class="section-number-4">6.4.7</span> org mode slideshows</h4>
+<div id="outline-container-orga33956a" class="outline-4">
+<h4 id="orga33956a"><span class="section-number-4">6.4.7</span> org mode slideshows</h4>
 <div class="outline-text-4" id="text-6-4-7">
 <p>
 Making presentations within emacs with org mode is cool as well.
@@ -5935,8 +5936,8 @@ Will be inserted as first help slide in a slide show
 <hr />
 </div>
 </div>
-<div id="outline-container-orgd29a43e" class="outline-4">
-<h4 id="orgd29a43e"><span class="section-number-4">6.4.8</span> outshine mode</h4>
+<div id="outline-container-org10e21a1" class="outline-4">
+<h4 id="org10e21a1"><span class="section-number-4">6.4.8</span> outshine mode</h4>
 <div class="outline-text-4" id="text-6-4-8">
 <p>
 I maintain my emacs config with  outshine mode. It works a lot like
@@ -6116,8 +6117,8 @@ posting online, which makes it way easier to read.
 </div>
 </div>
 
-<div id="outline-container-org79b5bfd" class="outline-4">
-<h4 id="org79b5bfd"><span class="section-number-4">6.4.9</span> outline mode</h4>
+<div id="outline-container-org7c877e0" class="outline-4">
+<h4 id="org7c877e0"><span class="section-number-4">6.4.9</span> outline mode</h4>
 <div class="outline-text-4" id="text-6-4-9">
 <p>
 I use the very same cycle style  as in org mode: when on a heading,
@@ -6214,8 +6215,8 @@ orange fringe when narrowed
 <hr />
 </div>
 </div>
-<div id="outline-container-orgfb0a2ea" class="outline-4">
-<h4 id="orgfb0a2ea"><span class="section-number-4">6.4.10</span> narrowing (no mode but fits here)</h4>
+<div id="outline-container-org1e7fef3" class="outline-4">
+<h4 id="org1e7fef3"><span class="section-number-4">6.4.10</span> narrowing (no mode but fits here)</h4>
 <div class="outline-text-4" id="text-6-4-10">
 <p>
 I use narrowing quite frequently, so here are some enhancements.
@@ -6255,8 +6256,8 @@ via <a href="https://emacs.stackexchange.com/questions/33288/how-to-find-out-if-
 <hr />
 </div>
 </div>
-<div id="outline-container-orgdee3e1f" class="outline-4">
-<h4 id="orgdee3e1f"><span class="section-number-4">6.4.11</span> ANSI-TERM (inferior shells/interpreters and REPLs)</h4>
+<div id="outline-container-orgd35e948" class="outline-4">
+<h4 id="orgd35e948"><span class="section-number-4">6.4.11</span> ANSI-TERM (inferior shells/interpreters and REPLs)</h4>
 <div class="outline-text-4" id="text-6-4-11">
 <p>
 I use ansi term for inferior shells only.
@@ -6372,8 +6373,8 @@ finally the inferior REPLs:
 </div>
 </div>
 
-<div id="outline-container-orgc55d827" class="outline-4">
-<h4 id="orgc55d827"><span class="section-number-4">6.4.12</span> Puppet</h4>
+<div id="outline-container-orgaba9496" class="outline-4">
+<h4 id="orgaba9496"><span class="section-number-4">6.4.12</span> Puppet</h4>
 <div class="outline-text-4" id="text-6-4-12">
 <p>
 adds hook for .pp files
@@ -6387,8 +6388,8 @@ adds hook for .pp files
 </div>
 </div>
 
-<div id="outline-container-org3d0721a" class="outline-4">
-<h4 id="org3d0721a"><span class="section-number-4">6.4.13</span> Novel Mode - Screen Reader</h4>
+<div id="outline-container-orgf7daa64" class="outline-4">
+<h4 id="orgf7daa64"><span class="section-number-4">6.4.13</span> Novel Mode - Screen Reader</h4>
 <div class="outline-text-4" id="text-6-4-13">
 <p>
 my own emacs screen reader, very handy to read docs on the road.
@@ -6404,8 +6405,8 @@ my own emacs screen reader, very handy to read docs on the road.
 </div>
 </div>
 
-<div id="outline-container-org0f17e10" class="outline-4">
-<h4 id="org0f17e10"><span class="section-number-4">6.4.14</span> Macro Math</h4>
+<div id="outline-container-org35abb1d" class="outline-4">
+<h4 id="org35abb1d"><span class="section-number-4">6.4.14</span> Macro Math</h4>
 <div class="outline-text-4" id="text-6-4-14">
 <p>
 see <a href="https://github.com/nschum/macro-math.el">macro-math</a>
@@ -6428,8 +6429,8 @@ mark something and hit C-x C-0  (which is a reminder to C-x C-= w/o the shift)
 </div>
 </div>
 
-<div id="outline-container-orgdd4d35e" class="outline-4">
-<h4 id="orgdd4d35e"><span class="section-number-4">6.4.15</span> Common-Lisp (SLIME)</h4>
+<div id="outline-container-orgfb8cd01" class="outline-4">
+<h4 id="orgfb8cd01"><span class="section-number-4">6.4.15</span> Common-Lisp (SLIME)</h4>
 <div class="outline-text-4" id="text-6-4-15">
 <p>
 I'm learing CL with slime, start with M-x slime.
@@ -6462,8 +6463,8 @@ INSTALL: (see: <a href="http://www.jonathanfischer.net/modern-common-lisp-on-lin
 </div>
 </div>
 
-<div id="outline-container-orgc3d4e4b" class="outline-4">
-<h4 id="orgc3d4e4b"><span class="section-number-4">6.4.16</span> INFO Mode</h4>
+<div id="outline-container-orgcfa2941" class="outline-4">
+<h4 id="orgcfa2941"><span class="section-number-4">6.4.16</span> INFO Mode</h4>
 <div class="outline-text-4" id="text-6-4-16">
 <p>
 open an info file somewhere outside %infodir% with info-mode
@@ -6495,8 +6496,8 @@ easier navigation in Info mode, intuitive history back and forth.
 </div>
 </div>
 
-<div id="outline-container-orgd9b9b3e" class="outline-4">
-<h4 id="orgd9b9b3e"><span class="section-number-4">6.4.17</span> calc et al.</h4>
+<div id="outline-container-org36a9d5f" class="outline-4">
+<h4 id="org36a9d5f"><span class="section-number-4">6.4.17</span> calc et al.</h4>
 <div class="outline-text-4" id="text-6-4-17">
 <p>
 emacs provides 4 ways to calculate:
@@ -6546,8 +6547,8 @@ or, inferior perl calc: M-x icalc, see above
 </div>
 </div>
 
-<div id="outline-container-org54df3e5" class="outline-4">
-<h4 id="org54df3e5"><span class="section-number-4">6.4.18</span> MACROs</h4>
+<div id="outline-container-org9300cfe" class="outline-4">
+<h4 id="org9300cfe"><span class="section-number-4">6.4.18</span> MACROs</h4>
 <div class="outline-text-4" id="text-6-4-18">
 <p>
 help: <a href="https://www.emacswiki.org/emacs/KeyboardMacrosTricks">emacswiki macro tricks</a>.
@@ -6760,8 +6761,8 @@ but only load if in use
 <hr />
 </div>
 </div>
-<div id="outline-container-orgfbba60f" class="outline-4">
-<h4 id="orgfbba60f"><span class="section-number-4">6.4.19</span> EWW browser stuff</h4>
+<div id="outline-container-orga6e3b07" class="outline-4">
+<h4 id="orga6e3b07"><span class="section-number-4">6.4.19</span> EWW browser stuff</h4>
 <div class="outline-text-4" id="text-6-4-19">
 <p>
 Emacs has a builtin browser, which is not too bad.
@@ -6829,8 +6830,8 @@ hides menus and distractions! Update emacs.
 <hr />
 </div>
 </div>
-<div id="outline-container-org34a9792" class="outline-4">
-<h4 id="org34a9792"><span class="section-number-4">6.4.20</span> Firestarter</h4>
+<div id="outline-container-org03aad87" class="outline-4">
+<h4 id="org03aad87"><span class="section-number-4">6.4.20</span> Firestarter</h4>
 <div class="outline-text-4" id="text-6-4-20">
 <p>
 experimental: do things on save buffer etc.
@@ -6839,8 +6840,8 @@ Source: <a href="https://github.com/wasamasa/firestarter">firestarter</a>
 </div>
 </div>
 
-<div id="outline-container-org6274efc" class="outline-4">
-<h4 id="org6274efc"><span class="section-number-4">6.4.21</span> Tabulated List Mode</h4>
+<div id="outline-container-orgca3975f" class="outline-4">
+<h4 id="orgca3975f"><span class="section-number-4">6.4.21</span> Tabulated List Mode</h4>
 <div class="outline-text-4" id="text-6-4-21">
 <p>
 built-in, used by many interactive major modes
@@ -6888,8 +6889,8 @@ we need to kill tablist's binding in order to have ours run (see below)
 </div>
 </div>
 
-<div id="outline-container-org0b7e489" class="outline-4">
-<h4 id="org0b7e489"><span class="section-number-4">6.4.22</span> Help Mode</h4>
+<div id="outline-container-orga46b17d" class="outline-4">
+<h4 id="orga46b17d"><span class="section-number-4">6.4.22</span> Help Mode</h4>
 <div class="outline-text-4" id="text-6-4-22">
 <p>
 I even customize help windows! &#x2026; at least a little :)
@@ -6912,8 +6913,8 @@ I even customize help windows! &#x2026; at least a little :)
 </div>
 </div>
 
-<div id="outline-container-orgefa546a" class="outline-4">
-<h4 id="orgefa546a"><span class="section-number-4">6.4.23</span> Suggest Mode</h4>
+<div id="outline-container-org980e6a5" class="outline-4">
+<h4 id="org980e6a5"><span class="section-number-4">6.4.23</span> Suggest Mode</h4>
 <div class="outline-text-4" id="text-6-4-23">
 <p>
 <a href="https://github.com/Wilfred/suggest.el">suggest mode</a> is a great
@@ -6963,8 +6964,8 @@ I use my own clearing function, since suggest doesn't provide this
 </div>
 </div>
 
-<div id="outline-container-org636b326" class="outline-4">
-<h4 id="org636b326"><span class="section-number-4">6.4.24</span> Followcursor Mode</h4>
+<div id="outline-container-org7610483" class="outline-4">
+<h4 id="org7610483"><span class="section-number-4">6.4.24</span> Followcursor Mode</h4>
 <div class="outline-text-4" id="text-6-4-24">
 <p>
 <a href="https://github.com/TLINDEN/followcursor-mode">source on github</a>
@@ -6993,8 +6994,8 @@ The mode is a work-in-progress&#x2026;
 
 
 
-<div id="outline-container-org3b8fc25" class="outline-4">
-<h4 id="org3b8fc25"><span class="section-number-4">6.4.25</span> Magit</h4>
+<div id="outline-container-org7b092a3" class="outline-4">
+<h4 id="org7b092a3"><span class="section-number-4">6.4.25</span> Magit</h4>
 <div class="outline-text-4" id="text-6-4-25">
 <p>
 Not much to  say about Magit
@@ -7048,24 +7049,28 @@ Not much to  say about Magit
         (<span style="color: #0000ff;">when</span> (re-search-forward <span style="color: #ff0000;">"Magit requires Git &gt;="</span>)
           (kill-buffer-and-window)))))
 
-  (add-hook <span style="color: #ff00ff;">'after-init-hook</span> <span style="color: #ff00ff;">'tvd-ignore-magit-warnings-if-any</span> t))
+  (add-hook <span style="color: #ff00ff;">'after-init-hook</span> <span style="color: #ff00ff;">'tvd-ignore-magit-warnings-if-any</span> t)
+
+  <span style="color: #006400;">;; </span><span style="color: #006400;">now, THIS is the pure genius me: hit "ls in magit-status buffer</span>
+  <span style="color: #006400;">;; </span><span style="color: #006400;">and end up in a dired buffer of current repository. The default</span>
+  <span style="color: #006400;">;; </span><span style="color: #006400;">binding for this is C-M-i, which is not memorizable, while "ls"</span>
+  <span style="color: #006400;">;; </span><span style="color: #006400;">is. That is, 'l' is a prefix command leading to magit-log-popup</span>
+  <span style="color: #006400;">;; </span><span style="color: #006400;">and 's' is undefined, which I define here, which then jumps to</span>
+  <span style="color: #006400;">;; </span><span style="color: #006400;">dired.</span>
+  (magit-define-popup-action <span style="color: #ff00ff;">'magit-log-popup</span>
+    ?s <span style="color: #ff0000;">"Dired"</span> <span style="color: #ff00ff;">'magit-dired-jump</span>))
 </pre>
 </div>
 
-<p>
-HINT: how to add a popup action:
-   (magit-define-popup-action 'magit-commit-popup
-     ?n "Reshelve" 'magit-reshelve)
-</p>
+<hr />
 </div>
 </div>
 </div>
-
-<div id="outline-container-org88a7238" class="outline-3">
-<h3 id="org88a7238"><span class="section-number-3">6.5</span> Emacs Interface</h3>
+<div id="outline-container-orga8fa542" class="outline-3">
+<h3 id="orga8fa542"><span class="section-number-3">6.5</span> Emacs Interface</h3>
 <div class="outline-text-3" id="text-6-5">
-</div><div id="outline-container-orge60e233" class="outline-4">
-<h4 id="orge60e233"><span class="section-number-4">6.5.1</span> Parens</h4>
+</div><div id="outline-container-org3e20186" class="outline-4">
+<h4 id="org3e20186"><span class="section-number-4">6.5.1</span> Parens</h4>
 <div class="outline-text-4" id="text-6-5-1">
 <p>
 display matching braces
@@ -7086,8 +7091,8 @@ display matching braces
 </div>
 </div>
 
-<div id="outline-container-org3eda1d7" class="outline-4">
-<h4 id="org3eda1d7"><span class="section-number-4">6.5.2</span> highlight todo keywords (such as <i>FIXME</i>)</h4>
+<div id="outline-container-orge60ba1a" class="outline-4">
+<h4 id="orge60ba1a"><span class="section-number-4">6.5.2</span> highlight todo keywords (such as <i>FIXME</i>)</h4>
 <div class="outline-text-4" id="text-6-5-2">
 <p>
 Absolutely needed!
@@ -7102,8 +7107,8 @@ Absolutely needed!
 <hr />
 </div>
 </div>
-<div id="outline-container-orge17f87f" class="outline-4">
-<h4 id="orge17f87f"><span class="section-number-4">6.5.3</span> UNDO Tree Mode</h4>
+<div id="outline-container-org54e4f22" class="outline-4">
+<h4 id="org54e4f22"><span class="section-number-4">6.5.3</span> UNDO Tree Mode</h4>
 <div class="outline-text-4" id="text-6-5-3">
 <p>
 Better undo, with redo support.
@@ -7146,8 +7151,8 @@ M-_ catched by Xmonad
 <hr />
 </div>
 </div>
-<div id="outline-container-orgb8db313" class="outline-4">
-<h4 id="orgb8db313"><span class="section-number-4">6.5.4</span> Smarter M-x Mode (smex)</h4>
+<div id="outline-container-orgec0c8fd" class="outline-4">
+<h4 id="orgec0c8fd"><span class="section-number-4">6.5.4</span> Smarter M-x Mode (smex)</h4>
 <div class="outline-text-4" id="text-6-5-4">
 <p>
 This is really cool and I don't know how I could ever live without it.
@@ -7170,8 +7175,8 @@ fails @win, so wrap it
 </div>
 </div>
 
-<div id="outline-container-org8866f01" class="outline-4">
-<h4 id="org8866f01"><span class="section-number-4">6.5.5</span> Which Func</h4>
+<div id="outline-container-orgcf647f0" class="outline-4">
+<h4 id="orgcf647f0"><span class="section-number-4">6.5.5</span> Which Func</h4>
 <div class="outline-text-4" id="text-6-5-5">
 <p>
 display current function - if any - in mode line
@@ -7186,8 +7191,8 @@ display current function - if any - in mode line
 <hr />
 </div>
 </div>
-<div id="outline-container-orge5bd207" class="outline-4">
-<h4 id="orge5bd207"><span class="section-number-4">6.5.6</span> Show current-line in the Fringe</h4>
+<div id="outline-container-org584e613" class="outline-4">
+<h4 id="org584e613"><span class="section-number-4">6.5.6</span> Show current-line in the Fringe</h4>
 <div class="outline-text-4" id="text-6-5-6">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #0000ff;">require</span> <span style="color: #ff00ff;">'fringe-current-line</span>)
@@ -7206,8 +7211,8 @@ also change the color (matching the mode line
 <hr />
 </div>
 </div>
-<div id="outline-container-org25227f6" class="outline-4">
-<h4 id="org25227f6"><span class="section-number-4">6.5.7</span> Recent Files</h4>
+<div id="outline-container-orga0ca64a" class="outline-4">
+<h4 id="orga0ca64a"><span class="section-number-4">6.5.7</span> Recent Files</h4>
 <div class="outline-text-4" id="text-6-5-7">
 <p>
 You know the  file you edited yesterday had "kri"  in its name, but
@@ -7301,8 +7306,8 @@ exclude some auto generated files
 </div>
 </div>
 
-<div id="outline-container-orgf0364c4" class="outline-4">
-<h4 id="orgf0364c4"><span class="section-number-4">6.5.8</span> IDO mode</h4>
+<div id="outline-container-orgb8fc2b7" class="outline-4">
+<h4 id="orgb8fc2b7"><span class="section-number-4">6.5.8</span> IDO mode</h4>
 <div class="outline-text-4" id="text-6-5-8">
 <p>
 There are other completion  enhancement packages available like ivy
@@ -7434,8 +7439,8 @@ by howardism: [re]open non-writable file with sudo
 </div>
 </div>
 
-<div id="outline-container-org7a81907" class="outline-4">
-<h4 id="org7a81907"><span class="section-number-4">6.5.9</span> Save cursor position</h4>
+<div id="outline-container-org6e0b76a" class="outline-4">
+<h4 id="org6e0b76a"><span class="section-number-4">6.5.9</span> Save cursor position</h4>
 <div class="outline-text-4" id="text-6-5-9">
 <p>
 So the  next time  I start  emacs and  open a  file I  were editing
@@ -7456,8 +7461,8 @@ before.
 </div>
 </div>
 
-<div id="outline-container-org2a4fb33" class="outline-4">
-<h4 id="org2a4fb33"><span class="section-number-4">6.5.10</span> DoReMi experimentation</h4>
+<div id="outline-container-orgce37712" class="outline-4">
+<h4 id="orgce37712"><span class="section-number-4">6.5.10</span> DoReMi experimentation</h4>
 <div class="outline-text-4" id="text-6-5-10">
 <p>
 I'm not using it a lot, sometimes I tune the background color though.
@@ -7486,8 +7491,8 @@ cool ones: doremi-buffers, doremi-all-faces-fg+ [s, h]
 <hr />
 </div>
 </div>
-<div id="outline-container-orga54c7e1" class="outline-4">
-<h4 id="orga54c7e1"><span class="section-number-4">6.5.11</span> Hightligt TABs</h4>
+<div id="outline-container-org6b0a518" class="outline-4">
+<h4 id="org6b0a518"><span class="section-number-4">6.5.11</span> Hightligt TABs</h4>
 <div class="outline-text-4" id="text-6-5-11">
 <p>
 not a mode, but however: higlight TABs in certain modes
@@ -7510,8 +7515,8 @@ not a mode, but however: higlight TABs in certain modes
 </div>
 </div>
 
-<div id="outline-container-org35fdd43" class="outline-4">
-<h4 id="org35fdd43"><span class="section-number-4">6.5.12</span> Browse kill-ring</h4>
+<div id="outline-container-orgd4299b6" class="outline-4">
+<h4 id="orgd4299b6"><span class="section-number-4">6.5.12</span> Browse kill-ring</h4>
 <div class="outline-text-4" id="text-6-5-12">
 <p>
 when active use n  and p to browse, &lt;ret&gt; to  select, it's the same
@@ -7529,8 +7534,8 @@ as &lt;M-y&gt; and I never really use it&#x2026;
 </div>
 </div>
 
-<div id="outline-container-org3825157" class="outline-4">
-<h4 id="org3825157"><span class="section-number-4">6.5.13</span> goto-last-change</h4>
+<div id="outline-container-orgf4defa3" class="outline-4">
+<h4 id="orgf4defa3"><span class="section-number-4">6.5.13</span> goto-last-change</h4>
 <div class="outline-text-4" id="text-6-5-13">
 <p>
 Very handy, jump to last change[s].
@@ -7547,8 +7552,8 @@ Very handy, jump to last change[s].
 </div>
 </div>
 
-<div id="outline-container-orgd077464" class="outline-4">
-<h4 id="orgd077464"><span class="section-number-4">6.5.14</span> Bookmarks</h4>
+<div id="outline-container-org471bd24" class="outline-4">
+<h4 id="org471bd24"><span class="section-number-4">6.5.14</span> Bookmarks</h4>
 <div class="outline-text-4" id="text-6-5-14">
 <p>
 I use  the builtin bookmark feature  quite a lot and  am happy with
@@ -7580,8 +7585,8 @@ I use the same aliases as in apparix for bash (since I'm used to them)
 </div>
 </div>
 
-<div id="outline-container-org3028c8b" class="outline-4">
-<h4 id="org3028c8b"><span class="section-number-4">6.5.15</span> which-key</h4>
+<div id="outline-container-orgc529521" class="outline-4">
+<h4 id="orgc529521"><span class="section-number-4">6.5.15</span> which-key</h4>
 <div class="outline-text-4" id="text-6-5-15">
 <p>
 One of the  best unobstrusive modes for key help  ever.  Just start
@@ -7601,8 +7606,8 @@ press from there along with the associated functions.
 </div>
 </div>
 
-<div id="outline-container-orgfbf3f4d" class="outline-4">
-<h4 id="orgfbf3f4d"><span class="section-number-4">6.5.16</span> iBuffer mode</h4>
+<div id="outline-container-org14bf47f" class="outline-4">
+<h4 id="org14bf47f"><span class="section-number-4">6.5.16</span> iBuffer mode</h4>
 <div class="outline-text-4" id="text-6-5-16">
 <p>
 iBuffer is a great interactive buffer management tool included with
@@ -7812,8 +7817,8 @@ override ibuffer M-o binding
 </div>
 </div>
 
-<div id="outline-container-orgc74fa98" class="outline-4">
-<h4 id="orgc74fa98"><span class="section-number-4">6.5.17</span> Printing</h4>
+<div id="outline-container-org9c86f40" class="outline-4">
+<h4 id="org9c86f40"><span class="section-number-4">6.5.17</span> Printing</h4>
 <div class="outline-text-4" id="text-6-5-17">
 <p>
 overwrites printing default menu, access via menu File =&gt; Print
@@ -7858,8 +7863,8 @@ via <a href="https://emacs.stackexchange.com/questions/9364/convert-a-text-buffe
 <hr />
 </div>
 </div>
-<div id="outline-container-org88aad90" class="outline-4">
-<h4 id="org88aad90"><span class="section-number-4">6.5.18</span> Beacon mode (pointer blink)</h4>
+<div id="outline-container-org10a4c82" class="outline-4">
+<h4 id="org10a4c82"><span class="section-number-4">6.5.18</span> Beacon mode (pointer blink)</h4>
 <div class="outline-text-4" id="text-6-5-18">
 <p>
 Source: <a href="https://github.com/Malabarba/beacon">beacon mode</a>
@@ -7889,8 +7894,8 @@ editing position.
 </div>
 </div>
 </div>
-<div id="outline-container-org063d0a4" class="outline-3">
-<h3 id="org063d0a4"><span class="section-number-3">6.6</span> mode-line setup (must be the last mode)</h3>
+<div id="outline-container-org567c4c3" class="outline-3">
+<h3 id="org567c4c3"><span class="section-number-3">6.6</span> mode-line setup (must be the last mode)</h3>
 <div class="outline-text-3" id="text-6-6">
 <p>
 I just append the current version  of my emacs config and leave out
@@ -7955,13 +7960,13 @@ custom modeline
 </div>
 </div>
 </div>
-<div id="outline-container-org8030e11" class="outline-2">
-<h2 id="org8030e11"><span class="section-number-2">7</span> Emacs Autoconfig / Customizegroup stuff</h2>
+<div id="outline-container-orgb2cfcf2" class="outline-2">
+<h2 id="orgb2cfcf2"><span class="section-number-2">7</span> Emacs Autoconfig / Customizegroup stuff</h2>
 <div class="outline-text-2" id="text-7">
 <hr />
 </div>
-<div id="outline-container-org1d72aa1" class="outline-3">
-<h3 id="org1d72aa1"><span class="section-number-3">7.1</span> font faces</h3>
+<div id="outline-container-org87de9e5" class="outline-3">
+<h3 id="org87de9e5"><span class="section-number-3">7.1</span> font faces</h3>
 <div class="outline-text-3" id="text-7-1">
 <p>
 Font color config, must always be the last thing so all hook faces are loaded.
@@ -8040,8 +8045,8 @@ unless we're on windoze
 <hr />
 </div>
 </div>
-<div id="outline-container-org9da8d82" class="outline-3">
-<h3 id="org9da8d82"><span class="section-number-3">7.2</span> variables</h3>
+<div id="outline-container-org8a8b4ae" class="outline-3">
+<h3 id="org8a8b4ae"><span class="section-number-3">7.2</span> variables</h3>
 <div class="outline-text-3" id="text-7-2">
 <p>
 If I  ever use custom-group  to customize a  mode, then I  create a
@@ -8061,8 +8066,8 @@ here. So, in normal times this should be empty, but needs to exist.
 </div>
 </div>
 
-<div id="outline-container-org2c33e99" class="outline-3">
-<h3 id="org2c33e99"><span class="section-number-3">7.3</span> done</h3>
+<div id="outline-container-orgfc836a8" class="outline-3">
+<h3 id="orgfc836a8"><span class="section-number-3">7.3</span> done</h3>
 <div class="outline-text-3" id="text-7-3">
 <p>
 Finally, this message is being displayed.  If this isn't the case I
@@ -8079,7 +8084,7 @@ know easily that something went wrong.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Thomas von Dein</p>
-<p class="date">Created: 2017-07-31 Mon 10:00</p>
+<p class="date">Created: 2017-07-31 Mon 11:28</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

@@ -591,6 +591,7 @@
 ;;    - do not load magit on w32
 ;;    - Always call `magit-status' with prefix arg
 ;;    - do bigger jumps in magit with just C-<up|down>
+;;    - add "ls" to magit-status leading to dired
 
 ;; ** TODO
 
@@ -4447,12 +4448,18 @@ defun."
         (when (re-search-forward "Magit requires Git >=")
           (kill-buffer-and-window)))))
 
-  (add-hook 'after-init-hook 'tvd-ignore-magit-warnings-if-any t))
+  (add-hook 'after-init-hook 'tvd-ignore-magit-warnings-if-any t)
 
-;; HINT: how to add a popup action:
-;;    (magit-define-popup-action 'magit-commit-popup
-;;      ?n "Reshelve" 'magit-reshelve)
+  ;; now, THIS is the pure genius me: hit "ls in magit-status buffer
+  ;; and end up in a dired buffer of current repository. The default
+  ;; binding for this is C-M-i, which is not memorizable, while "ls"
+  ;; is. That is, 'l' is a prefix command leading to magit-log-popup
+  ;; and 's' is undefined, which I define here, which then jumps to
+  ;; dired.
+  (magit-define-popup-action 'magit-log-popup
+    ?s "Dired" 'magit-dired-jump))
 
+;; --------------------------------------------------------------------------------
 ;; ** Emacs Interface
 ;; *** Parens
 
