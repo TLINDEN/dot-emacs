@@ -4473,6 +4473,74 @@ defun."
   (define-key magit-mode-map (kbd "C") 'tvd-switch-magit-repo))
 
 ;; --------------------------------------------------------------------------------
+;; *** Dired
+
+;; I do not use  dired, but its good to drop into  a dired buffer from
+;; magit (see "ls" shortcut above). But default dired looks ugly, so I
+;; use k.
+
+;; *** dired-k
+(require 'dired-k)
+
+(add-hook 'dired-initial-position-hook 'dired-k)
+(add-hook 'dired-after-readin-hook #'dired-k-no-revert)
+
+(setq dired-k-padding 2)
+
+;; [[http://blog.binchen.org/posts/the-most-efficient-way-to-git-add-file-in-dired-mode-emacsendiredgit.html][via bin chen]]:
+;; make git commands available from dired  buffer, so I can easily add
+;; or remove files from git
+(defun diredext-exec-git-command-in-shell (command &optional arg file-list)
+  "Run a shell command git COMMAND  ' on the marked files.  if no
+files marked, always operate on current line in dired-mode"
+  (interactive
+   (let ((files (dired-get-marked-files t current-prefix-arg)))
+     (list
+      ;; Want to give feedback whether this file or marked files are used:
+      (dired-read-shell-command "git command on %s: " current-prefix-arg files)
+      current-prefix-arg
+      files)))
+  (unless (string-match "[?][ \t]\'" command)
+    (setq command (concat command " *")))
+  (setq command (concat "git " command))
+  (dired-do-shell-command command arg file-list)
+  (message command))
+
+;; [[http://ergoemacs.org/emacs/dired_sort.html][via Xah Lee]]:
+(defun xah-dired-sort ()
+  "Sort dired dir listing in different ways.
+Prompt for a choice.
+URL `http://ergoemacs.org/emacs/dired_sort.html'
+Version 2015-07-30"
+  (interactive)
+  (let (sort-by arg)
+    (setq sort-by (ido-completing-read "Sort by:" '( "date" "size" "name" "dir" "date-desc" "size-desc" "name-desc" "dir-desc" )))
+    (cond
+     ((equal sort-by "name") (setq arg "-Al --si --time-style long-iso "))
+     ((equal sort-by "date") (setq arg "-Al --si --time-style long-iso -t"))
+     ((equal sort-by "size") (setq arg "-Al --si --time-style long-iso -S"))
+     ((equal sort-by "dir") (setq arg "-Al --si --time-style long-iso --group-directories-first"))
+     ((equal sort-by "name-desc") (setq arg "-Al --si --time-style long-iso -r"))
+     ((equal sort-by "date-desc") (setq arg "-Al --si --time-style long-iso -t -r"))
+     ((equal sort-by "size-desc") (setq arg "-Al --si --time-style long-iso -S -r"))
+     ((equal sort-by "dir-desc") (setq arg "-Al --si --time-style long-iso --group-directories-first -r"))
+     (t (error "logic error 09535" )))
+    (dired-sort-other arg )))
+
+(eval-after-load 'dired '(progn
+                           ;; stay with 1 dired buffer per instance
+                           (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file)
+                           (define-key dired-mode-map (kbd "^") (lambda () (interactive) (find-alternate-file "..")))
+                           (define-key dired-mode-map (kbd "<C-left>") (lambda () (interactive) (find-alternate-file "..")))
+                           ;; I use 'g' here, because F5 works for dired reload already
+                           (define-key dired-mode-map "g" 'diredext-exec-git-command-in-shell)
+                           ;; sort
+                           (define-key dired-mode-map (kbd "s") 'xah-dired-sort)))
+
+;; HINTS:
+;; - use wdired-change-to-wdired-mode to edit filenames inside dired
+;; - http://ergoemacs.org/emacs/emacs_dired_tips.html
+
 ;; ** Emacs Interface
 ;; *** Parens
 
@@ -5048,6 +5116,7 @@ converted to PDF at the same location."
  '(cperl-nonoverridable-face ((((class color) (background light)) (:foreground "Magenta"))))
  '(custom-documentation-face ((t (:foreground "Navy"))) t)
  '(custom-group-tag-face-1 ((((class color) (background light)) (:underline t :foreground "VioletRed"))) t)
+ '(dired-directory ((t (:inherit font-lock-keyword-face))))
  '(font-lock-builtin-face ((t (:foreground "BlueViolet"))))
  '(font-lock-comment-face ((t (:foreground "DarkGreen"))))
  '(font-lock-constant-face ((t (:foreground "Magenta"))))
