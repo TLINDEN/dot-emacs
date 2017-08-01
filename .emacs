@@ -595,6 +595,7 @@
 
 ;; 20170801.01
 ;;    - added C command to magit to switch repo
+;;    - add : trigger for ido-find-file to begin with tramp
 
 ;; ** TODO
 
@@ -4676,6 +4677,16 @@ defun."
        (interactive)
        (if (looking-back "/")
            (insert "~/")
+         (call-interactively 'self-insert-command))))
+   ;; same thing, but for ssh/tramp triggered by :
+   (define-key ido-file-completion-map
+     (kbd ":")
+     (lambda ()
+       (interactive)
+       (if (looking-back "/")
+           (progn
+             (ido-set-current-directory "/ssh:")
+             (ido-reread-directory))
          (call-interactively 'self-insert-command))))))
 
 ;; by howardism: [re]open non-writable file with sudo
