@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version (20170731.01)          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version (20170801.01)          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -593,6 +593,9 @@
 ;;    - do bigger jumps in magit with just C-<up|down>
 ;;    - add "ls" to magit-status leading to dired
 
+;; 20170801.01
+;;    - added C command to magit to switch repo
+
 ;; ** TODO
 
 ;; - check helpful https://github.com/wilfred/helpful
@@ -621,7 +624,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20170731.01")
+(defvar tvd-emacs-version "20170801.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -4421,7 +4424,7 @@ defun."
                                            "/Documentation/")))
     (setq magit-view-git-manual-method 'woman))
 
-  (defalias 'git       'tvd-magit-status)
+  (defalias 'git       'magit-status)
   (defalias 'gitlog    'magit-log-buffer-file)
 
   ;; configure magit
@@ -4457,7 +4460,16 @@ defun."
   ;; and 's' is undefined, which I define here, which then jumps to
   ;; dired.
   (magit-define-popup-action 'magit-log-popup
-    ?s "Dired" 'magit-dired-jump))
+    ?s "Dired" 'magit-dired-jump)
+
+  ;; after an exhausting discussion on magit#3139 I use this function
+  ;; to (kind of) switch to another repository from inside magit-status.
+  (defun tvd-switch-magit-repo ()
+    (interactive)
+    (let ((dir (magit-read-repository)))
+      (magit-mode-bury-buffer)
+      (magit-status dir)))
+  (define-key magit-mode-map (kbd "C") 'tvd-switch-magit-repo))
 
 ;; --------------------------------------------------------------------------------
 ;; ** Emacs Interface
