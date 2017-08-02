@@ -599,6 +599,7 @@
 
 ;; 20170802.01
 ;;    - +table-to-excel
+;;    - added some git wrappers to dired to add or rm files
 
 ;; ** TODO
 
@@ -4549,18 +4550,45 @@ Version 2015-07-30"
      (t (error "logic error 09535" )))
     (dired-sort-other arg )))
 
+(defun tvd-dired-git-add(&optional arg file-list)
+  (interactive
+    (let ((files (dired-get-marked-files t current-prefix-arg)))
+      (list current-prefix-arg files)))
+  (dired-do-shell-command "git add -v * " arg file-list)
+  (revert-buffer))
+
+(defun tvd-dired-git-rm(&optional arg file-list)
+  (interactive
+   (let ((files (dired-get-marked-files t current-prefix-arg)))
+     (list current-prefix-arg files)))
+  (dired-do-shell-command "git rm -rf * " arg file-list)
+  (revert-buffer))
+
+(defun tvd-dired-git-ungit(&optional arg file-list)
+  (interactive
+   (let ((files (dired-get-marked-files t current-prefix-arg)))
+     (list current-prefix-arg files)))
+  (dired-do-shell-command "git rm -rf --cached * " arg file-list)
+  (revert-buffer))
+
+
 (eval-after-load 'dired '(progn
                            ;; stay with 1 dired buffer per instance
                            (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file)
                            (define-key dired-mode-map (kbd "^") (lambda () (interactive) (find-alternate-file "..")))
                            (define-key dired-mode-map (kbd "<C-left>") (lambda () (interactive) (find-alternate-file "..")))
-                           ;; I use 'g' here, because F5 works for dired reload already
-                           (define-key dired-mode-map "g" 'diredext-exec-git-command-in-shell)
-                           ;; sort
-                           (define-key dired-mode-map (kbd "s") 'xah-dired-sort)))
+                           (define-key dired-mode-map (kbd "s") 'xah-dired-sort)
+
+                           (define-prefix-command 'tvd-dired-git-map)
+                           (define-key dired-mode-map (kbd "g") 'tvd-dired-git-map)
+                           (define-key tvd-dired-git-map (kbd "a") 'tvd-dired-git-add)
+                           (define-key tvd-dired-git-map (kbd "d") 'tvd-dired-git-rm)
+                           (define-key tvd-dired-git-map (kbd "u") 'tvd-dired-git-ungit)
+
+                           (defalias 'rename 'wdired-change-to-wdired-mode)
+                           ))
 
 ;; HINTS:
-;; - use wdired-change-to-wdired-mode to edit filenames inside dired
 ;; - http://ergoemacs.org/emacs/emacs_dired_tips.html
 
 ;; ** Emacs Interface
