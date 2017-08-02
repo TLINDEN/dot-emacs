@@ -3555,15 +3555,15 @@ intended to be #'> to support reverse sorting."
   (sit-for 0.2 t)
   (copy-rectangle-as-kill (org-table-col-beginning) (org-table-col-end)))
 
-;; bindings only  required with org  mode, the'll work in  orgtbl mode
-;; tables as well
-(eval-after-load "org"
-  '(progn
-     (add-hook 'org-mode-hook
-               (lambda ()
-                 (local-set-key (kbd "C-c o") 'org-table-copy-col)
-                 (local-set-key (kbd "C-c t") 'tvd-copy-org-table-cell)
-                 ))))
+(with-eval-after-load "org"
+  (add-hook 'org-mode-hook
+            (lambda ()
+              (local-set-key (kbd "C-c o") 'org-table-copy-col)
+              (local-set-key (kbd "C-c t") 'tvd-copy-org-table-cell))))
+
+(with-eval-after-load 'orgtbl
+  (define-key orgtbl-mode-map (kbd "C-c o") 'org-table-copy-col)
+  (define-key orgtbl-mode-map (kbd "C-c t") 'tvd-copy-org-table-cell))
 
 ;; integers, reals, positives, set via custom
 (setq org-table-number-regexp "^[-+]?\\([0-9]*\\.[0-9]+\\|[0-9]+\\.?[0-9]*\\)$")
