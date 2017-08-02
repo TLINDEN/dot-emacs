@@ -597,6 +597,9 @@
 ;;    - added C command to magit to switch repo
 ;;    - add : trigger for ido-find-file to begin with tramp
 
+;; 20170802.01
+;;    - +table-to-excel
+
 ;; ** TODO
 
 ;; - check helpful https://github.com/wilfred/helpful
@@ -3452,7 +3455,24 @@ intended to be #'> to support reverse sorting."
     (switch-to-buffer ebuf)
     (delete-file efile)))
 
+;; FIXME: once there's an org solution to this, remove this code
 ;; format specific exporters
+(defun tvd-org-quote-csv-field (s)
+  "Quote every field."
+  (if (string-match "." s)
+      (concat "=\"" (mapconcat 'identity
+                               (split-string s "\"") "\"\"") "\"")
+    s))
+
+(defun table-to-excel ()
+  "export current org table to CSV format suitable for MS Excel."
+  (interactive)
+  ;; quote everything, map temporarily 'org-quote-csv-field
+  ;; to my version
+  (cl-letf (((symbol-function 'org-quote-csv-field)
+             #'tvd-org-quote-csv-field))
+           (tvd-export-org-table "csv")))
+
 (defun table-to-csv ()
   "export current org table to CSV format"
   (interactive)
@@ -3484,6 +3504,7 @@ intended to be #'> to support reverse sorting."
 
 ;; exporter shortcuts
 (defalias 'ttc      'table-to-csv)
+(defalias 'tte      'table-to-excel)
 (defalias 'ttl      'table-to-latex)
 (defalias 'tth      'table-to-html)
 (defalias 'ttt      'table-to-csv-tab)
@@ -3561,9 +3582,10 @@ intended to be #'> to support reverse sorting."
               (local-set-key (kbd "C-c o") 'org-table-copy-col)
               (local-set-key (kbd "C-c t") 'tvd-copy-org-table-cell))))
 
-(with-eval-after-load 'orgtbl
-  (define-key orgtbl-mode-map (kbd "C-c o") 'org-table-copy-col)
-  (define-key orgtbl-mode-map (kbd "C-c t") 'tvd-copy-org-table-cell))
+;; eval-after-load 'orgtbl doesn't work
+(add-hook 'orgtbl-mode-hook '(lambda ()
+                               (define-key orgtbl-mode-map (kbd "C-c o") 'org-table-copy-col)
+                               (define-key orgtbl-mode-map (kbd "C-c t") 'tvd-copy-org-table-cell)))
 
 ;; integers, reals, positives, set via custom
 (setq org-table-number-regexp "^[-+]?\\([0-9]*\\.[0-9]+\\|[0-9]+\\.?[0-9]*\\)$")
