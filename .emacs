@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version (20170801.01)          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version (20170805.01)          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -601,6 +601,9 @@
 ;;    - +table-to-excel
 ;;    - added some git wrappers to dired to add or rm files
 
+;; 20170805.01
+;;    - +C-c C-c for rename files in dired
+
 ;; ** TODO
 
 ;; - check helpful https://github.com/wilfred/helpful
@@ -629,7 +632,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20170801.01")
+(defvar tvd-emacs-version "20170805.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -4585,8 +4588,8 @@ Version 2015-07-30"
                            (define-key tvd-dired-git-map (kbd "d") 'tvd-dired-git-rm)
                            (define-key tvd-dired-git-map (kbd "u") 'tvd-dired-git-ungit)
 
-                           (defalias 'rename 'wdired-change-to-wdired-mode)
-                           ))
+                           (defalias 'edit-dired 'wdired-change-to-wdired-mode)
+                           (define-key dired-mode-map (kbd "C-c C-c") 'wdired-change-to-wdired-mode)))
 
 ;; HINTS:
 ;; - http://ergoemacs.org/emacs/emacs_dired_tips.html
