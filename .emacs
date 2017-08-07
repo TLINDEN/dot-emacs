@@ -606,6 +606,7 @@
 
 ;; 20170807.01
 ;;    - added dired config and functions
+;;    - added dired-hacks: ranger and filters, enhanced navigation commands
 
 ;; ** TODO
 
@@ -4526,6 +4527,21 @@ defun."
 
 (setq dired-k-padding 2)
 
+;; **** dired-hacks
+
+;; [[https://github.com/Fuco1/dired-hacks][Fuco1s dired-hacks]] is a
+;; place to find the really cool stuff, I mostly use the filters.
+(require 'dired-filter)
+
+(defun tvd-dired-quit-or-filter-pop (&optional arg)
+  "Remove a filter from the filter stack. If none left, quit the dired buffer."
+  (interactive "p")
+  (if dired-filter-stack
+      (dired-filter-pop arg)
+    (quit-window)))
+
+(require 'dired-ranger)
+
 ;; **** dired sort helpers
 
 ;; This sort function by [[http://ergoemacs.org/emacs/dired_sort.html][Xah Lee]]
@@ -4663,6 +4679,18 @@ files marked, always operate on current line in dired-mode"
      (defalias 'edit-dired 'wdired-change-to-wdired-mode)
      (define-key dired-mode-map (kbd "C-c C-c") 'wdired-change-to-wdired-mode)
 
+     ;; dired-hacks filters
+     (define-key dired-mode-map (kbd "f") dired-filter-map)
+     (define-key dired-mode-map (kbd "q") 'tvd-dired-quit-or-filter-pop)
+     (define-key dired-mode-map (kbd "Q") 'dired-filter-pop-all)
+
+     ;; ranger, multi file copy/move
+     (define-prefix-command 'tvd-dired-ranger-map)
+     (define-key dired-mode-map (kbd "r") 'tvd-dired-ranger-map)
+     (define-key tvd-dired-ranger-map (kbd "c") 'dired-ranger-copy)
+     (define-key tvd-dired-ranger-map (kbd "p") 'dired-ranger-paste)
+     (define-key tvd-dired-ranger-map (kbd "m") 'dired-ranger-move)
+
      ;; navigation,  use TAB  and C-TAB  to move
      ;; point to  next or prev dir  like in info
      ;; mode, and  HOME+END to reach the  end or
@@ -4670,7 +4698,10 @@ files marked, always operate on current line in dired-mode"
      (define-key dired-mode-map (kbd "<tab>") 'dired-next-dirline)
      (define-key dired-mode-map (kbd "<C-tab>") 'dired-prev-dirline)
      (define-key dired-mode-map (kbd "<home>") 'tvd-dired-begin)
-     (define-key dired-mode-map (kbd "<end>") 'tvd-dired-end)))
+     (define-key dired-mode-map (kbd "<end>") 'tvd-dired-end)
+
+     ;; overwrite some defaults I do not use anyway
+     (define-key dired-mode-map (kbd "n") 'dired-create-directory)))
 
 
 ;; ** Emacs Interface
