@@ -4645,6 +4645,7 @@ files marked, always operate on current line in dired-mode"
      ;; stay  with 1  dired buffer  per instance
      ;; when changing directories
      (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file)
+     (define-key dired-mode-map (kbd "<C-right>") 'dired-find-alternate-file)
      (define-key dired-mode-map (kbd "^") (lambda () (interactive) (find-alternate-file "..")))
      (define-key dired-mode-map (kbd "<C-left>") (lambda () (interactive) (find-alternate-file "..")))
 
