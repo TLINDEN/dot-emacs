@@ -4627,14 +4627,6 @@ files marked, always operate on current line in dired-mode"
 ;; clearly  marked  as  non-file  buffers. In  fact  I  consider  this
 ;; behavior as a bug, but I doubt many people would agree :)
 
-;; (defun tvd-dired-fix-buffer-name (buffer)
-;;   "Modify dired buffer names to this pattern: *dired: full-path*"
-;;   (interactive)
-;;   (with-current-buffer buffer
-;;     (rename-buffer (format "*dired: %s*" default-directory)))
-;;   buffer)
-;; (advice-add 'dired-internal-noselect :filter-return 'tvd-dired-fix-buffer-name)
-
 (advice-add 'dired-internal-noselect
             :filter-return
             '(lambda (buffer)
