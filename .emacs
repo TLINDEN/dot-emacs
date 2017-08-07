@@ -4511,8 +4511,7 @@ defun."
 ;; But as with everything else I use,  it must fit and so I managed to
 ;; tune this as well.
 
-;; More Hints:
-;; - http://ergoemacs.org/emacs/emacs_dired_tips.html
+;; [[http://ergoemacs.org/emacs/emacs_dired_tips.html][More Hints]]
 
 ;; **** dired-k
 
