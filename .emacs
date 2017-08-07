@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version (20170805.01)          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version (20170806.01)          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -604,6 +604,9 @@
 ;; 20170805.01
 ;;    - +C-c C-c for rename files in dired
 
+;; 20170807.01
+;;    - added dired config and functions
+
 ;; ** TODO
 
 ;; - check helpful https://github.com/wilfred/helpful
@@ -632,7 +635,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20170805.01")
+(defvar tvd-emacs-version "20170807.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -4501,11 +4504,22 @@ defun."
 ;; --------------------------------------------------------------------------------
 ;; *** Dired
 
-;; I do not use  dired, but its good to drop into  a dired buffer from
-;; magit (see "ls" shortcut above). But default dired looks ugly, so I
-;; use k.
+;; I use dired  for two things: from inside magit  as a convenient way
+;; to add or remove files from a  repository. Or if I want to rename a
+;; bunch of files using search/replace and other editing commands.
 
-;; *** dired-k
+;; But as with everything else I use,  it must fit and so I managed to
+;; tune this as well.
+
+;; More Hints:
+;; - http://ergoemacs.org/emacs/emacs_dired_tips.html
+
+;; **** dired-k
+
+;; dired-k is k  for dired/emacs: it colorizes files  and directory by
+;; age, that is, the older the  greyer they get. And it displays flags
+;; about the git status of each file, which is really handy.
+
 (require 'dired-k)
 
 (add-hook 'dired-initial-position-hook 'dired-k)
@@ -4513,26 +4527,11 @@ defun."
 
 (setq dired-k-padding 2)
 
-;; [[http://blog.binchen.org/posts/the-most-efficient-way-to-git-add-file-in-dired-mode-emacsendiredgit.html][via bin chen]]:
-;; make git commands available from dired  buffer, so I can easily add
-;; or remove files from git
-(defun diredext-exec-git-command-in-shell (command &optional arg file-list)
-  "Run a shell command git COMMAND  ' on the marked files.  if no
-files marked, always operate on current line in dired-mode"
-  (interactive
-   (let ((files (dired-get-marked-files t current-prefix-arg)))
-     (list
-      ;; Want to give feedback whether this file or marked files are used:
-      (dired-read-shell-command "git command on %s: " current-prefix-arg files)
-      current-prefix-arg
-      files)))
-  (unless (string-match "[?][ \t]\'" command)
-    (setq command (concat command " *")))
-  (setq command (concat "git " command))
-  (dired-do-shell-command command arg file-list)
-  (message command))
+;; **** dired sort helpers
 
-;; [[http://ergoemacs.org/emacs/dired_sort.html][via Xah Lee]]:
+;; This sort function by [[http://ergoemacs.org/emacs/dired_sort.html][Xah Lee]]
+;; is easy to use and does what it should, great!, However, I added some -desc
+;; sister sorts for reverse sorting.
 (defun xah-dired-sort ()
   "Sort dired dir listing in different ways.
 Prompt for a choice.
@@ -4553,7 +4552,31 @@ Version 2015-07-30"
      (t (error "logic error 09535" )))
     (dired-sort-other arg )))
 
+;; **** dired git helpers
+
+;; [[http://blog.binchen.org/posts/the-most-efficient-way-to-git-add-file-in-dired-mode-emacsendiredgit.html][via bin chen]]:
+;; make git commands available from dired  buffer, which can be used in
+;; those rare cases, where my wrappers below don't fit.
+(defun diredext-exec-git-command-in-shell (command &optional arg file-list)
+  "Run a shell command git COMMAND  ' on the marked files.  if no
+files marked, always operate on current line in dired-mode"
+  (interactive
+   (let ((files (dired-get-marked-files t current-prefix-arg)))
+     (list
+      ;; Want to give feedback whether this file or marked files are used:
+      (dired-read-shell-command "git command on %s: " current-prefix-arg files)
+      current-prefix-arg
+      files)))
+  (unless (string-match "[?][ \t]\'" command)
+    (setq command (concat command " *")))
+  (setq command (concat "git " command))
+  (dired-do-shell-command command arg file-list)
+  (message command))
+
+;; some git  commandline wrappers  which directly  work on  git files,
+;; called with "hydras".
 (defun tvd-dired-git-add(&optional arg file-list)
+  "Add marked or current file to current repository (stash)."
   (interactive
     (let ((files (dired-get-marked-files t current-prefix-arg)))
       (list current-prefix-arg files)))
@@ -4561,6 +4584,7 @@ Version 2015-07-30"
   (revert-buffer))
 
 (defun tvd-dired-git-rm(&optional arg file-list)
+  "Remove marked or current file from current repository and filesystem."
   (interactive
    (let ((files (dired-get-marked-files t current-prefix-arg)))
      (list current-prefix-arg files)))
@@ -4568,31 +4592,94 @@ Version 2015-07-30"
   (revert-buffer))
 
 (defun tvd-dired-git-ungit(&optional arg file-list)
+  "Like `tvd-dired-git-rm' but keep the files in the filesystem (unstage)."
   (interactive
    (let ((files (dired-get-marked-files t current-prefix-arg)))
      (list current-prefix-arg files)))
   (dired-do-shell-command "git rm -rf --cached * " arg file-list)
   (revert-buffer))
 
+;; **** dired navigation
 
-(eval-after-load 'dired '(progn
-                           ;; stay with 1 dired buffer per instance
-                           (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file)
-                           (define-key dired-mode-map (kbd "^") (lambda () (interactive) (find-alternate-file "..")))
-                           (define-key dired-mode-map (kbd "<C-left>") (lambda () (interactive) (find-alternate-file "..")))
-                           (define-key dired-mode-map (kbd "s") 'xah-dired-sort)
+;; I'm used to jump around with pos1+end
+(defun tvd-dired-begin ()
+  "Move point to the first directory in the listing .."
+  (interactive)
+  (goto-char (point-min))
+  (dired-next-dirline 2))
 
-                           (define-prefix-command 'tvd-dired-git-map)
-                           (define-key dired-mode-map (kbd "g") 'tvd-dired-git-map)
-                           (define-key tvd-dired-git-map (kbd "a") 'tvd-dired-git-add)
-                           (define-key tvd-dired-git-map (kbd "d") 'tvd-dired-git-rm)
-                           (define-key tvd-dired-git-map (kbd "u") 'tvd-dired-git-ungit)
+(defun tvd-dired-end ()
+  "Move point to the last file or directory in the listing."
+  (interactive)
+  (goto-char (point-max))
+  (dired-previous-line 1))
 
-                           (defalias 'edit-dired 'wdired-change-to-wdired-mode)
-                           (define-key dired-mode-map (kbd "C-c C-c") 'wdired-change-to-wdired-mode)))
+;; **** dired buffer names
 
-;; HINTS:
-;; - http://ergoemacs.org/emacs/emacs_dired_tips.html
+;; This took  me a long time  to figure out,  but I finally got  it: I
+;; really  hate it  how  dired names  its buffers,  it  just uses  the
+;; basename part of  the current working directory as  buffer name. So
+;; when there are  a couple of dozen  buffers open and one  of them is
+;; named "tmp"  I just can't see  it. So what  I do here is  to rename
+;; each   dired  buffer   right   after  its   creation  by   advising
+;; `dired-internal-noselect'. My  dired buffers  have such  names now:
+;; *dired: ~/tmp*. I  can find them easily, and I  can reach all dired
+;; buffers very  fast thanks to  the *dired  prefix. And they  are now
+;; clearly  marked  as  non-file  buffers. In  fact  I  consider  this
+;; behavior as a bug, but I doubt many people would agree :)
+
+;; (defun tvd-dired-fix-buffer-name (buffer)
+;;   "Modify dired buffer names to this pattern: *dired: full-path*"
+;;   (interactive)
+;;   (with-current-buffer buffer
+;;     (rename-buffer (format "*dired: %s*" default-directory)))
+;;   buffer)
+;; (advice-add 'dired-internal-noselect :filter-return 'tvd-dired-fix-buffer-name)
+
+(advice-add 'dired-internal-noselect
+            :filter-return
+            '(lambda (buffer)
+               "Modify dired buffer names to this pattern: *dired: full-path*"
+               (interactive)
+               (with-current-buffer buffer
+                 (rename-buffer (format "*dired: %s*" default-directory)))
+               buffer))
+
+;; **** dired config and key bindings
+
+;; and finally put everything together.
+
+(eval-after-load 'dired
+  '(progn
+     ;; stay  with 1  dired buffer  per instance
+     ;; when changing directories
+     (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file)
+     (define-key dired-mode-map (kbd "^") (lambda () (interactive) (find-alternate-file "..")))
+     (define-key dired-mode-map (kbd "<C-left>") (lambda () (interactive) (find-alternate-file "..")))
+
+     ;; Xah Lee'S custom sort's
+     (define-key dired-mode-map (kbd "s") 'xah-dired-sort)
+
+     ;; my git "hydras"
+     (define-prefix-command 'tvd-dired-git-map)
+     (define-key dired-mode-map (kbd "g") 'tvd-dired-git-map)
+     (define-key tvd-dired-git-map (kbd "a") 'tvd-dired-git-add)
+     (define-key tvd-dired-git-map (kbd "d") 'tvd-dired-git-rm)
+     (define-key tvd-dired-git-map (kbd "u") 'tvd-dired-git-ungit)
+
+     ;; edit filenames
+     (defalias 'edit-dired 'wdired-change-to-wdired-mode)
+     (define-key dired-mode-map (kbd "C-c C-c") 'wdired-change-to-wdired-mode)
+
+     ;; navigation,  use TAB  and C-TAB  to move
+     ;; point to  next or prev dir  like in info
+     ;; mode, and  HOME+END to reach the  end or
+     ;; beginning of the listing.
+     (define-key dired-mode-map (kbd "<tab>") 'dired-next-dirline)
+     (define-key dired-mode-map (kbd "<C-tab>") 'dired-prev-dirline)
+     (define-key dired-mode-map (kbd "<home>") 'tvd-dired-begin)
+     (define-key dired-mode-map (kbd "<end>") 'tvd-dired-end)))
+
 
 ;; ** Emacs Interface
 ;; *** Parens
