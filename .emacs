@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version (20170806.01)          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version (20170808.01)          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -608,6 +608,11 @@
 ;;    - added dired config and functions
 ;;    - added dired-hacks: ranger and filters, enhanced navigation commands
 
+;; 20170808.01
+;;    - (i) is now a function, not an alias anymore and more comfortable
+;;    - added org info path
+;;    - added info+
+
 ;; ** TODO
 
 ;; - check helpful https://github.com/wilfred/helpful
@@ -636,7 +641,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20170807.01")
+(defvar tvd-emacs-version "20170808.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -960,7 +965,6 @@ to next buffer otherwise."
 (defalias 'db        'describe-bindings)
 (defalias 'dl        'finder-commentary) ; aka "describe library"
 (defalias 'repl      'ielm)
-(defalias 'i         'info-display-manual) ; with prompt and completion
 (defalias 'ws        'window-configuration-to-register) ; save window config
 (defalias 'wr        'jump-to-register)                 ; restore window config
 (defalias 'rec       'rectangle-mark-mode)
@@ -3350,6 +3354,12 @@ down and unfold it, otherwise jump paragraph as usual."
             '(lambda (&rest args)
                (set-face-attribute 'fringe nil :background tvd-fringe-narrow-bg)))
 
+;; always use the latest docs
+(with-eval-after-load 'info
+    (info-initialize)
+    (add-to-list 'Info-directory-list
+                 (expand-file-name "~/.emacs.d/lisp/org/doc")))
+
 ;; --------------------------------------------------------------------------------
 ;; *** org table mode
 
@@ -4065,8 +4075,9 @@ otherwise fold current level and jump one level up."
 
 ;; *** INFO Mode
 
-;; open an info file somewhere outside %infodir% with info-mode
+(require 'info)
 
+;; open an info file somewhere outside %infodir% with info-mode
 (defun info-find-file (file)
   (interactive "f")
   (info-setup file
@@ -4079,7 +4090,30 @@ otherwise fold current level and jump one level up."
 (eval-after-load "Info"
   '(progn
      (define-key Info-mode-map (kbd "<C-left>")  'Info-history-back)
-     (define-key Info-mode-map (kbd "<C-right>") 'Info-history-forward)))
+     (define-key Info-mode-map (kbd "<C-right>") 'Info-history-forward)
+     (require 'info+)))
+
+;; make Info great again!
+;; [[http://mbork.pl/2014-12-27_Info_dispatch][based on Marcins]] info dispatch,
+;; contains (interactive) code from 'info-display-manual for manual selection.
+(defun i (manual)
+    "Read documentation for MANUAL in the info system.  Name the
+buffer '*Info MANUAL*'.  If that buffer is already present, just
+switch to it.
+
+If MANUAL not given as argument, ask interactively with completion
+to select from a list of installed manuals."
+  (interactive
+   (list
+    (progn
+      (info-initialize)
+      (ido-completing-read "Manual name: "
+                       (info--manual-names current-prefix-arg)
+                       nil t))))
+  (let ((buffer (format "*Info %s*" manual)))
+    (if (get-buffer buffer)
+      (switch-to-buffer bufer)
+      (info manual buffer))))
 
 ;; --------------------------------------------------------------------------------
 
