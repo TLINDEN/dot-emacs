@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version (20170808.01)          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version (20170821.01)          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -613,6 +613,10 @@
 ;;    - added org info path
 ;;    - added info+
 
+;; 20170821.01
+;;    - highlight line color light green with default bg
+
+
 ;; ** TODO
 
 ;; - check helpful https://github.com/wilfred/helpful
@@ -641,7 +645,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20170808.01")
+(defvar tvd-emacs-version "20170821.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -5324,7 +5328,7 @@ converted to PDF at the same location."
  '(font-lock-type-face ((t (:foreground "DarkSlateBlue"))))
  '(font-lock-variable-name-face ((t (:foreground "Sienna"))))
  '(font-lock-warning-face ((t (:bold t :foreground "Red"))))
- '(highlight ((t (:background "DodgerBlue2" :foreground "White"))))
+ '(highlight ((t (:background "DarkSeaGreen1"))))
  '(ido-only-match ((t (:foreground "dark green" :weight bold))))
  '(info-title-1 ((t (:inherit outline-1))))
  '(info-title-2 ((t (:inherit outline-2))))
