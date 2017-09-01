@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version (20170821.01)          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version (20170901.01)          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -616,6 +616,9 @@
 ;; 20170821.01
 ;;    - highlight line color light green with default bg
 
+;; 20170901.01
+;;    - added :jump-to-captured to org capture templates,
+;;      didn't know about it before
 
 ;; ** TODO
 
@@ -645,7 +648,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20170821.01")
+(defvar tvd-emacs-version "20170901.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -3340,13 +3343,14 @@ down and unfold it, otherwise jump paragraph as usual."
 ;; my own capture templates
 (setq org-capture-templates
       '(("n" "Project" entry (file+headline tvd-org-file "Unsorted Tasks")
-         "* TODO %^{title}\n%u\n** Kostenstelle\n** Contact Peer\n**Contact Customer\n**ARS\n**Daten\n** Notizen\n  %i%?\n")
+         "* TODO %^{title}\n%u\n** Kostenstelle\n** Contact Peer\n**Contact Customer\n**ARS\n**Daten\n** Notizen\n  %i%?\n"
+         :prepend t :jump-to-captured t)
 
         ("j" "Journal" entry (file+headline tvd-org-file "Kurznotizen")
-         "* TODO %^{title}\n%u\n  %i%?\n" :prepend t)
+         "* TODO %^{title}\n%u\n  %i%?\n" :prepend t :jump-to-captured t)
 
         ("c" "Copy/Paste" entry (file+headline tvd-org-file "Kurznotizen")
-         "* TODO %^{title}\n%u\n  %x\n" :immediate-finish t :prepend t)))
+         "* TODO %^{title}\n%u\n  %x\n" :immediate-finish t :prepend t :jump-to-captured t)))
 
 ;; follow links using eww, if present
 (if (fboundp 'eww-browse-url)
