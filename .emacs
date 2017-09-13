@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version (20170901.01)          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version (20170913.01)          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -620,6 +620,9 @@
 ;;    - added :jump-to-captured to org capture templates,
 ;;      didn't know about it before
 
+;; 20170913.01
+;;    - disabled outline in config-general-mode
+
 ;; ** TODO
 
 ;; - check helpful https://github.com/wilfred/helpful
@@ -648,7 +651,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20170901.01")
+(defvar tvd-emacs-version "20170913.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -2385,7 +2388,6 @@ string).  It returns t if a new expansion is found, nil otherwise."
 ;; for config-general-mode (which inherits from conf-mode).
 (add-hook 'config-general-mode-hook
           (lambda ()
-            (outline-minor-mode)
             (electric-indent-mode)
             ;; de-activate some senseless bindings
             (local-unset-key (kbd "C-c C-c"))
