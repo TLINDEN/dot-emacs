@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version (20170913.01)          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version (20170924.01)          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -623,6 +623,9 @@
 ;; 20170913.01
 ;;    - disabled outline in config-general-mode
 
+;; 20170924.01
+;;    - experimenting swiper
+
 ;; ** TODO
 
 ;; - check helpful https://github.com/wilfred/helpful
@@ -651,7 +654,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20170913.01")
+(defvar tvd-emacs-version "20170924.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -795,6 +798,7 @@
 ;; modules
 (add-to-list 'load-path (concat tvd-lisp-dir "/er"))
 (add-to-list 'load-path (concat tvd-lisp-dir "/org/lisp"))
+(add-to-list 'load-path (concat tvd-lisp-dir "/ivy"))
 (add-to-list 'load-path (concat tvd-lisp-dir "/doremi"))
 (add-to-list 'load-path (concat tvd-lisp-dir "/org/contrib/lisp"))
 
@@ -1174,8 +1178,8 @@ to next buffer otherwise."
 
 ;; --------------------------------------------------------------------------------
 ;; ** general keys (re-)mappings
-(global-set-key (kbd "C-s")             'isearch-forward-regexp)
-(global-set-key (kbd "C-r")             'isearch-backward-regexp)
+;(global-set-key (kbd "C-s")             'isearch-forward-regexp)
+;(global-set-key (kbd "C-r")             'isearch-backward-regexp)
 (global-set-key (kbd "M-C-s")           'isearch-forward)
 (global-set-key (kbd "M-C-r")           'isearch-backward)
 (global-set-key (kbd "M-%")             'query-replace-regexp)
@@ -4799,6 +4803,15 @@ files marked, always operate on current line in dired-mode"
    (global-set-key (kbd "M-X") 'smex-major-mode-commands))
  (message "ignoring unsupported smex"))
 ;; --------------------------------------------------------------------------------
+
+;; *** Smarter Search
+
+;; test, replace isearch-forward-regexp first only.
+;; dir: ivy/
+(require 'swiper)
+(with-eval-after-load 'swiper
+  (setq ivy-wrap t)
+  (global-set-key "\C-s" 'swiper))
 
 ;; *** Which Func
 ;; display current function - if any - in mode line
