@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version (20171201.01)          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version (20171205.01)          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -629,6 +629,9 @@
 ;; 20171201.01
 ;;    - highlight TABs with ruby as well
 
+;; 20171205.01
+;;    - fixed ORG template headings
+
 ;; ** TODO
 
 ;; - check helpful https://github.com/wilfred/helpful
@@ -657,7 +660,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20171201.01")
+(defvar tvd-emacs-version "20171205.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -3352,7 +3355,7 @@ down and unfold it, otherwise jump paragraph as usual."
 ;; my own capture templates
 (setq org-capture-templates
       '(("n" "Project" entry (file+headline tvd-org-file "Unsorted Tasks")
-         "* TODO %^{title}\n%u\n** Kostenstelle\n** Contact Peer\n**Contact Customer\n**ARS\n**Daten\n** Notizen\n  %i%?\n"
+         "* TODO %^{title}\n%u\n** Kostenstelle\n** Contact Peer\n** Contact Customer\n** Aufträge\n** Daten\n** Notizen\n  %i%?\n"
          :prepend t :jump-to-captured t)
 
         ("j" "Journal" entry (file+headline tvd-org-file "Kurznotizen")
