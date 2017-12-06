@@ -683,6 +683,18 @@
 (setq tvd-lisp-dir (expand-file-name "lisp" user-init-dir))
 
 ;; --------------------------------------------------------------------------------
+;; ** Shortcut Mode - mode specific help about my own customizations
+
+;; FIXME: complete
+
+(defun add-shortcut (mode help)
+  (add-to-list 'shortcut-alist '(mode . help)))
+
+(defun shortcut ()
+  (interactive)
+  (message (cdr (assoc major-mode 'shortcut-alist))))
+
+;; --------------------------------------------------------------------------------
 ;; ** Fontlock-mode - use syntax highlighting on graphical displays
 
 ;; look: [[https://www.emacswiki.org/emacs/CustomizingBoth][emacswiki]]
