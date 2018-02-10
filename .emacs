@@ -4780,17 +4780,33 @@ files marked, always operate on current line in dired-mode"
 
 (eval-after-load "ediff"
   '(progn
-     (message "doing ediff customisation")
-     (setq diff-switches               "-u"
-           ediff-custom-diff-options   "-U3"
+     (setq ediff-diff-options   "-w"
            ediff-split-window-function 'split-window-horizontally
            ediff-window-setup-function 'ediff-setup-windows-plain)
 
      (add-hook 'ediff-startup-hook 'ediff-toggle-wide-display)
      (add-hook 'ediff-cleanup-hook 'ediff-toggle-wide-display)
      (add-hook 'ediff-suspend-hook 'ediff-toggle-wide-display)
+
+     (add-hook 'ediff-mode-hook
+               (lambda ()
+                 (ediff-setup-keymap)
+                 ;; merge left to right
+                 (define-key ediff-mode-map ">" 'ediff-copy-A-to-B)
+                 ;; merge right to left
+                 (define-key ediff-mode-map "<" 'ediff-copy-B-to-A)))
+
+     ;; restore window config on quit
+     (add-hook 'ediff-after-quit-hook-internal 'winner-undo)
      ))
 
+;; from emacswiki:
+;; Usage: emacs -diff file1 file2
+(defun command-line-diff (switch)
+  (let ((file1 (pop command-line-args-left))
+        (file2 (pop command-line-args-left)))
+    (ediff file1 file2)))
+(add-to-list 'command-switch-alist '("diff" . command-line-diff))
 
 ;; --------------------------------------------------------------------------------
 ;; ** Emacs Interface
