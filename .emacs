@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version (20171205.01)          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version (20180210.01)          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -632,6 +632,9 @@
 ;; 20171205.01
 ;;    - fixed ORG template headings
 
+;; 20180210.01
+;;    - added ediff config
+
 ;; ** TODO
 
 ;; - check helpful https://github.com/wilfred/helpful
@@ -660,7 +663,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20171205.01")
+(defvar tvd-emacs-version "20180210.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -1735,7 +1738,6 @@ might be bad."
   (interactive)
   (set-buffer-file-coding-system 'utf-8-dos)
   (message (format "converted current buffer to %s" buffer-file-coding-system)))
-
 ;; --------------------------------------------------------------------------------
 ;; ** helper do add the same thing to multiple mode hooks
 ;; via [[http://stackoverflow.com/posts/3900056/revisions][stackoverflow]]
@@ -4770,6 +4772,27 @@ files marked, always operate on current line in dired-mode"
      (define-key dired-mode-map (kbd "n") 'dired-create-directory)))
 
 
+;; *** Ediff Config
+
+;; Force ediff to use  1 frame (the current) and not  open a new frame
+;; for control  and help. Also  changing the split  orientation doesnt
+;; open a new frame.
+
+(eval-after-load "ediff"
+  '(progn
+     (message "doing ediff customisation")
+     (setq diff-switches               "-u"
+           ediff-custom-diff-options   "-U3"
+           ediff-split-window-function 'split-window-horizontally
+           ediff-window-setup-function 'ediff-setup-windows-plain)
+
+     (add-hook 'ediff-startup-hook 'ediff-toggle-wide-display)
+     (add-hook 'ediff-cleanup-hook 'ediff-toggle-wide-display)
+     (add-hook 'ediff-suspend-hook 'ediff-toggle-wide-display)
+     ))
+
+
+;; --------------------------------------------------------------------------------
 ;; ** Emacs Interface
 ;; *** Parens
 
