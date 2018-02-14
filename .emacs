@@ -1678,6 +1678,41 @@ might be bad."
 (defalias 'cb        'cleanup-buffer)
 
 ;; --------------------------------------------------------------------------------
+;; ** Remove Umlauts and other crab in current buffer
+
+;; converts:
+;;            Stan Lem - ein schönes Leben & sonst nix(ungekuerzte Ausgabe)
+;; to:
+;;            Stan_Lem-ein_schoenes_Leben_sonst_nix_ungekuerzte_Ausgabe
+;;
+;; used in dired buffers to cleanup filenames by german windows users.
+(defun umlaute-weg()
+  (interactive)
+  (let ((umlaute '((Ü . Ue)
+                   (Ä . Ae)
+                   (Ö . Oe)
+                   (ü . ue)
+                   (ä . ae)
+                   (ö . oe)
+                   (ß . ss)))
+        (regs (list
+               '(" "       . "_")
+               '("_-_"     . "-")
+               '("[\(\)&]" . "_")
+               '("__*"     . "_")
+               '("_$"      . "")
+               )))
+    (save-excursion
+      (dolist (pair umlaute)
+        (replace-regexp (symbol-name (car pair))
+                        (symbol-name (cdr pair))
+                        nil
+                        (point-min) (point-max)))
+      (dolist (reg regs)
+        (replace-regexp (car reg) (cdr reg) nil
+                        (point-min) (point-max))))))
+
+;; --------------------------------------------------------------------------------
 ;; ** Better newline(s)
 
 ;; Add newline  and jump to indent  from wherever I am  in the current
