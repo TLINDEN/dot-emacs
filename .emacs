@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version (20180210.01)          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version (20180710.01)          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -634,6 +634,7 @@
 
 ;; 20180210.01
 ;;    - added ediff config
+;;    - fixed ob-sh to ob-shell
 
 ;; ** TODO
 
@@ -663,7 +664,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20180210.01")
+(defvar tvd-emacs-version "20180710.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -3212,7 +3213,7 @@ a list symbol describing the command."
 ;; enable syntax highlighting for embedded source blocks
 (require 'ob-python)
 (require 'ob-perl)
-(require 'ob-sh)
+(require 'ob-shell)
 
 (setq org-bullets-bullet-list '("►" "✜" "✸" "✿" "♦"))
 
