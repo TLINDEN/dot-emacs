@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version (20180710.01)          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version (20180730.01)          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -636,6 +636,9 @@
 ;;    - added ediff config
 ;;    - fixed ob-sh to ob-shell
 
+;; 20180730.01
+;;    - added autoscratch-reset-default-directory t
+
 ;; ** TODO
 
 ;; - check helpful https://github.com/wilfred/helpful
@@ -664,7 +667,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20180710.01")
+(defvar tvd-emacs-version "20180730.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -1163,7 +1166,8 @@ to next buffer otherwise."
                                             ("/"            . (c-mode))
                                             ("*"            . (progn (insert " ") (org-mode)))
                                             ("."            . (fundamental-mode)))
-                                          autoscratch-trigger-on-first-char t)
+                                          autoscratch-trigger-on-first-char t
+                                          autoscratch-reset-default-directory t)
                                     (electric-indent-local-mode nil)
                                     ))
 (defalias 'scratch 'autoscratch-buffer)
