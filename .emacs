@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version (20180730.01)          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version (20181001.01)          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -639,6 +639,9 @@
 ;; 20180730.01
 ;;    - added autoscratch-reset-default-directory t
 
+;; 20181001.01
+;;    - fixed magit log dates
+
 ;; ** TODO
 
 ;; - check helpful https://github.com/wilfred/helpful
@@ -667,7 +670,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20180730.01")
+(defvar tvd-emacs-version "20181001.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -4573,6 +4576,7 @@ defun."
       (when (file-exists-p dir)
         (add-to-list 'magit-repository-directories (cons dir 1))))
     (setq magit-completing-read-function 'magit-ido-completing-read)
+    (setq magit-log-margin '(t "%d-%m-%Y %H:%M" magit-log-margin-width t 18))
     ;; navigate magit buffers as I do everywhere else, I do not automatically
     ;; cycle/decycle though, the magit defaults are absolutely sufficient.
     (define-key magit-mode-map (kbd "<C-down>") 'magit-section-forward-sibling)
