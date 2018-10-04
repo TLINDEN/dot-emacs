@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version (20181001.01)          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version (20181004.01)          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -639,8 +639,9 @@
 ;; 20180730.01
 ;;    - added autoscratch-reset-default-directory t
 
-;; 20181001.01
-;;    - fixed magit log dates
+;; 20181004.01
+;;    - added projectile and config
+;;    - added hydra and config (for org tables and projectile)
 
 ;; ** TODO
 
@@ -670,7 +671,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20181001.01")
+(defvar tvd-emacs-version "20181004.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -2803,6 +2804,9 @@ in between will be killed. If INS is non-nil, it will be inserted then."
 ;; --------------------------------------------------------------------------------
 
 ;; ** Interactives
+;; *** Hydra
+;; Used here and there below
+(require 'hydra)
 ;; *** eShell stuff, or if interactive stuff is needed, use ansi-term
 
 ;; I am  a hardcore bash  user, but from time  to time eshell  is good
@@ -3684,6 +3688,51 @@ intended to be #'> to support reverse sorting."
 
 ;; integers, reals, positives, set via custom
 (setq org-table-number-regexp "^[-+]?\\([0-9]*\\.[0-9]+\\|[0-9]+\\.?[0-9]*\\)$")
+
+;; table hydras, maybe better than aliases?!
+(defhydra hydra-org-tables (:color blue)
+  "
+^Sort by^             ^Transform to^      ^Copy what^       ^Modify^
+^^^^^^-----------------------------------------------------------------------
+_sa_:  alphanumeric   _tc_: CSV           _cl_: Column      _cd_: Delete Column
+_sA_: -alphanumeric   _te_: Excel         _cc_: Cell        _ci_: Insert Column
+_si_:  ip             _tl_: Latex                           _rd_: Delete Row
+_sI_: -ip             _th_: HTML                            _ri_: Insert Row
+_sn_:  numeric        _tt_: Tab                             _li_: Insert Line
+_sN_: -numeric        _ta_: Aligned                         _tr_: Transpose Table
+_st_:  time           _to_: Org Mode
+_sT_: -time           ^^                                    _q_: Cancel
+
+
+"
+  ("sa" sort-table-alphanumeric )
+  ("sA" sort-table-alphanumeric-desc)
+  ("si" sort-table-ip)
+  ("sI" sort-table-ip-desc )
+  ("sn" sort-table-numeric )
+  ("sN" sort-table-numeric-desc )
+  ("st" sort-table-time )
+  ("sT" sort-table-time-desc )
+
+  ("tc" table-to-csv)
+  ("te" table-to-excel   )
+  ("tl" table-to-latex   )
+  ("th" table-to-html    )
+  ("tt" table-to-csv-tab )
+  ("ta" table-to-aligned )
+  ("to" tablify )
+
+  ("cl" org-table-copy-col )
+  ("cc" tvd-copy-org-table-cell )
+
+  ("cd" org-table-delete-column)
+  ("ci" org-table-insert-column)
+  ("rd" org-table-kill-row)
+  ("ri" org-table-insert-row)
+  ("li" org-table-insert-hline-and-move)
+  ("tr" org-table-transpose-table-at-point)
+
+  ("q" nil :color red))
 
 ;; *** org mode slideshows
 
@@ -4576,7 +4625,6 @@ defun."
       (when (file-exists-p dir)
         (add-to-list 'magit-repository-directories (cons dir 1))))
     (setq magit-completing-read-function 'magit-ido-completing-read)
-    (setq magit-log-margin '(t "%d-%m-%Y %H:%M" magit-log-margin-width t 18))
     ;; navigate magit buffers as I do everywhere else, I do not automatically
     ;; cycle/decycle though, the magit defaults are absolutely sufficient.
     (define-key magit-mode-map (kbd "<C-down>") 'magit-section-forward-sibling)
@@ -4851,6 +4899,43 @@ files marked, always operate on current line in dired-mode"
         (file2 (pop command-line-args-left)))
     (ediff file1 file2)))
 (add-to-list 'command-switch-alist '("diff" . command-line-diff))
+;; --------------------------------------------------------------------------------
+;; *** Projectile
+(require 'projectile)
+(projectile-mode +1)
+
+(defun tvd-dir-to-projectile ()
+    "drop a .projectile wherever we are"
+  (interactive)
+  (with-temp-file ".projectile"
+    (insert "-.snapshot\n-.git\n-.RCS\n"))
+  (message (format "Turned %s into projectile project" default-directory)))
+
+(defhydra hydra-projectile
+  ( :color teal
+    :columns 4)
+  "Projectile (use C-p for this menu)"
+  ("s"   projectile-switch-project           "Switch Project")
+  ("f"   projectile-find-file                "Find File")
+  ("r"   projectile-recentf                  "Recent Files")
+  ("b"   projectile-ibuffer                  "Show Project Buffers")
+
+  ("g"   projectile-grep                     "Grep")
+  ("o"   projectile-multi-occur              "Multi Occur")
+  ("d"   projectile-dired                    "Project Dired")
+  ("R"   projectile-replace                  "Replace in Project")
+
+  ("C"   projectile-invalidate-cache         "Clear Cache")
+  ("t"   projectile-regenerate-tags          "Regenerate Tags")
+  ("X"   projectile-cleanup-known-projects   "Cleanup Known Projects")
+  ("n"   tvd-dir-to-projectile               "Turn current directory into Projectile")
+
+  ("c"   projectile-commander                "Commander")
+  ("k"   projectile-kill-buffers             "Kill Buffers")
+  ("q"   nil                                 "Cancel" :color blue))
+
+(global-set-key (kbd "C-p") 'hydra-projectile/body)
+(defalias 'p 'hydra-projectile/body)
 
 ;; --------------------------------------------------------------------------------
 ;; ** Emacs Interface
