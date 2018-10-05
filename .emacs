@@ -642,6 +642,7 @@
 ;; 20181004.01
 ;;    - added projectile and config
 ;;    - added hydra and config (for org tables and projectile)
+;;    - finished org table hydra
 
 ;; ** TODO
 
@@ -3639,6 +3640,25 @@ intended to be #'> to support reverse sorting."
     (delete-region beg end)
     (org-table-align)))
 
+(defun tvd-del-org-table-row ()
+  "Delete a table row's contents"
+  (interactive)
+  (org-beginning-of-line 1)
+  (kill-line)
+  (org-table-insert-row nil))
+
+(defun tvd-del-org-table-col ()
+  "Delete a table column's contents, keep heading as is"
+  (interactive)
+  (let ((head (org-table-get 1 nil)))
+    (org-table-delete-column)
+    (re-search-forward "|")
+    (org-table-insert-column)
+    (org-table-goto-col-beginning)
+    (insert head)
+    (org-table-align))
+  )
+
 ;; Sometimes I need to copy whole columns too:
 ;; via [[https://emacs.stackexchange.com/questions/28270/how-to-select-and-copy-a-column-of-an-org-table-without-rectangle-selection][stackoverflow]]
 
@@ -3706,14 +3726,14 @@ intended to be #'> to support reverse sorting."
   "
 ^Sort by^             ^Transform to^      ^Copy/Del what^       ^Modify^                 ^Outside Org^
 ^^^^^^^^----------------------------------------------------------------------------------------------------------
-_sa_:  alphanumeric   _tc_: CSV           _cl_: Copy Column     _cd_: Delete Column      _ot_: Table to Org Mode
-_sA_: -alphanumeric   _te_: Excel         _cc_: Copy Cell       _ci_: Insert Column      _oe_: Enable Org-Tbl Mode
-_si_:  ip             _tl_: Latex         _dd_: Delete Cell     _rd_: Delete Row
-_sI_: -ip             _th_: HTML          _dc_: Delete Column   _ri_: Insert Row
-_sn_:  numeric        _tt_: Tab           _dr_: Delete Row      _li_: Insert Line
-_sN_: -numeric        _ta_: Aligned       ^^                    _tr_: Transpose Table
-_st_:  time
-_sT_: -time           ^^                  ^^                    ^^                       _q_: Cancel
+_sa_:  alphanumeric   _tc_: CSV           _cl_: Copy Column     _ic_: Insert Column      _ot_: Table to Org Mode
+_sA_: -alphanumeric   _te_: Excel         _cc_: Copy Cell       _ir_: Insert Row         _oe_: Enable Org-Tbl Mode
+_si_:  ip             _tl_: Latex         ^^                    _il_: Insert Line
+_sI_: -ip             _th_: HTML          _dd_: Delete Cell     _tr_: Transpose Table
+_sn_:  numeric        _tt_: Tab           _dc_: Delete Column
+_sN_: -numeric        _ta_: Aligned       _dr_: Delete Row
+_st_:  time           ^^                  _kr_: Kill Row
+_sT_: -time           ^^                  _kc_: Kill Column     ^^                       _q_: Cancel
 
 
 "
@@ -3736,14 +3756,14 @@ _sT_: -time           ^^                  ^^                    ^^              
   ("cl" org-table-copy-col )
   ("cc" tvd-copy-org-table-cell)
   ("dd" org-table-blank-field)
-  ("dr" nil)
-  ("dc" nil)
+  ("dr" tvd-del-org-table-row)
+  ("dc" tvd-del-org-table-col)
+  ("kc" org-table-delete-column)
+  ("kr" org-table-kill-row)
 
-  ("cd" org-table-delete-column)
-  ("ci" org-table-insert-column)
-  ("rd" org-table-kill-row)
-  ("ri" org-table-insert-row)
-  ("li" org-table-hline-and-move)
+  ("ic" org-table-insert-column)
+  ("ir" org-table-insert-row)
+  ("il" org-table-hline-and-move)
   ("tr" org-table-transpose-table-at-point)
 
   ("ot" tablify )
@@ -3753,6 +3773,7 @@ _sT_: -time           ^^                  ^^                    ^^              
 
 ;; allow me to insert org tables everywhere on request
 (defalias 'table     'hydra-org-tables/body)
+(defalias 't        'hydra-org-tables/body)
 (global-set-key (kbd "C-c t") 'hydra-org-tables/body)
 
 ;; *** org mode slideshows
