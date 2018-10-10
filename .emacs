@@ -4699,7 +4699,6 @@ defun."
 ;; Not much to  say about Magit
 (unless tvd-win-home
   (setq tvd-magit-revision "20170725.1153")
-
   (add-to-list 'load-path (concat tvd-lisp-dir (concat "/magit-" tvd-magit-revision)))
 
   (require 'magit)
@@ -5110,6 +5109,31 @@ T - tag prefix
               (regexp-quote sym))))
         regexp-history)
   (call-interactively 'occur))
+
+;; *** Window Hydra
+
+(defhydra hydra-windows (:color blue)
+  "
+^Window Management^
+^^---------------------------
+_s_: Resize Windiws
+_f_: Flip Windows
+_4_: Quarter Windows
+_u_: Windows Undo
+_r_: Windows Redo
+_i_: Invert Colors
+_b_: Adjust Background Color
+
+
+"
+  ("s" windresize)
+  ("f" flip-windows)
+  ("4" tvd-quarter-windows)
+  ("u" winner-undo)
+  ("r" winner-redo)
+  ("i" tvd-invert)
+  ("b" doremi-bg-brightness+)
+  ("q" nil :color red))
 
 ;; ** Emacs Interface
 ;; *** Parens
@@ -5755,6 +5779,7 @@ converted to PDF at the same location."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(package-selected-packages (quote (magit)))
  '(safe-local-variable-values (quote ((ruby-indent-level 4)))))
 
 ;; ** done
