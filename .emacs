@@ -3729,7 +3729,7 @@ intended to be #'> to support reverse sorting."
 ^^^^^^^^----------------------------------------------------------------------------------------------------------
 _sa_:  alphanumeric   _tc_: CSV           _cl_: Copy Column     _ic_: Insert Column      _ot_: Table to Org Mode
 _sA_: -alphanumeric   _te_: Excel         _cc_: Copy Cell       _ir_: Insert Row         _oe_: Enable Org-Tbl Mode
-_si_:  ip             _tl_: Latex         ^^                    _il_: Insert Line
+_si_:  ip             _tl_: Latex         ^^                    _il_: Insert Line        _oc_: Turn region to columns
 _sI_: -ip             _th_: HTML          _dd_: Delete Cell     _tr_: Transpose Table
 _sn_:  numeric        _tt_: Tab           _dc_: Delete Column
 _sN_: -numeric        _ta_: Aligned       _dr_: Delete Row
@@ -3769,6 +3769,7 @@ _sT_: -time           ^^                  _kc_: Kill Column     ^^              
 
   ("ot" tablify )
   ("oe" orgtbl-mode)
+  ("oc" align-repeat)
 
   ("q" nil :color red))
 
