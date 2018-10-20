@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version (20181004.01)          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version (20181019.01)          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -645,6 +645,23 @@
 ;;    - finished org table hydra
 ;;    - added info hydra, fixed 't bug
 
+;; 20181016.01
+;;    - fixed dired under cygwin w/o git
+
+;; 20181019.01
+;;    - using C-x for all hydras now:
+;;      C-x w: windows
+;;      C-x t: org table
+;;      C-y p: projectile
+;;    - added copy org table row
+;;    - enhanced window hyrda by resizing chords
+;;    - changed table copy key chords (C-c t [ctr]
+
+
+;;    - better windows hydra
+;;    - on help close restore windows setup
+;;    - fixed hydra hints
+
 ;; ** TODO
 
 ;; - check dired hydra
@@ -677,7 +694,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20181004.01")
+(defvar tvd-emacs-version "20181019.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -3655,7 +3672,7 @@ intended to be #'> to support reverse sorting."
     (org-table-delete-column)
     (re-search-forward "|")
     (org-table-insert-column)
-    (org-table-goto-col-beginning)
+    (tvd-org-table-goto-col-beginning)
     (insert head)
     (org-table-align))
   )
@@ -3663,7 +3680,7 @@ intended to be #'> to support reverse sorting."
 ;; Sometimes I need to copy whole columns too:
 ;; via [[https://emacs.stackexchange.com/questions/28270/how-to-select-and-copy-a-column-of-an-org-table-without-rectangle-selection][stackoverflow]]
 
-(defun org-table-goto-col-beginning ()
+(defun tvd-org-table-goto-col-beginning ()
   "Go to beginning of current column and return `point'."
   (interactive)
   (assert (org-table-p) "Not in org-table.")
@@ -3673,12 +3690,12 @@ intended to be #'> to support reverse sorting."
     (org-table-goto-column col))
   (point))
 
-(defun org-table-col-beginning ()
+(defun tvd-org-table-col-beginning ()
   "Return beginning position of current column."
   (save-excursion
-    (org-table-goto-col-beginning)))
+    (tvd-org-table-goto-col-beginning)))
 
-(defun org-table-goto-col-end ()
+(defun tvd-org-table-goto-col-end ()
   "Goto end of current column and return `point'."
   (interactive)
   (assert (org-table-p) "Not in org-table.")
@@ -3689,35 +3706,58 @@ intended to be #'> to support reverse sorting."
     (skip-chars-forward "^|"))
   (point))
 
-(defun org-table-col-end ()
+(defun tvd-org-table-col-end ()
   "Return end position of current column."
   (save-excursion
-    (org-table-goto-col-end)))
+    (tvd-org-table-goto-col-end)))
 
-(defun org-table-select-col ()
+(defun tvd-org-table-select-col ()
   "Select current column."
   (interactive)
-  (set-mark (org-table-col-beginning))
-  (org-table-goto-col-end)
+  (set-mark (tvd-org-table-col-beginning))
+  (tvd-org-table-goto-col-end)
   (rectangle-mark-mode))
 
-(defun org-table-copy-col ()
+(defun tvd-copy-org-table-col ()
   "Copy current column."
   (interactive)
-  (org-table-select-col)
+  (tvd-org-table-select-col)
   (sit-for 0.2 t)
-  (copy-rectangle-as-kill (org-table-col-beginning) (org-table-col-end)))
+  (copy-region-as-kill nil nil t)
+  (with-temp-buffer
+    (yank)
+    (delete-trailing-whitespace)
+    (delete-whitespace-rectangle (point-min) (point-max))
+    (font-lock-unfontify-buffer)
+    (copy-region-as-kill (point-min) (point-max))))
+
+(defun tvd-copy-org-table-row ()
+  "Copy current row, space aligned"
+  (interactive)
+  (mcyt-copy-line)
+  (with-temp-buffer
+    (yank)
+    (goto-char (point-min))
+    (let ((spc ""))
+      (while (re-search-forward "|[ ]*" nil t)
+        (replace-match spc)
+        (setq spc " ")))
+    (delete-trailing-whitespace)
+    (copy-region-as-kill (point-min) (point-max))))
+
 
 (with-eval-after-load "org"
   (add-hook 'org-mode-hook
             (lambda ()
-              (local-set-key (kbd "C-c o") 'org-table-copy-col)
-              (local-set-key (kbd "C-c c") 'tvd-copy-org-table-cell))))
+              (local-set-key (kbd "C-c t l") 'tvd-copy-org-table-col)
+              (local-set-key (kbd "C-c t r") 'tvd-copy-org-table-row)
+              (local-set-key (kbd "C-c t c") 'tvd-copy-org-table-cell))))
 
 ;; eval-after-load 'orgtbl doesn't work
 (add-hook 'orgtbl-mode-hook '(lambda ()
-                               (define-key orgtbl-mode-map (kbd "C-c o") 'org-table-copy-col)
-                               (define-key orgtbl-mode-map (kbd "C-c c") 'tvd-copy-org-table-cell)))
+                               (define-key orgtbl-mode-map (kbd "C-c t l") 'tvd-copy-org-table-col)
+                               (define-key orgtbl-mode-map (kbd "C-c t r") 'tvd-copy-org-table-row)
+                               (define-key orgtbl-mode-map (kbd "C-c t c") 'tvd-copy-org-table-cell)))
 
 ;; integers, reals, positives, set via custom
 (setq org-table-number-regexp "^[-+]?\\([0-9]*\\.[0-9]+\\|[0-9]+\\.?[0-9]*\\)$")
@@ -3725,57 +3765,63 @@ intended to be #'> to support reverse sorting."
 ;; table hydras, maybe better than aliases?!
 (defhydra hydra-org-tables (:color blue)
   "
-^Sort by^             ^Transform to^      ^Copy/Del what^       ^Modify^                 ^Outside Org^
-^^^^^^^^----------------------------------------------------------------------------------------------------------
-_sa_:  alphanumeric   _tc_: CSV           _cl_: Copy Column     _ic_: Insert Column      _ot_: Table to Org Mode
-_sA_: -alphanumeric   _te_: Excel         _cc_: Copy Cell       _ir_: Insert Row         _oe_: Enable Org-Tbl Mode
-_si_:  ip             _tl_: Latex         ^^                    _il_: Insert Line        _oc_: Turn region to columns
-_sI_: -ip             _th_: HTML          _dd_: Delete Cell     _tr_: Transpose Table
+^Sort by^             ^Transform to^      ^Copy/Del what^                ^Modify^                 ^Outside Org^
+^^^^^^^^-----------------------------------------------------------------------------------------------------------------------
+_sa_:  alphanumeric   _tc_: CSV           _cl_: Copy Column (C-c t l)    _ic_: Insert Column      _ot_: Table to Org Mode
+_sA_: -alphanumeric   _te_: Excel         _cr_: Copy Row    (C-c t r)    _ir_: Insert Row         _oe_: Enable Org-Tbl Mode
+_si_:  ip             _tl_: Latex         _cc_: Copy Cell   (C-c t c)    _il_: Insert Line        _oc_: Turn region to columns
+_sI_: -ip             _th_: HTML          _dd_: Delete Cell              _tr_: Transpose Table
 _sn_:  numeric        _tt_: Tab           _dc_: Delete Column
 _sN_: -numeric        _ta_: Aligned       _dr_: Delete Row
 _st_:  time           ^^                  _kr_: Kill Row
-_sT_: -time           ^^                  _kc_: Kill Column     ^^                       _q_: Cancel
+_sT_: -time           ^^                  _kc_: Kill Column              ^^                       _q_: Cancel
+
+
+^^^^^^^^-----------------------------------------------------------------------------------------------------------------------
+Reach this hydra with <C-x t>
+^^^^^^^^-----------------------------------------------------------------------------------------------------------------------
 
 
 "
-  ("sa" sort-table-alphanumeric )
-  ("sA" sort-table-alphanumeric-desc)
-  ("si" sort-table-ip)
-  ("sI" sort-table-ip-desc )
-  ("sn" sort-table-numeric )
-  ("sN" sort-table-numeric-desc )
-  ("st" sort-table-time )
-  ("sT" sort-table-time-desc )
+  ("sa" sort-table-alphanumeric  nil)
+  ("sA" sort-table-alphanumeric-desc nil)
+  ("si" sort-table-ip nil)
+  ("sI" sort-table-ip-desc  nil)
+  ("sn" sort-table-numeric  nil)
+  ("sN" sort-table-numeric-desc  nil)
+  ("st" sort-table-time  nil)
+  ("sT" sort-table-time-desc  nil)
 
-  ("tc" table-to-csv)
-  ("te" table-to-excel   )
-  ("tl" table-to-latex   )
-  ("th" table-to-html    )
-  ("tt" table-to-csv-tab )
-  ("ta" table-to-aligned )
+  ("tc" table-to-csv nil)
+  ("te" table-to-excel    nil)
+  ("tl" table-to-latex    nil)
+  ("th" table-to-html     nil)
+  ("tt" table-to-csv-tab  nil)
+  ("ta" table-to-aligned  nil)
 
-  ("cl" org-table-copy-col )
-  ("cc" tvd-copy-org-table-cell)
-  ("dd" org-table-blank-field)
-  ("dr" tvd-del-org-table-row)
-  ("dc" tvd-del-org-table-col)
-  ("kc" org-table-delete-column)
-  ("kr" org-table-kill-row)
+  ("cl" tvd-copy-org-table-col nil)
+  ("cr" tvd-copy-org-table-row nil)
+  ("cc" tvd-copy-org-table-cell nil)
+  ("dd" org-table-blank-field nil)
+  ("dr" tvd-del-org-table-row nil)
+  ("dc" tvd-del-org-table-col nil)
+  ("kc" org-table-delete-column nil)
+  ("kr" org-table-kill-row nil)
 
-  ("ic" org-table-insert-column)
-  ("ir" org-table-insert-row)
-  ("il" org-table-hline-and-move)
-  ("tr" org-table-transpose-table-at-point)
+  ("ic" org-table-insert-column nil)
+  ("ir" org-table-insert-row nil)
+  ("il" org-table-hline-and-move nil)
+  ("tr" org-table-transpose-table-at-point nil)
 
-  ("ot" tablify )
-  ("oe" orgtbl-mode)
-  ("oc" align-repeat)
+  ("ot" tablify  nil)
+  ("oe" orgtbl-mode nil)
+  ("oc" align-repeat nil)
 
-  ("q" nil :color red))
+  ("q" nil nil :color red))
 
 ;; allow me to insert org tables everywhere on request
 (defalias 'table     'hydra-org-tables/body)
-(global-set-key (kbd "C-c t") 'hydra-org-tables/body)
+(global-set-key (kbd "C-x t") 'hydra-org-tables/body)
 
 ;; *** org mode slideshows
 
@@ -4295,49 +4341,51 @@ Info-mode:
   ^^_n_ext (same level only)               ^^_H_istory         _g_oto (C-u for new window)          _,_ next index item      _c_opy node name
   ^^_p_rev (same level only)               _<_/_t_op           _b_eginning of buffer                virtual _I_ndex          _C_lone buffer
   regex _s_earch (_S_ case sensitive)      ^^_>_ final         _e_nd of buffer                      ^^                       _a_propos
+
   _1_ .. _9_ Pick first .. ninth item in the node's menu.
+
 "
-      ("]"   Info-forward-node)
-      ("["   Info-backward-node)
-      ("n"   Info-next)
-      ("p"   Info-prev)
-      ("s"   Info-search)
-      ("S"   Info-search-case-sensitively)
+      ("]"   Info-forward-node nil)
+      ("["   Info-backward-node nil)
+      ("n"   Info-next nil)
+      ("p"   Info-prev nil)
+      ("s"   Info-search nil)
+      ("S"   Info-search-case-sensitively nil)
 
-      ("l"   Info-history-back)
-      ("r"   Info-history-forward)
-      ("H"   Info-history)
-      ("t"   Info-top-node)
-      ("<"   Info-top-node)
-      (">"   Info-final-node)
+      ("l"   Info-history-back nil)
+      ("r"   Info-history-forward nil)
+      ("H"   Info-history nil)
+      ("t"   Info-top-node nil)
+      ("<"   Info-top-node nil)
+      (">"   Info-final-node nil)
 
-      ("u"   Info-up)
-      ("^"   Info-up)
-      ("m"   Info-menu)
-      ("g"   Info-goto-node)
-      ("b"   beginning-of-buffer)
-      ("e"   end-of-buffer)
+      ("u"   Info-up nil)
+      ("^"   Info-up nil)
+      ("m"   Info-menu nil)
+      ("g"   Info-goto-node nil)
+      ("b"   beginning-of-buffer nil)
+      ("e"   end-of-buffer nil)
 
-      ("f"   Info-follow-reference)
-      ("i"   Info-index)
-      (","   Info-index-next)
-      ("I"   Info-virtual-index)
+      ("f"   Info-follow-reference nil)
+      ("i"   Info-index nil)
+      (","   Info-index-next nil)
+      ("I"   Info-virtual-index nil)
 
-      ("T"   Info-toc)
-      ("d"   Info-directory)
-      ("c"   Info-copy-current-node-name)
-      ("C"   clone-buffer)
-      ("a"   info-apropos)
+      ("T"   Info-toc nil)
+      ("d"   Info-directory nil)
+      ("c"   Info-copy-current-node-name nil)
+      ("C"   clone-buffer nil)
+      ("a"   info-apropos nil)
 
-      ("1"   Info-nth-menu-item)
-      ("2"   Info-nth-menu-item)
-      ("3"   Info-nth-menu-item)
-      ("4"   Info-nth-menu-item)
-      ("5"   Info-nth-menu-item)
-      ("6"   Info-nth-menu-item)
-      ("7"   Info-nth-menu-item)
-      ("8"   Info-nth-menu-item)
-      ("9"   Info-nth-menu-item)
+      ("1"   Info-nth-menu-item nil)
+      ("2"   Info-nth-menu-item nil)
+      ("3"   Info-nth-menu-item nil)
+      ("4"   Info-nth-menu-item nil)
+      ("5"   Info-nth-menu-item nil)
+      ("6"   Info-nth-menu-item nil)
+      ("7"   Info-nth-menu-item nil)
+      ("8"   Info-nth-menu-item nil)
+      ("9"   Info-nth-menu-item nil)
 
       ("?"   Info-summary "Info summary")
       ("h"   Info-help "Info help")
@@ -4626,11 +4674,16 @@ defun."
 
 ;; I even customize help windows! ... at least a little :)
 
+(defun tvd-close-help ()
+  (interactive)
+  (kill-this-buffer)
+  (winner-undo))
+
 (eval-after-load "Help"
   '(progn
      (add-hook 'help-mode-hook
                (lambda ()
-                 (local-set-key (kbd "q") 'tvd-close-window)
+                 (local-set-key (kbd "q") 'tvd-close-help)
                  (local-set-key (kbd "x") 'quit-window)
                  (local-set-key (kbd "p") 'help-go-back)
                  (local-set-key (kbd "b") 'help-go-back)
@@ -4782,12 +4835,14 @@ defun."
 ;; age, that is, the older the  greyer they get. And it displays flags
 ;; about the git status of each file, which is really handy.
 
-(require 'dired-k)
-
-(add-hook 'dired-initial-position-hook 'dired-k)
-(add-hook 'dired-after-readin-hook #'dired-k-no-revert)
-
-(setq dired-k-padding 2)
+;; However,  it only  works with  git installed  and if  enabled stops
+;; dired to work  completely. So I define an exception  here and don't
+;; load k if there's no git (e.g. on my notebook at work)
+(when (string-match "version" (shell-command-to-string "git version"))
+  (require 'dired-k)
+  (add-hook 'dired-initial-position-hook 'dired-k)
+  (add-hook 'dired-after-readin-hook #'dired-k-no-revert)
+  (setq dired-k-padding 2))
 
 ;; **** dired-hacks
 
@@ -4969,10 +5024,10 @@ files marked, always operate on current line in dired-mode"
 ;; FIXME: not yet customized to fit my own config
 (defhydra hydra-dired (:hint nil :color pink)
   "
-_+_ mkdir          _v_iew           _m_ark             _(_ details        _i_nsert-subdir    wdired
-_C_opy             _O_ view other   _U_nmark all       _)_ omit-mode      _$_ hide-subdir    C-x C-q : edit
-_D_elete           _o_pen other     _u_nmark           _l_ redisplay      _w_ kill-subdir    C-c C-c : commit
-_R_ename           _M_ chmod        _t_oggle           _g_ revert buf     _e_ ediff          C-c ESC : abort
+_+_ mkdir          _v_iew           _m_ark             _(_ details        _i_nsert-subdir    _W_dired (EDIT FILENAMES)
+_C_opy             _O_ view other   _U_nmark all       _)_ omit-mode      _$_ hide-subdir    C-c C-c : edit
+_D_elete           _o_pen other     _u_nmark           _l_ redisplay      _w_ kill-subdir
+_R_ename           _M_ chmod        _t_oggle           _g_ revert buf     _e_ ediff          _q_uit
 _Y_ rel symlink    _G_ chgrp        _E_xtension mark   _s_ort             _=_ pdiff
 _S_ymlink          ^ ^              _F_ind marked      _._ toggle hydra   \\ flyspell
 _r_sync            ^ ^              ^ ^                ^ ^                _?_ summary
@@ -4980,45 +5035,47 @@ _z_ compress-file  _A_ find regexp
 _Z_ compress       _Q_ repl regexp
 
 T - tag prefix
-"
-  ("\\" dired-do-ispell)
-  ("(" dired-hide-details-mode)
-  (")" dired-omit-mode)
-  ("+" dired-create-directory)
-  ("=" diredp-ediff)         ;; smart diff
-  ("?" dired-summary)
-  ("$" diredp-hide-subdir-nomove)
-  ("A" dired-do-find-regexp)
-  ("C" dired-do-copy)        ;; Copy all marked files
-  ("D" dired-do-delete)
-  ("E" dired-mark-extension)
-  ("e" dired-ediff-files)
-  ("F" dired-do-find-marked-files)
-  ("G" dired-do-chgrp)
-  ("g" revert-buffer)        ;; read all directories again (refresh)
-  ("i" dired-maybe-insert-subdir)
-  ("l" dired-do-redisplay)   ;; relist the marked or singel directory
-  ("M" dired-do-chmod)
-  ("m" dired-mark)
-  ("O" dired-display-file)
-  ("o" dired-find-file-other-window)
-  ("Q" dired-do-find-regexp-and-replace)
-  ("R" dired-do-rename)
-  ("r" dired-do-rsynch)
-  ("S" dired-do-symlink)
-  ("s" dired-sort-toggle-or-edit)
-  ("t" dired-toggle-marks)
-  ("U" dired-unmark-all-marks)
-  ("u" dired-unmark)
-  ("v" dired-view-file)      ;; q to exit, s to search, = gets line #
-  ("w" dired-kill-subdir)
-  ("Y" dired-do-relsymlink)
-  ("z" diredp-compress-this-file)
-  ("Z" dired-do-compress)
-  ("q" nil)
-  ("." nil :color blue))
 
-(define-key dired-mode-map "." 'hydra-dired/body)
+"
+  ("\\" dired-do-ispell nil)
+  ("(" dired-hide-details-mode nil)
+  (")" dired-omit-mode nil)
+  ("+" dired-create-directory nil)
+  ("=" diredp-ediff nil)         ;; smart diff
+  ("?" dired-summary nil)
+  ("$" diredp-hide-subdir-nomove nil)
+  ("A" dired-do-find-regexp nil)
+  ("C" dired-do-copy nil)        ;; Copy all marked files
+  ("D" dired-do-delete nil)
+  ("E" dired-mark-extension nil)
+  ("e" dired-ediff-files nil)
+  ("F" dired-do-find-marked-files nil)
+  ("G" dired-do-chgrp nil)
+  ("g" revert-buffer nil)        ;; read all directories again (refresh nil)
+  ("i" dired-maybe-insert-subdir nil)
+  ("l" dired-do-redisplay nil)   ;; relist the marked or singel directory
+  ("M" dired-do-chmod nil)
+  ("m" dired-mark nil)
+  ("O" dired-display-file nil)
+  ("o" dired-find-file-other-window nil)
+  ("Q" dired-do-find-regexp-and-replace nil)
+  ("R" dired-do-rename nil)
+  ("r" dired-do-rsynch nil)
+  ("S" dired-do-symlink nil)
+  ("s" dired-sort-toggle-or-edit nil)
+  ("t" dired-toggle-marks nil)
+  ("U" dired-unmark-all-marks nil)
+  ("u" dired-unmark nil)
+  ("v" dired-view-file nil)      ;; q to exit, s to search, = gets line #
+  ("w" dired-kill-subdir nil)
+  ("W" wdired-change-to-wdired-mode nil)
+  ("Y" dired-do-relsymlink nil)
+  ("z" diredp-compress-this-file nil)
+  ("Z" dired-do-compress nil)
+  ("q" nil nil)
+  ("." nil nil :color blue))
+
+(define-key dired-mode-map "?" 'hydra-dired/body)
 
 ;; *** Ediff Config
 
@@ -5067,6 +5124,7 @@ T - tag prefix
     (insert "-.snapshot\n-.git\n-.RCS\n"))
   (message (format "Turned %s into projectile project" default-directory)))
 
+;; FIXME: add custom docstring
 (defhydra hydra-projectile
   ( :color teal
     :columns 4)
@@ -5090,8 +5148,8 @@ T - tag prefix
   ("k"   projectile-kill-buffers             "Kill Buffers")
   ("q"   nil                                 "Cancel" :color blue))
 
-(global-set-key (kbd "C-p") 'hydra-projectile/body)
-(defalias 'p 'hydra-projectile/body)
+(global-set-key (kbd "C-x p") 'hydra-projectile/body)
+
 
 ;; --------------------------------------------------------------------------------
 ;; *** Occur
@@ -5112,28 +5170,54 @@ T - tag prefix
 
 ;; *** Window Hydra
 
-(defhydra hydra-windows (:color blue)
-  "
-^Window Management^
-^^---------------------------
-_s_: Resize Windiws
-_f_: Flip Windows
-_4_: Quarter Windows
-_u_: Windows Undo
-_r_: Windows Redo
-_i_: Invert Colors
-_b_: Adjust Background Color
+;; brightness wrappers
+(defun tvd-bg-brighter ()
+  (interactive)
+  (doremi-increment-background-color-1 ?v -1))
 
+(defun tvd-bg-darker ()
+  (interactive)
+  (doremi-increment-background-color-1 ?v 1))
+
+(defhydra hydra-windows (:color blue)
+"
+
+^Window Management^
+^^------------------------------------------------------------------------
+_+_ Increase Font | _-_ Decrease Font      Resize     ^ ^  _w_  ^ ^
+_f_: Flip Windows    <M-O>            ^^   Current    _a_  ^ ^  _d_
+_4_: Quarter Windows <C-x 4>          ^^   Window:    ^ ^  _s_  ^ ^
+_u_: Windows Undo    <C-c left>
+_r_: Windows Redo    <C-c right>      ^^   _l_: Adjust Background brighter
+_i_: Invert Colors   <C-c C-i>        ^^   _b_: Adjust Background darker
+
+_h_: Toggle Highlight Line Mode
+_n_: Toogle Line Number Mode
+
+^^------------------------------------------------------------------------
+Reach this hydra with <C-x w>
+^^------------------------------------------------------------------------
 
 "
-  ("s" windresize)
-  ("f" flip-windows)
-  ("4" tvd-quarter-windows)
-  ("u" winner-undo)
-  ("r" winner-redo)
-  ("i" tvd-invert)
-  ("b" doremi-bg-brightness+)
-  ("q" nil :color red))
+  ("+" tvd-global-font-size-bigger nil :color pink)
+  ("-" tvd-global-font-size-smaller nil :color pink)
+  ("f" flip-windows nil)
+  ("4" tvd-quarter-windows nil)
+  ("u" winner-undo nil)
+  ("r" winner-redo nil)
+  ("i" tvd-invert nil)
+  ("b" tvd-bg-darker nil :color pink)
+  ("l" tvd-bg-brighter nil :color pink)
+  ("a" shrink-window-horizontally nil :color pink)
+  ("d" enlarge-window-horizontally nil :color pink)
+  ("w" shrink-window nil :color pink)
+  ("s" enlarge-window nil :color pink)
+  ("h" hl-line-mode nil)
+  ("n" linum-mode nil)
+  ("q" nil nil :color red))
+
+(global-set-key (kbd "C-x w") 'hydra-windows/body)
+
 
 ;; ** Emacs Interface
 ;; *** Parens
