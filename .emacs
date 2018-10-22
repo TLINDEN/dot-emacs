@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version (20181019.01)          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version (20181022.01)          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -662,6 +662,13 @@
 ;;    - on help close restore windows setup
 ;;    - fixed hydra hints
 
+;; 20181021.01
+;;    - fixed window resizing
+
+;; 20181022.01
+;;    - enhanced M-o for window switching a lot, using a hydra and the arrow keys
+
+
 ;; ** TODO
 
 ;; - check dired hydra
@@ -694,7 +701,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20181019.01")
+(defvar tvd-emacs-version "20181022.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -855,6 +862,10 @@
 (add-to-list 'load-path (concat tvd-lisp-dir "/org/contrib/lisp"))
 
 ;; --------------------------------------------------------------------------------
+;; ** Hydra
+;; Used here and there below, loaded as early as possible
+(require 'hydra)
+
 ;; ** byte-compile all of them, if needed
 
 ;; handy function to recompile all lisp files
@@ -897,30 +908,35 @@
 (setq windmove-wrap-around t)
 
 ;; *** M-o switch window or buffer
-;; via [[http://mbork.pl/2017-02-26_other-window-or-switch-buffer][mbork]]
 
-;; Most of  the time I switch  back and forth between  two buffers, be
-;; they  in separate  windows  or not.  With this  function  I can  do
-;; that. Of course this doesn't work if there are more than 2 windows,
-;; and it only works with the 2 most recent visited buffers.
-(defun other-window-or-switch-buffer ()
-  "Call `other-window' if more than one window is visible, switch
-to next buffer otherwise."
+;; The key M-o has different functions depending on context:
+;;
+;; If there's only 1 window open, switch to the last active.
+;;
+;; If there  are 2  windows open,  switch back  and forth  between the
+;; two. In order to flip them, Use M-O (that is: ALT+shift+o).
+;;
+;; And if  there are more than  2 windows open, call  the hydra, which
+;; allows to switch to another window  using the arrow keys. The hydra
+;; stays for 1 second  unles an arrow key has been  pressed. So, I can
+;; press  multiple arrow  keys in  a row  as long  as I'm  fast enough
+;; between key  presses. If I stop,the  hydra disappears and I  end up
+;; whereever I was last.
+;;
+;; Also, within the hydra 'o' jumps  to the last active window and
+;; 'f' flips all windows.
+
+(defun tvd-previous-window (&optional ignore)
+  "Toggle between the last two selected windows."
   (interactive)
-  (if (one-window-p)
-      (switch-to-buffer nil)
-    (other-window 1)))
-
-(global-set-key (kbd "M-o")             'other-window-or-switch-buffer)
-
-;; M-o doesn't  work when using emacs  via Win->RDP->VNC->X11->Xmonad,
-;; so fall back to C-o.
-(global-set-key (kbd "C-o")             'other-window-or-switch-buffer)
+  (let ((win (get-mru-window t t t)))
+    (unless win (error "Last window not found."))
+    (select-window win)))
 
 ;; via
 ;; [[http://whattheemacsd.com/buffer-defuns.el-02.html][whattheemacs.d]]:
 ;; exchange left with right buffer (or up and down), love it.
-(defun flip-windows ()
+(defun tvd-flip-windows ()
   "Rotate your windows"
   (interactive)
   (cond ((not (> (count-windows)1))
@@ -943,10 +959,40 @@ to next buffer otherwise."
              (set-window-start w2 s1)
              (setq i (1+ i)))))))
 
+(defhydra hydra-switch-windows (:color pink: :timeout 1)
+  "
+Switch to buffer: ← ↑ → ↓   | _o_: previous   | _f_: flip"
+  ("<up>"    windmove-up    nil)
+  ("<down>"  windmove-down  nil)
+  ("<left>"  windmove-left  nil)
+  ("<right>" windmove-right nil)
+  ("o"       tvd-previous-window nil :color blue)
+  ("f"       tvd-flip-windows    nil :color blue)
+  ("q" nil nil :color red))
+
+;; via [[http://mbork.pl/2017-02-26_other-window-or-switch-buffer][mbork]]
+;; modified to call the above hydra if there are more than 2 windows
+(defun other-window-or-switch-buffer ()
+  "Call `other-window' if more than one window is visible, switch
+to next buffer otherwise."
+  (interactive)
+  (if (one-window-p)
+      (switch-to-buffer nil)
+    (progn
+      (if (= (length (window-list)) 2)
+          (other-window 1)
+        (hydra-switch-windows/body)))))
+
+(global-set-key (kbd "M-o")             'other-window-or-switch-buffer)
+
+;; M-o doesn't  work when using emacs  via Win->RDP->VNC->X11->Xmonad,
+;; so fall back to C-o.
+(global-set-key (kbd "C-o")             'other-window-or-switch-buffer)
+
 ;; Use only in  X11 emacs - setting M-O inside console  causes <up> and
 ;; <down> to stop working properly, for whatever reasons.
 (if (display-graphic-p)
-(global-set-key (kbd "M-O")             'flip-windows))
+    (global-set-key (kbd "M-O")             'tvd-flip-windows))
 
 ;; --------------------------------------------------------------------------------
 ;; *** Split window to 4 parts
@@ -2827,9 +2873,6 @@ in between will be killed. If INS is non-nil, it will be inserted then."
 ;; --------------------------------------------------------------------------------
 
 ;; ** Interactives
-;; *** Hydra
-;; Used here and there below
-(require 'hydra)
 ;; *** eShell stuff, or if interactive stuff is needed, use ansi-term
 
 ;; I am  a hardcore bash  user, but from time  to time eshell  is good
@@ -5179,13 +5222,41 @@ T - tag prefix
   (interactive)
   (doremi-increment-background-color-1 ?v 1))
 
+(defun tvd-pre-resize ()
+  "Called as  pre execute  hook py  hydra-windows-resize/body and
+executes the called key once, so that no key press gets lost from
+hydra-windows (a,s,d,w)"
+  (interactive)
+  (let
+      ((key (car (reverse (append (recent-keys) nil)))))
+    (cond
+     ((eq key ?a)
+      (shrink-window-horizontally 1))
+     ((eq key ?d)
+      (enlarge-window-horizontally 1))
+     ((eq key ?w)
+      (shrink-window 1))
+     ((eq key ?s)
+      (enlarge-window 1)))))
+
+(defhydra hydra-windows-resize (:color pink :pre (tvd-pre-resize))
+  ;; small sub hydra  for window resizing, it leaves as  much room for
+  ;; windows as possible
+  "
+_a_ ||    _d_ |---|     _w_ ---   _s_ ="
+  ("a" shrink-window-horizontally nil)
+  ("d" enlarge-window-horizontally nil)
+  ("w" shrink-window nil)
+  ("s" enlarge-window nil)
+  ("q" nil nil :color red))
+
 (defhydra hydra-windows (:color blue)
 "
 
 ^Window Management^
 ^^------------------------------------------------------------------------
 _+_ Increase Font | _-_ Decrease Font      Resize     ^ ^  _w_  ^ ^
-_f_: Flip Windows    <M-O>            ^^   Current    _a_  ^ ^  _d_
+_f_: Flip Windows    <M-O>            ^^   Current     ←  ^ ^  _d_
 _4_: Quarter Windows <C-x 4>          ^^   Window:    ^ ^  _s_  ^ ^
 _u_: Windows Undo    <C-c left>
 _r_: Windows Redo    <C-c right>      ^^   _l_: Adjust Background brighter
@@ -5208,10 +5279,10 @@ Reach this hydra with <C-x w>
   ("i" tvd-invert nil)
   ("b" tvd-bg-darker nil :color pink)
   ("l" tvd-bg-brighter nil :color pink)
-  ("a" shrink-window-horizontally nil :color pink)
-  ("d" enlarge-window-horizontally nil :color pink)
-  ("w" shrink-window nil :color pink)
-  ("s" enlarge-window nil :color pink)
+  ("a" hydra-windows-resize/body nil)
+  ("d" hydra-windows-resize/body nil)
+  ("w" hydra-windows-resize/body nil)
+  ("s" hydra-windows-resize/body nil)
   ("h" hl-line-mode nil)
   ("n" linum-mode nil)
   ("q" nil nil :color red))
