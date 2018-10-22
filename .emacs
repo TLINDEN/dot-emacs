@@ -926,6 +926,9 @@
 ;; Also, within the hydra 'o' jumps  to the last active window and
 ;; 'f' flips all windows.
 
+;; from https://github.com/lukhas/buffer-move
+(require 'buffer-move)
+
 (defun tvd-previous-window (&optional ignore)
   "Toggle between the last two selected windows."
   (interactive)
@@ -959,15 +962,19 @@
              (set-window-start w2 s1)
              (setq i (1+ i)))))))
 
-(defhydra hydra-switch-windows (:color pink: :timeout 1)
+(defhydra hydra-switch-windows (:color pink: :timeout 2.5)
   "
-Switch to buffer: ← ↑ → ↓   | _o_: previous   | _f_: flip"
+Switch to buffer: ← ↑ → ↓   | _o_: previous | _f_: flip | MOVE: _u_: up    _d_: down   _l_: left   _r_: right"
   ("<up>"    windmove-up    nil)
   ("<down>"  windmove-down  nil)
   ("<left>"  windmove-left  nil)
   ("<right>" windmove-right nil)
   ("o"       tvd-previous-window nil :color blue)
   ("f"       tvd-flip-windows    nil :color blue)
+  ("u"       buf-move-up         nil :color blue)
+  ("d"       buf-move-down       nil :color blue)
+  ("l"       buf-move-left       nil :color blue)
+  ("r"       buf-move-right      nil :color blue)
   ("q" nil nil :color red))
 
 ;; via [[http://mbork.pl/2017-02-26_other-window-or-switch-buffer][mbork]]
