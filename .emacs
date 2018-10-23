@@ -673,6 +673,7 @@
 ;;    - fixed window hydra docstring
 
 
+;;    - added kab to window hydra
 
 ;; ** TODO
 
@@ -5274,7 +5275,7 @@ _u_: Windows Undo    <C-c left>
 _r_: Windows Redo    <C-c right>      ^^   _l_: Adjust Background brighter
 _i_: Invert Colors   <C-c C-i>        ^^   _b_: Adjust Background darker
 
-_h_: Toggle Highlight Line Mode
+_h_: Toggle Highlight Line Mode       ^^   _k_: Kill All Buffers
 _n_: Toogle Line Number Mode
 
 ^^------------------------------------------------------------------------
@@ -5289,6 +5290,7 @@ Reach this hydra with <C-x w>
   ("u" winner-undo nil)
   ("r" winner-redo nil)
   ("i" tvd-invert nil)
+  ("k" kill-all-buffers nil)
   ("b" tvd-bg-darker nil :color pink)
   ("l" tvd-bg-brighter nil :color pink)
   ("a" hydra-windows-resize/body nil)
