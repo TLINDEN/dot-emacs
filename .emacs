@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version (20181022.01)          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version (20181023.01)          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -668,6 +668,11 @@
 ;; 20181022.01
 ;;    - enhanced M-o for window switching a lot, using a hydra and the arrow keys
 
+;; 20181023.01
+;;    - moved which-key window to bottom, more room
+;;    - fixed window hydra docstring
+
+
 
 ;; ** TODO
 
@@ -701,7 +706,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20181022.01")
+(defvar tvd-emacs-version "20181023.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -5263,7 +5268,7 @@ _a_ ||    _d_ |---|     _w_ ---   _s_ ="
 ^Window Management^
 ^^------------------------------------------------------------------------
 _+_ Increase Font | _-_ Decrease Font      Resize     ^ ^  _w_  ^ ^
-_f_: Flip Windows    <M-O>            ^^   Current     ←  ^ ^  _d_
+_f_: Flip Windows    <M-O>            ^^   Current     a  ^ ^  _d_
 _4_: Quarter Windows <C-x 4>          ^^   Window:    ^ ^  _s_  ^ ^
 _u_: Windows Undo    <C-c left>
 _r_: Windows Redo    <C-c right>      ^^   _l_: Adjust Background brighter
@@ -5632,7 +5637,7 @@ Reach this hydra with <C-x w>
 
 (require 'which-key)
 (which-key-mode)
-(which-key-setup-side-window-right)
+(which-key-setup-side-windowbottom)
 
 ;; --------------------------------------------------------------------------------
 
