@@ -674,6 +674,7 @@
 
 
 ;;    - added kab to window hydra
+;;    - added timestamps in magit log buffer
 
 ;; ** TODO
 
@@ -4835,7 +4836,13 @@ defun."
                        (expand-file-name "~/dev/git")))
       (when (file-exists-p dir)
         (add-to-list 'magit-repository-directories (cons dir 1))))
+
+    ;; timestamps not ages
+    (setq magit-log-margin '(t "%Y-%m-%d " magit-log-margin-width t 18))
+
+    ;; use ido
     (setq magit-completing-read-function 'magit-ido-completing-read)
+
     ;; navigate magit buffers as I do everywhere else, I do not automatically
     ;; cycle/decycle though, the magit defaults are absolutely sufficient.
     (define-key magit-mode-map (kbd "<C-down>") 'magit-section-forward-sibling)
@@ -5639,7 +5646,7 @@ Reach this hydra with <C-x w>
 
 (require 'which-key)
 (which-key-mode)
-(which-key-setup-side-windowbottom)
+(which-key-setup-side-window-bottom)
 
 ;; --------------------------------------------------------------------------------
 
