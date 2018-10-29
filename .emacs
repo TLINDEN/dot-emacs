@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version (20181023.01)          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version (20181029.01)          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -668,23 +668,13 @@
 ;; 20181022.01
 ;;    - enhanced M-o for window switching a lot, using a hydra and the arrow keys
 
-;; 20181023.01
-;;    - moved which-key window to bottom, more room
-;;    - fixed window hydra docstring
-
-
-;;    - added kab to window hydra
-;;    - added timestamps in magit log buffer
+;; 20181029.01
+;;    - fixed recentf max files
 
 ;; ** TODO
 
-;; - check dired hydra
-;; - complete org table hydra
-
-;; Old
 ;; - check helpful https://github.com/wilfred/helpful
 ;; - check no-littering https://github.com/tarsius/no-littering
-;; - submit novel + mark-copy-yank-things-mode to MELPA
 ;; - put tvd-ci-* stuff into mcyt
 ;; - check https://github.com/Wilfred/refine
 ;;         https://github.com/Wilfred/emacs-refactor
@@ -708,7 +698,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20181023.01")
+(defvar tvd-emacs-version "20181029.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -4836,13 +4826,7 @@ defun."
                        (expand-file-name "~/dev/git")))
       (when (file-exists-p dir)
         (add-to-list 'magit-repository-directories (cons dir 1))))
-
-    ;; timestamps not ages
-    (setq magit-log-margin '(t "%Y-%m-%d " magit-log-margin-width t 18))
-
-    ;; use ido
     (setq magit-completing-read-function 'magit-ido-completing-read)
-
     ;; navigate magit buffers as I do everywhere else, I do not automatically
     ;; cycle/decycle though, the magit defaults are absolutely sufficient.
     (define-key magit-mode-map (kbd "<C-down>") 'magit-section-forward-sibling)
@@ -5276,13 +5260,13 @@ _a_ ||    _d_ |---|     _w_ ---   _s_ ="
 ^Window Management^
 ^^------------------------------------------------------------------------
 _+_ Increase Font | _-_ Decrease Font      Resize     ^ ^  _w_  ^ ^
-_f_: Flip Windows    <M-O>            ^^   Current     a  ^ ^  _d_
+_f_: Flip Windows    <M-O>            ^^   Current     ←  ^ ^  _d_
 _4_: Quarter Windows <C-x 4>          ^^   Window:    ^ ^  _s_  ^ ^
 _u_: Windows Undo    <C-c left>
 _r_: Windows Redo    <C-c right>      ^^   _l_: Adjust Background brighter
 _i_: Invert Colors   <C-c C-i>        ^^   _b_: Adjust Background darker
 
-_h_: Toggle Highlight Line Mode       ^^   _k_: Kill All Buffers
+_h_: Toggle Highlight Line Mode
 _n_: Toogle Line Number Mode
 
 ^^------------------------------------------------------------------------
@@ -5297,7 +5281,6 @@ Reach this hydra with <C-x w>
   ("u" winner-undo nil)
   ("r" winner-redo nil)
   ("i" tvd-invert nil)
-  ("k" kill-all-buffers nil)
   ("b" tvd-bg-darker nil :color pink)
   ("l" tvd-bg-brighter nil :color pink)
   ("a" hydra-windows-resize/body nil)
@@ -5403,8 +5386,7 @@ Reach this hydra with <C-x w>
 (recentf-mode 1)
 
 ;; I like to have a longer list reaching deeper into the past
-(setq recentf-max-menu-items 200
-      recentf-max-menu-items 30)
+(setq recentf-max-menu-items 200)
 
 ;; enable IDO completion
 ;; via [[http://emacsredux.com/blog/2013/04/05/recently-visited-files/][emacsredux]]
@@ -5646,7 +5628,7 @@ Reach this hydra with <C-x w>
 
 (require 'which-key)
 (which-key-mode)
-(which-key-setup-side-window-bottom)
+(which-key-setup-side-window-right)
 
 ;; --------------------------------------------------------------------------------
 
