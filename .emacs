@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version (20181029.01)          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version (20181030.01)          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -671,6 +671,10 @@
 ;; 20181029.01
 ;;    - fixed recentf max files
 
+;; 20181030.01
+;;    - fixed windows hydra flip window call
+
+
 ;; ** TODO
 
 ;; - check helpful https://github.com/wilfred/helpful
@@ -698,7 +702,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20181029.01")
+(defvar tvd-emacs-version "20181030.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -5276,7 +5280,7 @@ Reach this hydra with <C-x w>
 "
   ("+" tvd-global-font-size-bigger nil :color pink)
   ("-" tvd-global-font-size-smaller nil :color pink)
-  ("f" flip-windows nil)
+  ("f" tvd-flip-windows nil)
   ("4" tvd-quarter-windows nil)
   ("u" winner-undo nil)
   ("r" winner-redo nil)
