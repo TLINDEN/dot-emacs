@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version (20181105.01)          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version (20181106.01)          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -677,7 +677,8 @@
 ;; 20181105.01
 ;;    - added eyebrowse with config and hydra, prefix: C-x C-x
 
-
+;; 20181106.01
+;;    - close help windows regularly again
 
 ;; ** TODO
 
@@ -706,7 +707,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20181105.01")
+(defvar tvd-emacs-version "20181106.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -4738,12 +4739,14 @@ defun."
   '(progn
      (add-hook 'help-mode-hook
                (lambda ()
-                 (local-set-key (kbd "q") 'tvd-close-help)
-                 (local-set-key (kbd "x") 'quit-window)
+                 ; doesn' work the way I like
+                 ;(local-set-key (kbd "q") 'tvd-close-help)
+                 (local-set-key (kbd "q") 'quit-window)
                  (local-set-key (kbd "p") 'help-go-back)
                  (local-set-key (kbd "b") 'help-go-back)
                  (local-set-key (kbd "n") 'help-go-forward)
                  (local-set-key (kbd "f") 'help-go-forward)
+                 (setq help-window-select t)
                  ))))
 
 ;; *** Suggest Mode
