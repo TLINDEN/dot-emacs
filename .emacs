@@ -688,6 +688,7 @@
 
 ;; 20181107.01
 ;;    - fixed  function, inserts  at ()
+;;    - added / to dired hydra
 
 ;; ** TODO
 
@@ -5117,7 +5118,7 @@ _R_ename           _M_ chmod        _t_oggle           _g_ revert buf     _e_ ed
 _Y_ rel symlink    _G_ chgrp        _E_xtension mark   _s_ort             _=_ pdiff
 _S_ymlink          ^ ^              _F_ind marked      _._ toggle hydra   \\ flyspell
 _r_sync            ^ ^              ^ ^                ^ ^                _?_ summary
-_z_ compress-file  _A_ find regexp
+_z_ compress-file  _A_ find regexp   / Filter
 _Z_ compress       _Q_ repl regexp
 
 T - tag prefix
