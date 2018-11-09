@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version (20181106.01)          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version (20181109.01)          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -680,6 +680,15 @@
 ;; 20181106.01
 ;;    - close help windows regularly again
 
+;; 20181107.01
+;;    - removed debug toggle
+;;    - added magit status window new "q" feature which kills
+;;      all magit buffers and restores window setup
+;;    - added magit status margin timestamps
+
+;; 20181107.01
+;;    - fixed  function, inserts  at ()
+
 ;; ** TODO
 
 ;; - check helpful https://github.com/wilfred/helpful
@@ -707,7 +716,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20181106.01")
+(defvar tvd-emacs-version "20181109.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -1492,14 +1501,16 @@ window, third in a row goes to end of buffer."
 
 ;; If (point)  is on a paren,  jump to the matching  paren, otherwise,
 ;; just insert a literal ?%. Only make sense if bound to %.
-
 (defun jump-paren-match-or-insert-percent (arg)
   "Go to  the matching  parenthesis if on  parenthesis. Otherwise
 insert %. Mimics vi style of % jumping to matching brace."
   (interactive "p")
   (cond ((looking-at "\\s\(\\|\{\\|\\[") (forward-list 1) (backward-char 1))
-        ((looking-at "\\s\)\\|\}\\|\\]") (forward-char 1) (backward-list 1))
-        (t (insert "%"))))
+        ((looking-at "\\s\)\\|\}\\|\\]")
+         (if (looking-back "\\s\(\\|\{\\|\\[")
+             (insert "%")
+           (forward-char 1) (backward-list 1))
+         (t (insert "%")))))
 
 (global-set-key (kbd "%")               'jump-paren-match-or-insert-percent)
 
@@ -4838,6 +4849,10 @@ defun."
       (when (file-exists-p dir)
         (add-to-list 'magit-repository-directories (cons dir 1))))
     (setq magit-completing-read-function 'magit-ido-completing-read)
+
+    ;; use timestamps in log buffers
+    (setq magit-log-margin '(t "%Y-%m-%d " magit-log-margin-width t 18))
+
     ;; navigate magit buffers as I do everywhere else, I do not automatically
     ;; cycle/decycle though, the magit defaults are absolutely sufficient.
     (define-key magit-mode-map (kbd "<C-down>") 'magit-section-forward-sibling)
@@ -4873,7 +4888,20 @@ defun."
     (let ((dir (magit-read-repository)))
       (magit-mode-bury-buffer)
       (magit-status dir)))
-  (define-key magit-mode-map (kbd "C") 'tvd-switch-magit-repo))
+  (define-key magit-mode-map (kbd "C") 'tvd-switch-magit-repo)
+
+  ;; via
+  ;; http://manuel-uberti.github.io/emacs/2018/02/17/magit-bury-buffer/:
+  ;; a great  enhancement, when closing  the magit status  buffer, ALL
+  ;; other possibly  still remaining magit  buffers will be  killed as
+  ;; well AND the window setup will be restored.
+  (defun tvd-kill-magit-buffers()
+    "Restore window setup from before magit and kill all magit buffers."
+    (interactive)
+    (let ((buffers (magit-mode-get-buffers)))
+      (magit-restore-window-configuration)
+      (mapc #'kill-buffer buffers)))
+  (define-key magit-status-mode-map (kbd "q") #'tvd-kill-magit-buffers))
 
 ;; --------------------------------------------------------------------------------
 ;; *** Dired
@@ -5324,7 +5352,6 @@ Reach this hydra with <C-x w>
 
 ;; always enable
 (eyebrowse-mode t)
-(toggle-debug-on-error)
 (setq eyebrowse-new-workspace 'tvd-new-eyebrowse-workspace
       eyebrowse-switch-back-and-forth t
       eyebrowse-wrap-around t
