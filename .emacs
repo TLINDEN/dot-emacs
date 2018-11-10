@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version (20181109.01)          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version (20181110.01)          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -690,6 +690,11 @@
 ;;    - fixed  function, inserts  at ()
 ;;    - added / to dired hydra
 
+;; 20181110.01
+;;    - fixed % function, really
+;;    - fixed elisp autoscratch config
+
+
 ;; ** TODO
 
 ;; - check helpful https://github.com/wilfred/helpful
@@ -717,7 +722,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20181109.01")
+(defvar tvd-emacs-version "20181110.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -1254,7 +1259,9 @@ to next buffer otherwise."
                                     (setq autoscratch-triggers-alist
                                           '(("[(;]"         . (progn
                                                                 (emacs-lisp-mode)
-                                                                (electric-indent-local-mode t)))
+                                                                (electric-indent-local-mode t)
+                                                                (paredit-mode t)
+                                                                (electric-pair-mode t)))
                                             ("#"            . (progn
                                                                 (config-general-mode)
                                                                 (electric-indent-local-mode t)))
@@ -1493,7 +1500,7 @@ window, third in a row goes to end of buffer."
 (global-set-key (kbd "<f8>")            'goto-percent)                                    ;F8 goto percent
 
 ;; --------------------------------------------------------------------------------
-;; ** Simulate vi's % function
+;; ** Simulate vi's % (percent) function
 
 ;; There's not  a lot  about vi[m]  I like,  but jumping  with %  to a
 ;; matching paren is one of THOSE features, I also need in emacs.
@@ -1502,18 +1509,19 @@ window, third in a row goes to end of buffer."
 
 ;; If (point)  is on a paren,  jump to the matching  paren, otherwise,
 ;; just insert a literal ?%. Only make sense if bound to %.
+;; Does not jump in inside () though
 (defun jump-paren-match-or-insert-percent (arg)
-  "Go to  the matching  parenthesis if on  parenthesis. Otherwise
-insert %. Mimics vi style of % jumping to matching brace."
-  (interactive "p")
-  (cond ((looking-at "\\s\(\\|\{\\|\\[") (forward-list 1) (backward-char 1))
-        ((looking-at "\\s\)\\|\}\\|\\]")
-         (if (looking-back "\\s\(\\|\{\\|\\[")
-             (insert "%")
-           (forward-char 1) (backward-list 1))
-         (t (insert "%")))))
+"Go to  the matching  parenthesis if on  parenthesis. Otherwise
+insert %. Mimics vi stle of % jumping to matching brace."
+(interactive "p")
+(cond ((looking-at "\\s\(\\|\{\\|\\[") (forward-list 1) (backward-char 1))
+      ((and (looking-at "\\s\)\\|\}\\|\\]")
+            (not (looking-back "\\s\(\\|\{\\|\\[")))
+       (forward-char 1) (backward-list 1))
+       (t (insert "%"))))
 
-(global-set-key (kbd "%")               'jump-paren-match-or-insert-percent)
+;; only useful in programming modes
+(define-key prog-mode-map (kbd "%") 'jump-paren-match-or-insert-percent)
 
 ;; --------------------------------------------------------------------------------
 ;; ** Move region
