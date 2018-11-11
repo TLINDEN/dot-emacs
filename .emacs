@@ -2176,16 +2176,38 @@ col1, col2"
 ;; https://ebzzry.io/en/emacs-pairs/
 (require 'smartparens-config)
 
+(defun tvd-disable-par-and-pair()
+  "Disables Paredit and Electric-Pair-Mode if currently active.
+Used when enabling smartparens-mode."
+  (interactive)
+  (when electric-pair-mode
+    (electric-pair-mode))
+  (when paredit-mode
+    (disable-paredit-mode)))
+
 (eval-after-load 'smartparens
   '(progn
-     (add-hook 'smartparens-enabled-hook #'disable-paredit-mode)
-     (define-key smartparens-mode-map (kbd "C-k")         'sp-kill-sexp)
-     (define-key smartparens-mode-map (kbd "C-<left>")    'sp-forward-slurp-sexp)
-     (define-key smartparens-mode-map (kbd "C-<right>")   'sp-forward-barf-sexp)
+     (add-hook 'smartparens-enabled-hook #'tvd-disable-par-and-pair)
+
+     ;; modification
+     (define-key smartparens-mode-map (kbd "C-k")           'sp-kill-sexp)
+     (define-key smartparens-mode-map (kbd "C-<left>")      'sp-forward-slurp-sexp)
+     (define-key smartparens-mode-map (kbd "C-<right>")     'sp-forward-barf-sexp)
+     (define-key smartparens-mode-map (kbd "M-<delete>")    'sp-unwrap-sexp)
+     (define-key smartparens-mode-map (kbd "M-<backspace>") 'sp-backward-unwrap-sexp)
+
+     ;; movement
+     ;; Also Check: https://github.com/Fuco1/smartparens/wiki/Working-with-expressions
+     ;; (look for "quick summary for each navigation function")
      (define-key smartparens-mode-map (kbd "C-M-<right>") 'sp-forward-sexp)
      (define-key smartparens-mode-map (kbd "C-M-<left>")  'sp-backward-sexp)
-     (define-key smartparens-mode-map (kbd "C-S-<right>") 'sp-next-sexp)
-     (define-key smartparens-mode-map (kbd "C-S-<left>")  'sp-previous-sexp)
+     (define-key smartparens-mode-map (kbd "C-S-<left>")  'sp-next-sexp)
+     (define-key smartparens-mode-map (kbd "C-S-<right>") 'sp-previous-sexp)
+
+     ;; replace my global setting
+     ;; FIXME: fhceck/fix M<up+down>!
+     (define-key smartparens-mode-map (kbd "M-<right>")   'sp-forward-symbol)
+     (define-key smartparens-mode-map (kbd "M-<left>")    'sp-backward-symbol)
      )
   )
 
