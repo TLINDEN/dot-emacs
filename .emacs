@@ -2187,9 +2187,62 @@ Used when enabling smartparens-mode."
 
 (eval-after-load 'smartparens
   '(progn
+     ;; hydra via https://github.com/lunaryorn/old-emacs-configuration/blob/master/init.el
+     (defhydra hydra-smartparens (:hint nil)
+    "
+Sexps (quit with _q_)
+^Nav^            ^Barf/Slurp^                 ^Depth^
+^---^------------^----------^-----------------^-----^-----------------
+_f_: forward     _→_:          slurp forward   _R_: splice
+_b_: backward    _←_:          barf forward    _r_: raise
+_u_: backward ↑  _C-<right>_:  slurp backward  _↑_: raise backward
+_d_: forward ↓   _C-<left>_:   barf backward   _↓_: raise forward
+_p_: backward ↓
+_n_: forward ↑
+^Kill^           ^Misc^                       ^Wrap^
+^----^-----------^----^-----------------------^----^------------------
+_w_: copy        _j_: join                    _(_: wrap with ( )
+_k_: kill        _s_: split                   _{_: wrap with { }
+^^               _t_: transpose               _'_: wrap with ' '
+^^               _c_: convolute               _\"_: wrap with \" \"
+^^               _i_: indent defun"
+    ("q" nil)
+    ;; Wrapping
+    ("(" (lambda (_) (interactive "P") (sp-wrap-with-pair "(")))
+    ("{" (lambda (_) (interactive "P") (sp-wrap-with-pair "{")))
+    ("'" (lambda (_) (interactive "P") (sp-wrap-with-pair "'")))
+    ("\"" (lambda (_) (interactive "P") (sp-wrap-with-pair "\"")))
+    ;; Navigation
+    ("f" sp-forward-sexp )
+    ("b" sp-backward-sexp)
+    ("u" sp-backward-up-sexp)
+    ("d" sp-down-sexp)
+    ("p" sp-backward-down-sexp)
+    ("n" sp-up-sexp)
+    ;; Kill/copy
+    ("w" sp-copy-sexp)
+    ("k" sp-kill-sexp)
+    ;; Misc
+    ("t" sp-transpose-sexp)
+    ("j" sp-join-sexp)
+    ("s" sp-split-sexp)
+    ("c" sp-convolute-sexp)
+    ("i" sp-indent-defun)
+    ;; Depth changing
+    ("R" sp-splice-sexp)
+    ("r" sp-splice-sexp-killing-around)
+    ("<up>" sp-splice-sexp-killing-backward)
+    ("<down>" sp-splice-sexp-killing-forward)
+    ;; Barfing/slurping
+    ("<right>" sp-forward-slurp-sexp)
+    ("<left>" sp-forward-barf-sexp)
+    ("C-<left>" sp-backward-barf-sexp)
+    ("C-<right>" sp-backward-slurp-sexp))
+
      (add-hook 'smartparens-enabled-hook #'tvd-disable-par-and-pair)
 
      ;; modification
+     (define-key smartparens-mode-map (kbd "C-(")           'hydra-smartparens/body)
      (define-key smartparens-mode-map (kbd "C-k")           'sp-kill-sexp)
      (define-key smartparens-mode-map (kbd "C-<left>")      'sp-forward-slurp-sexp)
      (define-key smartparens-mode-map (kbd "C-<right>")     'sp-forward-barf-sexp)
@@ -2199,17 +2252,37 @@ Used when enabling smartparens-mode."
      ;; movement
      ;; Also Check: https://github.com/Fuco1/smartparens/wiki/Working-with-expressions
      ;; (look for "quick summary for each navigation function")
+     ;;
+     ;; Jump after  the next  balanced expression.  If inside  one and
+     ;; there is no forward exp., jump after its closing pair.
      (define-key smartparens-mode-map (kbd "C-M-<right>") 'sp-forward-sexp)
+     ;; Jump before  the previous  balanced expression. If  inside one
+     ;; and there is no previous exp., jump before its opening pair.
      (define-key smartparens-mode-map (kbd "C-M-<left>")  'sp-backward-sexp)
+     ;; Jump up one  level from the current  balanced expression. This
+     ;; means skipping  all the  enclosed expressions within  this and
+     ;; then jumping after the closing pair.
+     (define-key smartparens-mode-map (kbd "C-M-<up>")    'sp-up-sexp)
+     ;; Jump after the opening pair  of next balanced expression. This
+     ;; effectively  descends  one  level   down  in  the  "expression
+     ;; hierarchy".  If there  is no  expression to  descend to,  jump
+     ;; after current expression's  opening pair. This can  be used to
+     ;; quickly  navigate   to  the  beginning  of   current  balanced
+     ;; expression.
+     (define-key smartparens-mode-map (kbd "C-M-<down>")  'sp-down-sexp)
+     ;;  Jump to  the beginning  of following balanced  expression. If
+     ;;  there is no  following expression on the  current level, jump
+     ;;  one level up backward, effectively doing sp-backward-up-sexp.
      (define-key smartparens-mode-map (kbd "C-S-<left>")  'sp-next-sexp)
+     ;; Jump to the end of  the previous balanced expression. If there
+     ;; is no previous expression on the current level, jupm one level
+     ;; up forward, effectively doing sp-up-sexp.
      (define-key smartparens-mode-map (kbd "C-S-<right>") 'sp-previous-sexp)
 
      ;; replace my global setting
      ;; FIXME: fhceck/fix M<up+down>!
      (define-key smartparens-mode-map (kbd "M-<right>")   'sp-forward-symbol)
-     (define-key smartparens-mode-map (kbd "M-<left>")    'sp-backward-symbol)
-     )
-  )
+     (define-key smartparens-mode-map (kbd "M-<left>")    'sp-backward-symbol)))
 
 ;; --------------------------------------------------------------------------------
 ;; *** ETAGS
