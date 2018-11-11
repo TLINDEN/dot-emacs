@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version (20181110.01)          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version (20181111.01)          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -694,6 +694,11 @@
 ;;    - fixed % function, really
 ;;    - fixed elisp autoscratch config
 
+;; 20181111.01
+;;    - fixed autoscratch elisp trigger
+
+
+;;    - started with smartparens, first config just replaces paredit
 
 ;; ** TODO
 
@@ -722,7 +727,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20181110.01")
+(defvar tvd-emacs-version "20181111.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -1258,12 +1263,11 @@ to next buffer otherwise."
 (add-hook 'autoscratch-mode-hook '(lambda ()
                                     (setq autoscratch-triggers-alist
                                           '(("[(;]"         . (progn
-                                                                (emacs-lisp-mode)
-                                                                (electric-indent-local-mode t)
-                                                                (paredit-mode t)
-                                                                (electric-pair-mode t)))
+                                                                (call-interactively 'emacs-lisp-mode)
+                                                                (call-interactively 'enable-paredit-mode)
+                                                                (call-interactively 'electric-pair-mode)))
                                             ("#"            . (progn
-                                                                (config-general-mode)
+                                                                (call-interactively 'config-general-mode)
                                                                 (electric-indent-local-mode t)))
                                             ("[-a-zA-Z0-9]" . (text-mode))
                                             ("/"            . (c-mode))
@@ -2139,7 +2143,7 @@ col1, col2"
 
 ;; *** Paredit for lisp only
 
-;; I use paredit in lisp a lot, but are mostly happy with the defaults.
+;; I use paredit in lisp a lot, and I'm mostly happy with the defaults.
 
 (autoload 'enable-paredit-mode "paredit" "Turn on pseudo-structural editing of Lisp code." t)
 
@@ -2162,7 +2166,30 @@ col1, col2"
      (define-key paredit-mode-map (kbd "<M-up>") nil)
      (define-key paredit-mode-map (kbd "<M-down>") nil)))
 ;; --------------------------------------------------------------------------------
+;; *** Smart Parens
+;; I'm trying  to migrate  to smart-parens, since  it supports  all of
+;; paredit but can do more
 
+;; Also look at:
+;; https://github.com/Fuco1/.emacs.d/blob/master/files/smartparens.el
+;; https://github.com/Fuco1/smartparens/wiki
+;; https://ebzzry.io/en/emacs-pairs/
+(require 'smartparens-config)
+
+(eval-after-load 'smartparens
+  '(progn
+     (add-hook 'smartparens-enabled-hook #'disable-paredit-mode)
+     (define-key smartparens-mode-map (kbd "C-k")         'sp-kill-sexp)
+     (define-key smartparens-mode-map (kbd "C-<left>")    'sp-forward-slurp-sexp)
+     (define-key smartparens-mode-map (kbd "C-<right>")   'sp-forward-barf-sexp)
+     (define-key smartparens-mode-map (kbd "C-M-<right>") 'sp-forward-sexp)
+     (define-key smartparens-mode-map (kbd "C-M-<left>")  'sp-backward-sexp)
+     (define-key smartparens-mode-map (kbd "C-S-<right>") 'sp-next-sexp)
+     (define-key smartparens-mode-map (kbd "C-S-<left>")  'sp-previous-sexp)
+     )
+  )
+
+;; --------------------------------------------------------------------------------
 ;; *** ETAGS
 
 ;; I use ETAGS for some projects. With  etags I can easily jump to the
