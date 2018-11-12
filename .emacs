@@ -2175,6 +2175,7 @@ col1, col2"
 ;; https://github.com/Fuco1/smartparens/wiki
 ;; https://ebzzry.io/en/emacs-pairs/
 (require 'smartparens-config)
+(require 'cl)
 
 (defun tvd-disable-par-and-pair()
   "Disables Paredit and Electric-Pair-Mode if currently active.
@@ -2182,30 +2183,35 @@ Used when enabling smartparens-mode."
   (interactive)
   (when electric-pair-mode
     (electric-pair-mode))
-  (when paredit-mode
-    (disable-paredit-mode)))
+  (when (fboundp 'pparedit-mode)
+        (when paredit-mode
+          (disable-paredit-mode))))
 
 (eval-after-load 'smartparens
   '(progn
      ;; hydra via https://github.com/lunaryorn/old-emacs-configuration/blob/master/init.el
      (defhydra hydra-smartparens (:hint nil)
     "
-Sexps (quit with _q_)
-^Nav^            ^Barf/Slurp^                 ^Depth^
-^---^------------^----------^-----------------^-----^-----------------
-_f_: forward     _→_:          slurp forward   _R_: splice
-_b_: backward    _←_:          barf forward    _r_: raise
-_u_: backward ↑  _C-<right>_:  slurp backward  _↑_: raise backward
-_d_: forward ↓   _C-<left>_:   barf backward   _↓_: raise forward
+Sexps [quit with _q_, reach this hydra with 'C-x (']
+
+^Nav^                       ^Barf/Slurp^                           ^Depth^
+^---^-----------------------^----------^---------------------------^-----^-----------------
+_f_: forward  (C-M-right)   _→_:          slurp forward (C-right)  _R_: splice
+_b_: backward (C-M-left)    _←_:          barf forward  (C-left)   _r_: raise
+_u_: backward ↑             _C-<right>_:  slurp backward           _↑_: raise backward
+_d_: forward  ↓ (C-M-down)  _C-<left>_:   barf backward            _↓_: raise forward
 _p_: backward ↓
-_n_: forward ↑
+_n_: forward  ↑ (C-M-up)
+
 ^Kill^           ^Misc^                       ^Wrap^
 ^----^-----------^----^-----------------------^----^------------------
 _w_: copy        _j_: join                    _(_: wrap with ( )
-_k_: kill        _s_: split                   _{_: wrap with { }
+_k_: kill (C-k)  _s_: split                   _{_: wrap with { }
 ^^               _t_: transpose               _'_: wrap with ' '
 ^^               _c_: convolute               _\"_: wrap with \" \"
-^^               _i_: indent defun"
+^^               _i_: indent defun
+
+"
     ("q" nil)
     ;; Wrapping
     ("(" (lambda (_) (interactive "P") (sp-wrap-with-pair "(")))
@@ -2239,10 +2245,47 @@ _k_: kill        _s_: split                   _{_: wrap with { }
     ("C-<left>" sp-backward-barf-sexp)
     ("C-<right>" sp-backward-slurp-sexp))
 
+     ;; via https://ebzzry.io/en/emacs-pairs/:
+     (defmacro def-pairs (pairs)
+  "Define functions for pairing. PAIRS is an alist of (NAME . STRING)
+conses, where NAME is the function name that will be created and
+STRING is a single-character string that marks the opening character.
+
+  (def-pairs ((paren . \"(\")
+              (bracket . \"[\"))
+
+defines the functions WRAP-WITH-PAREN and WRAP-WITH-BRACKET,
+respectively."
+  `(progn
+     ,@(loop for (key . val) in pairs
+             collect
+             `(defun ,(read (concat
+                             "wrap-with-"
+                             (prin1-to-string key)
+                             "s"))
+                  (&optional arg)
+                (interactive "p")
+                (sp-wrap-with-pair ,val)))))
+     (def-pairs ((paren . "(")
+            (bracket . "[")
+            (brace . "{")
+            (single-quote . "'")
+            (double-quote . "\"")
+            (back-quote . "`")))
+
      (add-hook 'smartparens-enabled-hook #'tvd-disable-par-and-pair)
+     (add-hook 'smartparens-enabled-hook #'turn-on-smartparens-strict-mode)
+
+     ;; auto wrapping w/o region
+     (define-key smartparens-mode-map (kbd "C-c (")  'wrap-with-parens)
+     (define-key smartparens-mode-map (kbd "C-c [")  'wrap-with-brackets)
+     (define-key smartparens-mode-map (kbd "C-c {")  'wrap-with-braces)
+     (define-key smartparens-mode-map (kbd "C-c '")  'wrap-with-single-quotes)
+     (define-key smartparens-mode-map (kbd "C-c \"") 'wrap-with-double-quotes)
+     (define-key smartparens-mode-map (kbd "C-c `")  'wrap-with-back-quotes)
 
      ;; modification
-     (define-key smartparens-mode-map (kbd "C-(")           'hydra-smartparens/body)
+     (define-key smartparens-mode-map (kbd "C-x (")         'hydra-smartparens/body)
      (define-key smartparens-mode-map (kbd "C-k")           'sp-kill-sexp)
      (define-key smartparens-mode-map (kbd "C-<left>")      'sp-forward-slurp-sexp)
      (define-key smartparens-mode-map (kbd "C-<right>")     'sp-forward-barf-sexp)
