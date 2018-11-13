@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version (20181111.01)          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version (20181113.01)          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -696,9 +696,10 @@
 
 ;; 20181111.01
 ;;    - fixed autoscratch elisp trigger
-
-
 ;;    - started with smartparens, first config just replaces paredit
+
+;; 20181113.01
+;;    - disabled paredit, enabled smartparens
 
 ;; ** TODO
 
@@ -727,7 +728,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20181111.01")
+(defvar tvd-emacs-version "20181113.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -2143,28 +2144,30 @@ col1, col2"
 
 ;; *** Paredit for lisp only
 
+;; 13.11.2018: disabled in exchange for smartparens, which see
+
 ;; I use paredit in lisp a lot, and I'm mostly happy with the defaults.
 
-(autoload 'enable-paredit-mode "paredit" "Turn on pseudo-structural editing of Lisp code." t)
+;; (autoload 'enable-paredit-mode "paredit" "Turn on pseudo-structural editing of Lisp code." t)
 
-;; However, I use it with lisp dialects only
-(add-hook 'emacs-lisp-mode-hook       #'enable-paredit-mode)
-(add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
-(add-hook 'ielm-mode-hook             #'enable-paredit-mode)
-(add-hook 'lisp-mode-hook             #'enable-paredit-mode)
-(add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
-(add-hook 'scheme-mode-hook           #'enable-paredit-mode)
-(add-hook 'slime-repl-mode-hook (lambda () (paredit-mode +1)))
+;; ;; However, I use it with lisp dialects only
+;; (add-hook 'emacs-lisp-mode-hook       #'enable-paredit-mode)
+;; (add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
+;; (add-hook 'ielm-mode-hook             #'enable-paredit-mode)
+;; (add-hook 'lisp-mode-hook             #'enable-paredit-mode)
+;; (add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
+;; (add-hook 'scheme-mode-hook           #'enable-paredit-mode)
+;; (add-hook 'slime-repl-mode-hook (lambda () (paredit-mode +1)))
 
-;; sometimes I need to be able to turn it off fast:
-(defalias 'pe        'paredit-mode)
+;; ;; sometimes I need to be able to turn it off fast:
+;; (defalias 'pe        'paredit-mode)
 
-(eval-after-load 'paredit
-  '(progn
-     ;; force my own bindings for those
-     (define-key paredit-mode-map (kbd "C-d") nil)
-     (define-key paredit-mode-map (kbd "<M-up>") nil)
-     (define-key paredit-mode-map (kbd "<M-down>") nil)))
+;; (eval-after-load 'paredit
+;;   '(progn
+;;      ;; force my own bindings for those
+;;      (define-key paredit-mode-map (kbd "C-d") nil)
+;;      (define-key paredit-mode-map (kbd "<M-up>") nil)
+;;      (define-key paredit-mode-map (kbd "<M-down>") nil)))
 ;; --------------------------------------------------------------------------------
 ;; *** Smart Parens
 ;; I'm trying  to migrate  to smart-parens, since  it supports  all of
@@ -2186,6 +2189,14 @@ Used when enabling smartparens-mode."
   (when (fboundp 'pparedit-mode)
         (when paredit-mode
           (disable-paredit-mode))))
+
+;; automatically enable where needed
+(add-something-to-mode-hooks
+ '(emacs-lisp ielm lisp lisp-interaction scheme slime-repl) 'smartparens-mode)
+
+;; also in some select prog modes
+(add-something-to-mode-hooks
+ '(perl ruby c c++ shell-script makefile config-general) 'smartparens-mode)
 
 (eval-after-load 'smartparens
   '(progn
@@ -2273,7 +2284,7 @@ respectively."
             (double-quote . "\"")
             (back-quote . "`")))
 
-     (add-hook 'smartparens-enabled-hook #'tvd-disable-par-and-pair)
+     ;;(add-hook 'smartparens-enabled-hook #'tvd-disable-par-and-pair)
      (add-hook 'smartparens-enabled-hook #'turn-on-smartparens-strict-mode)
 
      ;; auto wrapping w/o region
@@ -2289,8 +2300,6 @@ respectively."
      (define-key smartparens-mode-map (kbd "C-k")           'sp-kill-sexp)
      (define-key smartparens-mode-map (kbd "C-<left>")      'sp-forward-slurp-sexp)
      (define-key smartparens-mode-map (kbd "C-<right>")     'sp-forward-barf-sexp)
-     (define-key smartparens-mode-map (kbd "M-<delete>")    'sp-unwrap-sexp)
-     (define-key smartparens-mode-map (kbd "M-<backspace>") 'sp-backward-unwrap-sexp)
 
      ;; movement
      ;; Also Check: https://github.com/Fuco1/smartparens/wiki/Working-with-expressions
@@ -2737,7 +2746,8 @@ string).  It returns t if a new expansion is found, nil otherwise."
             (sh-electric-here-document-mode 1)
 
             ;; Inserting a brace or quote automatically inserts the matching pair
-            (electric-pair-mode t)
+            ;; use smartparens now
+            ;; (electric-pair-mode t)
             (setq-local hippie-expand-only-buffers '(config-general-mode))
 
             ;; configure order of expansion functions
@@ -4287,13 +4297,13 @@ update heading list if neccessary."
       (outshine-to-org)
       (org-export-to-file 'html file))))
 
-(defun export ()
+(defun export (cmessage)
   "Export .emacs to git, do not use."
   ;; FIXME: generate version number, add last changelog to git
-  (interactive)
+  (interactive "sEnter Commit Message: ")
   (outshine-to-html "~/D/github/dot-emacs/emacs.html")
   (shell-command "cp ~/.emacs ~/D/github/dot-emacs/")
-  (shell-command "cd ~/D/github/dot-emacs && git ci +fixes .emacs emacs.html")
+  (shell-command (format "cd ~/D/github/dot-emacs && git ci '%s' .emacs emacs.html" cmessage))
   (shell-command "cd ~/D/github/dot-emacs && git push"))
 
 ;; --------------------------------------------------------------------------------
