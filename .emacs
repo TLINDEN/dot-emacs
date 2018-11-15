@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version (20181113.01)          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version (20181115.01)          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -701,6 +701,11 @@
 ;; 20181113.01
 ;;    - disabled paredit, enabled smartparens
 
+;; 20181115.01
+;;    - disabled smartparens strict mode, much annoying
+;;    - map C-k to 'sp-kill-hybrid-sexp
+
+
 ;; ** TODO
 
 ;; - check helpful https://github.com/wilfred/helpful
@@ -728,7 +733,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20181113.01")
+(defvar tvd-emacs-version "20181115.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -2285,7 +2290,7 @@ respectively."
             (back-quote . "`")))
 
      ;;(add-hook 'smartparens-enabled-hook #'tvd-disable-par-and-pair)
-     (add-hook 'smartparens-enabled-hook #'turn-on-smartparens-strict-mode)
+     ;;(add-hook 'smartparens-enabled-hook #'turn-on-smartparens-strict-mode)
 
      ;; auto wrapping w/o region
      (define-key smartparens-mode-map (kbd "C-c (")  'wrap-with-parens)
@@ -2297,7 +2302,7 @@ respectively."
 
      ;; modification
      (define-key smartparens-mode-map (kbd "C-x (")         'hydra-smartparens/body)
-     (define-key smartparens-mode-map (kbd "C-k")           'sp-kill-sexp)
+     (define-key smartparens-mode-map (kbd "C-k")           'sp-kill-hybrid-sexp)
      (define-key smartparens-mode-map (kbd "C-<left>")      'sp-forward-slurp-sexp)
      (define-key smartparens-mode-map (kbd "C-<right>")     'sp-forward-barf-sexp)
 
