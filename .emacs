@@ -709,6 +709,8 @@
 ;;    - disabled outline C-<left> it overwrote sp slurp left
 ;;    - enhanced emacs-changelog
 ;;    - fixed parens bug, added sp ti monibuffer
+;;    - added tvd-lisp-comment
+;;    - (re-)added electric pair mode to eval-expression
 
 ;; ** TODO
 
@@ -2213,6 +2215,19 @@ Used when enabling smartparens-mode."
 (add-something-to-mode-hooks
  '(perl ruby c c++ shell-script makefile config-general) 'smartparens-mode)
 
+;; I use my own lisp comment tool until sp#942 is fixed
+(defun tvd-lisp-comment ()
+  (interactive)
+  (if (not (looking-at "\("))
+      (self-insert-command 1)
+    (let ((beg (point)))
+      (forward-list 1)
+      (when (looking-at "\(")
+        (insert "\n"))
+      (comment-region beg (point))
+      (indent-for-tab-command)
+      (goto-char beg))))
+
 (eval-after-load 'smartparens
   '(progn
      ;; hydra via https://github.com/lunaryorn/old-emacs-configuration/blob/master/init.el
@@ -2345,6 +2360,9 @@ respectively."
      ;; is no previous expression on the current level, jupm one level
      ;; up forward, effectively doing sp-up-sexp.
      (define-key smartparens-mode-map (kbd "C-S-<right>") 'sp-previous-sexp)
+
+     ;; comment the whole sexp
+     (define-key smartparens-mode-map (kbd ";") 'tvd-lisp-comment)
 
      ;; replace my global setting
      ;; FIXME: fhceck/fix M<up+down>!
@@ -3441,7 +3459,11 @@ Returns t if version changed, nil otherwise."
             (define-key comint-mode-map [up] 'comint-previous-input)))
 
 ;; sometimes I use lisp in minibuffer
-(defalias 'ee        'eval-expression)
+(defun ee()
+  (interactive)
+  (electric-pair-mode)
+  (call-interactively 'eval-expression)
+  (electric-pair-mode))
 
 ;; sometimes I eval regions
 (defalias 'er        'eval-region)
