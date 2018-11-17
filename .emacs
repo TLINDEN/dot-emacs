@@ -708,6 +708,7 @@
 ;; 20181117.01
 ;;    - disabled outline C-<left> it overwrote sp slurp left
 ;;    - enhanced emacs-changelog
+;;    - fixed parens bug, added sp ti monibuffer
 
 ;; ** TODO
 
@@ -2198,9 +2199,15 @@ Used when enabling smartparens-mode."
         (when paredit-mode
           (disable-paredit-mode))))
 
+;; enable sp in minibuffer as well
+;; maybe, see: https://github.com/Fuco1/smartparens/issues/33:
+;; (sp-local-pair 'minibuffer-inactive-mode "'" nil :actions nil)
+(setq sp-ignore-modes-list
+      (delete 'minibuffer-inactive-mode sp-ignore-modes-list))
+
 ;; automatically enable where needed
 (add-something-to-mode-hooks
- '(emacs-lisp ielm lisp lisp-interaction scheme slime-repl) 'smartparens-mode)
+ '(emacs-lisp ielm lisp lisp-interaction scheme slime-repl ) 'smartparens-mode)
 
 ;; also in some select prog modes
 (add-something-to-mode-hooks
@@ -3390,10 +3397,10 @@ Returns t if version changed, nil otherwise."
       (show-all)
       (beginning-of-buffer)
       (tvd-replace-all (format "\"%s\"" tvd-emacs-version)
-                                     (format "\"%s\"" v))
-                    (setq tvd-emacs-version v)
-                    (message (format "New config version set: %s" v))
-                    t)
+                       (format "\"%s\"" v))
+      (setq tvd-emacs-version v)
+      (message (format "New config version set: %s" v))
+      t)))
 
 (defun emacs-change-log (entry)
   "Add a changelog entry to .emacs Changelog"
