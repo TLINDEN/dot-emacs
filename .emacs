@@ -2362,7 +2362,7 @@ respectively."
      (define-key smartparens-mode-map (kbd "C-S-<right>") 'sp-previous-sexp)
 
      ;; comment the whole sexp
-     (define-key smartparens-mode-map (kbd) ";" 'tvd-lisp-comment)
+     (define-key smartparens-mode-map (kbd ";") 'tvd-lisp-comment)
 
      ;; replace my global setting
      ;; FIXME: fhceck/fix M<up+down>!
