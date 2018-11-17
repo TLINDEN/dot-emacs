@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version (20181115.01)          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version ("20181117.01")          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -705,6 +705,9 @@
 ;;    - disabled smartparens strict mode, much annoying
 ;;    - map C-k to 'sp-kill-hybrid-sexp
 
+;; 20181117.01
+;;    - disabled outline C-<left> it overwrote sp slurp left
+;;    - enhanced emacs-changelog
 
 ;; ** TODO
 
@@ -733,7 +736,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20181115.01")
+(defvar tvd-emacs-version "20181117.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -2256,10 +2259,10 @@ _k_: kill (C-k)  _s_: split                   _{_: wrap with { }
     ("<up>" sp-splice-sexp-killing-backward)
     ("<down>" sp-splice-sexp-killing-forward)
     ;; Barfing/slurping
-    ("<right>" sp-forward-slurp-sexp)
-    ("<left>" sp-forward-barf-sexp)
-    ("C-<left>" sp-backward-barf-sexp)
-    ("C-<right>" sp-backward-slurp-sexp))
+    ("<left>"     sp-forward-slurp-sexp)
+    ("<right>"    sp-forward-barf-sexp)
+    ("C-<left>"   sp-backward-barf-sexp)
+    ("C-<right>"  sp-backward-slurp-sexp))
 
      ;; via https://ebzzry.io/en/emacs-pairs/:
      (defmacro def-pairs (pairs)
@@ -3374,16 +3377,37 @@ a list symbol describing the command."
                      (find-function-other-window (symbol-at-point))))
       (goto-char end))))
 
+(defun emacs-change-version (v)
+  "Change version of .emacs (must be the current buffer).
+Returns t if version changed, nil otherwise."
+  (interactive
+   (list
+    (completing-read "New config version (press TAB for old): "
+                     (list tvd-emacs-version))))
+  (if (equal v tvd-emacs-version)
+      nil
+    (save-excursion
+      (show-all)
+      (beginning-of-buffer)
+      (tvd-replace-all (format "\"%s\"" tvd-emacs-version)
+                                     (format "\"%s\"" v))
+                    (setq tvd-emacs-version v)
+                    (message (format "New config version set: %s" v))
+                    t)
+
 (defun emacs-change-log (entry)
   "Add a changelog entry to .emacs Changelog"
   (interactive "Menter change log entry: ")
-  (save-excursion
-    (show-all)
-    (beginning-of-buffer)
-    (re-search-forward ";; .. Changelog")
-    (next-line)
-    (tvd-outshine-end-of-section)
-    (insert (format ";;    - %s\n" entry))))
+  (let ((newversion (call-interactively 'emacs-change-version)))
+      (save-excursion
+        (show-all)
+        (beginning-of-buffer)
+        (re-search-forward ";; .. Changelog")
+        (next-line)
+        (tvd-outshine-end-of-section)
+        (when newversion
+          (insert (format "\n;; %s\n" tvd-emacs-version)))
+        (insert (format ";;    - %s\n" entry)))))
 
 ;; elisp config
 (add-hook 'emacs-lisp-mode-hook
@@ -3483,6 +3507,7 @@ a list symbol describing the command."
 ;; doku: [[http://www.gnu.org/software/tramp/][gnu.org]]
 (setq tramp-default-method "ssh"
       tramp-default-user nil
+      tramp-verbose 1
       ido-enable-tramp-completion t)
 
 ;; see also backup section
@@ -4377,7 +4402,8 @@ otherwise fold current level and jump one level up."
                  (defalias 'w 'widen)
                  (define-key outline-minor-mode-map (kbd "<C-up>")   'tvd-outline-heading-up)
                  (define-key outline-minor-mode-map (kbd "<C-down>") 'tvd-outline-heading-down)
-                 (define-key outline-minor-mode-map (kbd "<C-left>") 'tvd-outline-left-or-level-up)))))
+                 ;;(define-key outline-minor-mode-map (kbd "<C-left>") 'tvd-outline-left-or-level-up)
+                 ))))
 
 ;; orange fringe when narrowed
 (advice-add 'outshine-narrow-to-subtree :after
