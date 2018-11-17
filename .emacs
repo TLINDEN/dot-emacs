@@ -2218,11 +2218,11 @@ Used when enabling smartparens-mode."
 ;; I use my own lisp comment tool until sp#942 is fixed
 (defun tvd-lisp-comment ()
   (interactive)
-  (if (not (looking-at "\("))
+  (if (not (looking-at "\s*\("))
       (self-insert-command 1)
     (let ((beg (point)))
       (forward-list 1)
-      (when (looking-at "\(")
+      (when (looking-at "\s*\)")
         (insert "\n"))
       (comment-region beg (point))
       (indent-for-tab-command)
@@ -2362,7 +2362,7 @@ respectively."
      (define-key smartparens-mode-map (kbd "C-S-<right>") 'sp-previous-sexp)
 
      ;; comment the whole sexp
-     (define-key smartparens-mode-map (kbd ";") 'tvd-lisp-comment)
+     (define-key smartparens-mode-map (kbd) ";" 'tvd-lisp-comment)
 
      ;; replace my global setting
      ;; FIXME: fhceck/fix M<up+down>!
