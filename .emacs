@@ -711,6 +711,7 @@
 ;;    - fixed parens bug, added sp ti monibuffer
 ;;    - added tvd-lisp-comment
 ;;    - (re-)added electric pair mode to eval-expression
+;;    - diret -lt
 
 ;; ** TODO
 
@@ -5305,6 +5306,9 @@ files marked, always operate on current line in dired-mode"
 
 (eval-after-load 'dired
   '(progn
+     ;; dired vars
+     (setq dired-listing-switches "-lt")
+
      ;; stay  with 1  dired buffer  per instance
      ;; when changing directories
      (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file)
