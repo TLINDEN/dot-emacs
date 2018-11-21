@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version ("20181117.01")          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version ("20181121.01")          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -713,6 +713,9 @@
 ;;    - (re-)added electric pair mode to eval-expression
 ;;    - diret -lt
 
+;; 20181121.01
+;;    - added org agenda
+
 ;; ** TODO
 
 ;; - check helpful https://github.com/wilfred/helpful
@@ -740,7 +743,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20181117.01")
+(defvar tvd-emacs-version "20181121.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -3753,6 +3756,9 @@ down and unfold it, otherwise jump paragraph as usual."
          "* TODO %^{title}\n%u\n** Kostenstelle\n** Contact Peer\n** Contact Customer\n** Aufträge\n** Daten\n** Notizen\n  %i%?\n"
          :prepend t :jump-to-captured t)
 
+        ("t" "Todo Item" entry (file+headline tvd-org-file "Heute")
+         "* TODO %^{title}\n:LOGBOOK:\n%u:END:\n" :prepend t :immediate-finish t)
+
         ("j" "Journal" entry (file+headline tvd-org-file "Kurznotizen")
          "* TODO %^{title}\n%u\n  %i%?\n" :prepend t :jump-to-captured t)
 
@@ -3774,7 +3780,172 @@ down and unfold it, otherwise jump paragraph as usual."
     (info-initialize)
     (add-to-list 'Info-directory-list
                  (expand-file-name "~/.emacs.d/lisp/org/doc")))
+;; --------------------------------------------------------------------------------
+;; *** org agenda mode
 
+;; I use org mode  for along time now, primarily at  work, but did not
+;; use agenda.  Instead  I developed the habit of  maintaining one org
+;; entry which  contains just a  list with all  things to do  today. I
+;; just edited this list manually  and it worked.  However, recently I
+;; found  out  that agenda  provides  lots  of features  and  commands
+;; precisely for what I already did  manually. So, now, finally (as of
+;; november 2018) I switch to using the agenda.
+
+;; My agenda use is very simple though: I don't use any scheduling, no
+;; priorities,  no recurring  events,  no daily  or  other time  based
+;; views. I just keep a list of TODO entries and another of entries in
+;; WAIT  state, that's  it.  All  those entries  are  located under  a
+;; special  org entry  with the  title  "Heute" and  the category  (as
+;; property) WORK, which I use for filtering out agenda items.
+
+;; The general workflow is as follows: I execute (agenda) which starts
+;; directly  my custom  agenda view.   It  lists open  TODO items  and
+;; waiting WAIT  items below. If  I press `n', I  will be asked  for a
+;; title and a new TODO item appears  in my agenda. I can press `d' to
+;; mark it as  DONE, it will also be archived  into a subsibling below
+;; "HEUTE". I can press `w' to move  an item into WAIT state and I can
+;; press `a' to  add text to the org entry  under point (like "waiting
+;; for customer email").
+
+;; So, I  don't use my  regular org entries,  which are in  most cases
+;; very large  containing lots  of information,  as agenda  items, but
+;; only very short ones which act  as reminders about what work I have
+;; to  do. However,  since I  have the  org buffer  always opened  and
+;; visible in a split  buffer next to the agenda, it  is no problem to
+;; go to such a deep entry for editing or viewing.
+
+(require 'org-agenda)
+
+;; This is my one and only  agenda custom view, it displays TODO items
+;; below entries  categorized as  WORK and WAIT  items under  the same
+;; category. The cool  thing here is, that the `tags'  agenda view can
+;; be used  to filter for  properties as well.  In order to  have this
+;; working the following  property drawer must exist in  an entry with
+;; TODO siblings:
+;;
+;;    * START Arbeit
+;;      :PROPERTIES:
+;;      :CATEGORY: WORK
+;;      :END:
+;;    ** TODO a thing to do
+;;    ** WAIT a thing waiting for something
+;;
+(setq org-agenda-custom-commands
+      '(("o" "Daily TODO Tasks"
+         ((tags "CATEGORY=\"WORK\""
+                ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("CANCEL" "START" "DONE" "WAIT")))
+                 (org-agenda-overriding-header "Tasks to do today:")
+                 (org-agenda-follow-mode t)
+                 (org-agenda-entry-text-mode t)))
+          (tags "CATEGORY=\"WORK\""
+                ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("CANCEL" "START" "DONE" "TODO")))
+                 (org-agenda-overriding-header "\nTasks Waiting:"))))
+         ((org-agenda-compact-blocks t)))))
+
+;; A shortcut to reach my custom view directly
+(defun agenda ()
+  "Visit my org agenda directly."
+  (interactive)
+  (org-agenda nil "o"))
+
+;; Add a line of text to the top of an existing TODO entry and refresh
+;; the agenda
+(defun tvd-org-agenda-edit-entry (note)
+  "Insert a note as plain text into an entry"
+  (interactive "sEnter note: ")
+  (save-excursion
+    (org-agenda-switch-to)
+    (end-of-line)
+    (newline)
+    (insert note))
+  (switch-to-buffer "*Org Agenda*")
+  (org-agenda-redo t))
+
+;; Mark an entry as DONE, archive it to an archive sibling and refresh
+;; the agenda
+(defun tvd-org-agenda-done()
+  (interactive)
+  (org-agenda-todo 'done)
+  (org-agenda-archive-to-archive-sibling)
+  (org-agenda-redo t))
+
+;; Mark an entry as WAIT, archive it to an archive sibling and refresh
+;; the agenda
+(defun tvd-org-agenda-wait()
+  (interactive)
+  (org-agenda-todo "WAIT")
+  (org-agenda-redo t))
+
+;; A  wrapper which  executes  an  org capture  directly.  `t' is  the
+;; shortcut for the capture, defined above in org mode.
+(defun tvd-org-agenda-capture (&optional vanilla)
+  "Capture a task in agenda mode, using the date at point.
+
+If VANILLA is non-nil, run the standard `org-capture'."
+  (interactive "P")
+  (if vanilla
+      (org-capture)
+    (let ((org-overriding-default-time (org-get-cursor-date)))
+      (org-capture nil "t")
+      (org-agenda-redo t))))
+
+;; Since I learned to love hydra, I have one for my agenda as well, of course:
+(defhydra hydra-org-agenda (:color blue
+                                   :pre (setq which-key-inhibit t)
+                                   :post (setq which-key-inhibit nil)
+                                   :hint none)
+  "
+Org Agenda (_q_uit)
+
+^Tasks^                             ^Options^             ^Movement^
+-^^^^^^-------------------------------------------------------------------------------------
+_n_: create new task                _f_: follow =?f?      ENTER:     switch to entry
+_d_: mark task done and archive     _e_: entry  =?e?      C-<up>:    go one entry up
+_w_: mark task waiting              ^^                    C-<down>:  go one entry down
+_t_: toggle todo state              ^Marking^             M-<up>:    move entry up
+_z_: archive task                   _m_: mark entry       M-<down>:  move entry down
+_+_: increase prio                  _u_: un-mark entry
+_-_: decrease prio                  _U_: un-mark all
+_g_: refresh                        _B_: bulk action
+_s_: save org buffer(s)
+_a_: add a note to the entry
+
+"
+  ("a" tvd-org-agenda-edit-entry nil)
+  ("n" tvd-org-agenda-capture nil)
+  ("g" org-agenda-redo nil)
+  ("t" org-agenda-todo)
+  ("d" tvd-org-agenda-done nil)
+  ("w" tvd-org-agenda-wait nil)
+  ("z" org-agenda-archive-to-archive-sibling nil)
+  ("+" org-agenda-priority-up nil)
+  ("-" org-agenda-priority-down nil)
+  ("s" org-save-all-org-buffers nil)
+  ("f" org-agenda-follow-mode
+   (format "% -3S" org-agenda-follow-mode))
+  ("e" org-agenda-entry-text-mode
+   (format "% -3S" org-agenda-entry-text-mode))
+  ("m" org-agenda-bulk-mark nil)
+  ("u" org-agenda-bulk-unmark nil)
+  ("U" org-agenda-bulk-remove-all-marks nil)
+  ("B" org-agenda-bulk-action nil)
+  ("q" nil nil :color red))
+
+;; Configuration and key bindings for org agenda (same as in the hydra)
+(add-hook 'org-agenda-mode-hook '(lambda () (progn
+                                              (setq org-agenda-follow-mode t
+                                                    org-log-into-drawer t
+                                                    org-agenda-entry-text-mode t)
+                                              (local-set-key (kbd "n") 'tvd-org-agenda-capture)
+                                              (local-set-key (kbd "a") 'tvd-org-agenda-edit-entry)
+                                              (local-set-key (kbd "d") 'tvd-org-agenda-done)
+                                              (local-set-key (kbd "w") 'tvd-org-agenda-wait)
+                                              (local-set-key (kbd "f") 'org-agenda-follow-mode)
+                                              (local-set-key (kbd "e") 'org-agenda-entry-text-mode)
+                                              (local-set-key (kbd "z") 'org-agenda-archive-to-archive-sibling)
+                                              (local-set-key (kbd "C-<up>") 'org-agenda-previous-line)
+                                              (local-set-key (kbd "C-<down>") 'org-agenda-next-line)
+                                              (local-set-key (kbd "?") 'hydra-org-agenda/body))))
 ;; --------------------------------------------------------------------------------
 ;; *** org table mode
 
