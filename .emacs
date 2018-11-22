@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version ("20181121.01")          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version ("20181122.01")          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -716,6 +716,9 @@
 ;; 20181121.01
 ;;    - added org agenda
 
+;; 20181122.01
+;;    - + new agenda o function
+
 ;; ** TODO
 
 ;; - check helpful https://github.com/wilfred/helpful
@@ -743,7 +746,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20181121.01")
+(defvar tvd-emacs-version "20181122.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -3889,6 +3892,15 @@ If VANILLA is non-nil, run the standard `org-capture'."
       (org-capture nil "t")
       (org-agenda-redo t))))
 
+;; Sometimes  it  is  nice  to  see  the  agenda  alone,  so  I  press
+;; `o'. However, since follow mode is  enabled, once I move point, the
+;; org buffer re-appears.
+(defun tvd-org-agenda-solitair ()
+  (interactive)
+  (delete-other-windows)
+  (setq org-agenda-follow-mode nil)
+  (message "Org Agenda Follow Mode Disabled"))
+
 ;; Since I learned to love hydra, I have one for my agenda as well, of course:
 (defhydra hydra-org-agenda (:color blue
                                    :pre (setq which-key-inhibit t)
@@ -3901,18 +3913,19 @@ Org Agenda (_q_uit)
 -^^^^^^-------------------------------------------------------------------------------------
 _n_: create new task                _f_: follow =?f?      ENTER:     switch to entry
 _d_: mark task done and archive     _e_: entry  =?e?      C-<up>:    go one entry up
-_w_: mark task waiting              ^^                    C-<down>:  go one entry down
-_t_: toggle todo state              ^Marking^             M-<up>:    move entry up
-_z_: archive task                   _m_: mark entry       M-<down>:  move entry down
-_+_: increase prio                  _u_: un-mark entry
-_-_: decrease prio                  _U_: un-mark all
-_g_: refresh                        _B_: bulk action
-_s_: save org buffer(s)
-_a_: add a note to the entry
+_w_: mark task waiting              _o_: one window       C-<down>:  go one entry down
+_t_: toggle todo state              ^^                    M-<up>:    move entry up
+_z_: archive task                   ^^                    M-<down>:  move entry down
+_+_: increase prio                  ^Marking^
+_-_: decrease prio                  _m_: mark entry
+_g_: refresh                        _u_: un-mark entry
+_s_: save org buffer(s)             _U_: un-mark all
+_a_: add a note to the entry        _B_: bulk action
 
 "
   ("a" tvd-org-agenda-edit-entry nil)
   ("n" tvd-org-agenda-capture nil)
+  ("o" tvd-org-agenda-solitair nil)
   ("g" org-agenda-redo nil)
   ("t" org-agenda-todo)
   ("d" tvd-org-agenda-done nil)
@@ -3937,6 +3950,7 @@ _a_: add a note to the entry
                                                     org-log-into-drawer t
                                                     org-agenda-entry-text-mode t)
                                               (local-set-key (kbd "n") 'tvd-org-agenda-capture)
+                                              (local-set-key (kbd "o") 'tvd-org-agenda-solitair)
                                               (local-set-key (kbd "a") 'tvd-org-agenda-edit-entry)
                                               (local-set-key (kbd "d") 'tvd-org-agenda-done)
                                               (local-set-key (kbd "w") 'tvd-org-agenda-wait)
