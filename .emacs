@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version ("20181122.01")          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version ("20181126.01")          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
