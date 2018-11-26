@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version ("20181123.01")          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version ("20181122.01")          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -719,10 +719,8 @@
 ;; 20181122.01
 ;;    - + new agenda o function
 
-;; 20181123.01
-;;    - added support for scheduled agenda entries and fixed tvd-replace-all
-;;    - c-down in agenda fixed
-;;    - fixed 'n' agenda command, file to correct item
+;; 20181126.01
+;;    - unlimited recentf
 
 ;; ** TODO
 
@@ -751,7 +749,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20181123.01")
+(defvar tvd-emacs-version "20181126.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -2005,11 +2003,11 @@ col1, col2"
          (string-equal (substring s 0 (length begins)) begins))
         (t nil)))
 
-(defun tvd-replace-all (regex replace)
+(defun tvd-replace-all (regex replace) 
   "Replace all matches of REGEX with REPLACE in current buffer."
   (interactive)
   (goto-char (point-min))
-  (while (re-search-forward regex nil t)
+  (while (re-search-forward regex (end-of-line) t)
     (replace-match replace)))
 
 ;; * Modes
@@ -3764,7 +3762,7 @@ down and unfold it, otherwise jump paragraph as usual."
          "* TODO %^{title}\n%u\n** Kostenstelle\n** Contact Peer\n** Contact Customer\n** Aufträge\n** Daten\n** Notizen\n  %i%?\n"
          :prepend t :jump-to-captured t)
 
-        ("t" "Todo Item" entry (file+headline tvd-org-file "Manual-Agenda-Tasks")
+        ("t" "Todo Item" entry (file+headline tvd-org-file "Heute")
          "* TODO %^{title}\n:LOGBOOK:\n%u:END:\n" :prepend t :immediate-finish t)
 
         ("j" "Journal" entry (file+headline tvd-org-file "Kurznotizen")
@@ -3840,18 +3838,11 @@ down and unfold it, otherwise jump paragraph as usual."
 ;;
 (setq org-agenda-custom-commands
       '(("o" "Daily TODO Tasks"
-         (
-          ;; a block containing only items scheduled for today, if any
-          (agenda ""
-                  ((org-agenda-span 1)
-                   (org-agenda-overriding-header "Tasks scheduled:")))
-          ;; manually created todo items due (state TODO)
-          (tags "CATEGORY=\"WORK\""
+         ((tags "CATEGORY=\"WORK\""
                 ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("CANCEL" "START" "DONE" "WAIT")))
-                 (org-agenda-overriding-header "\nTasks to do today:")
+                 (org-agenda-overriding-header "Tasks to do today:")
                  (org-agenda-follow-mode t)
                  (org-agenda-entry-text-mode t)))
-          ;; manually created todo items in wait state
           (tags "CATEGORY=\"WORK\""
                 ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("CANCEL" "START" "DONE" "TODO")))
                  (org-agenda-overriding-header "\nTasks Waiting:"))))
@@ -3969,8 +3960,8 @@ _a_: add a note to the entry        _B_: bulk action
                                               (local-set-key (kbd "f") 'org-agenda-follow-mode)
                                               (local-set-key (kbd "e") 'org-agenda-entry-text-mode)
                                               (local-set-key (kbd "z") 'org-agenda-archive-to-archive-sibling)
-                                              (local-set-key (kbd "C-<up>") 'org-agenda-previous-item)
-                                              (local-set-key (kbd "C-<down>") 'org-agenda-next-item)
+                                              (local-set-key (kbd "C-<up>") 'org-agenda-previous-line)
+                                              (local-set-key (kbd "C-<down>") 'org-agenda-next-line)
                                               (local-set-key (kbd "?") 'hydra-org-agenda/body))))
 ;; --------------------------------------------------------------------------------
 ;; *** org table mode
@@ -5935,7 +5926,8 @@ Use C-x C-x to access eyebrowse directly.
 (recentf-mode 1)
 
 ;; I like to have a longer list reaching deeper into the past
-(setq recentf-max-menu-items 200)
+(setq recentf-max-menu-items 200
+      recentf-max-saved-items nil)
 
 ;; enable IDO completion
 ;; via [[http://emacsredux.com/blog/2013/04/05/recently-visited-files/][emacsredux]]
