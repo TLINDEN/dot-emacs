@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version ("20181126.01")          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version ("20181127.02")          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -722,6 +722,13 @@
 ;; 20181126.01
 ;;    - unlimited recentf
 
+;; 20181127.01
+;;    - fixed tvd-replace-all
+;;    - fixed agenda capture template
+
+;; 20181127.02
+;;    - fixed C-up|down in agenda
+
 ;; ** TODO
 
 ;; - check helpful https://github.com/wilfred/helpful
@@ -749,7 +756,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20181126.01")
+(defvar tvd-emacs-version "20181127.02")
 
 ;; --------------------------------------------------------------------------------
 
@@ -2003,11 +2010,11 @@ col1, col2"
          (string-equal (substring s 0 (length begins)) begins))
         (t nil)))
 
-(defun tvd-replace-all (regex replace) 
+(defun tvd-replace-all (regex replace)
   "Replace all matches of REGEX with REPLACE in current buffer."
   (interactive)
   (goto-char (point-min))
-  (while (re-search-forward regex (end-of-line) t)
+  (while (re-search-forward regex nil t)
     (replace-match replace)))
 
 ;; * Modes
@@ -3762,7 +3769,7 @@ down and unfold it, otherwise jump paragraph as usual."
          "* TODO %^{title}\n%u\n** Kostenstelle\n** Contact Peer\n** Contact Customer\n** Aufträge\n** Daten\n** Notizen\n  %i%?\n"
          :prepend t :jump-to-captured t)
 
-        ("t" "Todo Item" entry (file+headline tvd-org-file "Heute")
+        ("t" "Todo Item" entry (file+headline tvd-org-file "Manual-Agenda-Tasks")
          "* TODO %^{title}\n:LOGBOOK:\n%u:END:\n" :prepend t :immediate-finish t)
 
         ("j" "Journal" entry (file+headline tvd-org-file "Kurznotizen")
@@ -3960,8 +3967,8 @@ _a_: add a note to the entry        _B_: bulk action
                                               (local-set-key (kbd "f") 'org-agenda-follow-mode)
                                               (local-set-key (kbd "e") 'org-agenda-entry-text-mode)
                                               (local-set-key (kbd "z") 'org-agenda-archive-to-archive-sibling)
-                                              (local-set-key (kbd "C-<up>") 'org-agenda-previous-line)
-                                              (local-set-key (kbd "C-<down>") 'org-agenda-next-line)
+                                              (local-set-key (kbd "C-<up>") 'org-agenda-previous-item)
+                                              (local-set-key (kbd "C-<down>") 'org-agenda-next-item)
                                               (local-set-key (kbd "?") 'hydra-org-agenda/body))))
 ;; --------------------------------------------------------------------------------
 ;; *** org table mode
