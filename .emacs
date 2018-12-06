@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version ("20181127.02")          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version ("20181206.01")          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -729,6 +729,10 @@
 ;; 20181127.02
 ;;    - fixed C-up|down in agenda
 
+;; 20181206.01
+;;    - added support for scheduled agenda entries and fixed tvd-replace-all
+;;      (I already had this in 20181123 but overwrote it soomehow!)
+
 ;; ** TODO
 
 ;; - check helpful https://github.com/wilfred/helpful
@@ -756,7 +760,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20181127.02")
+(defvar tvd-emacs-version "20181206.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -3845,11 +3849,18 @@ down and unfold it, otherwise jump paragraph as usual."
 ;;
 (setq org-agenda-custom-commands
       '(("o" "Daily TODO Tasks"
-         ((tags "CATEGORY=\"WORK\""
+         (
+          ;; a block containing only items scheduled for today, if any
+          (agenda ""
+                  ((org-agenda-span 1)
+                   (org-agenda-overriding-header "Tasks scheduled:")))
+          ;; manually created todo items due (state TODO)
+          (tags "CATEGORY=\"WORK\""
                 ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("CANCEL" "START" "DONE" "WAIT")))
-                 (org-agenda-overriding-header "Tasks to do today:")
+                 (org-agenda-overriding-header "\nTasks to do today:")
                  (org-agenda-follow-mode t)
                  (org-agenda-entry-text-mode t)))
+          ;; manually created todo items in wait state
           (tags "CATEGORY=\"WORK\""
                 ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("CANCEL" "START" "DONE" "TODO")))
                  (org-agenda-overriding-header "\nTasks Waiting:"))))
