@@ -731,7 +731,7 @@
 
 ;; 20181206.01
 ;;    - added support for scheduled agenda entries and fixed tvd-replace-all
-;;      (I already had this in 20181123 but overwrote it soomehow!)
+;;      (I already had this in 20181123 but overwrote it somehow!)
 
 ;; ** TODO
 
