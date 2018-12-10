@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version ("20181206.01")          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version ("20181210.01")          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -733,6 +733,9 @@
 ;;    - added support for scheduled agenda entries and fixed tvd-replace-all
 ;;      (I already had this in 20181123 but overwrote it somehow!)
 
+;; 20181210.01
+;;    - gixed agenda x command
+
 ;; ** TODO
 
 ;; - check helpful https://github.com/wilfred/helpful
@@ -760,7 +763,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20181206.01")
+(defvar tvd-emacs-version "20181210.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -3922,6 +3925,13 @@ If VANILLA is non-nil, run the standard `org-capture'."
   (setq org-agenda-follow-mode nil)
   (message "Org Agenda Follow Mode Disabled"))
 
+;; The original function scrolls the buffer  every time when it runs a
+;; little bit up, which is annoying, to say the least
+(defun tvd-org-agenda-redo()
+  (interactive)
+  (org-agenda-redo t)
+  (beginning-of-buffer))
+
 ;; Since I learned to love hydra, I have one for my agenda as well, of course:
 (defhydra hydra-org-agenda (:color blue
                                    :pre (setq which-key-inhibit t)
@@ -3947,7 +3957,7 @@ _a_: add a note to the entry        _B_: bulk action
   ("a" tvd-org-agenda-edit-entry nil)
   ("n" tvd-org-agenda-capture nil)
   ("o" tvd-org-agenda-solitair nil)
-  ("g" org-agenda-redo nil)
+  ("g" tvd-org-agenda-redo)
   ("t" org-agenda-todo)
   ("d" tvd-org-agenda-done nil)
   ("w" tvd-org-agenda-wait nil)
@@ -3975,6 +3985,7 @@ _a_: add a note to the entry        _B_: bulk action
                                               (local-set-key (kbd "a") 'tvd-org-agenda-edit-entry)
                                               (local-set-key (kbd "d") 'tvd-org-agenda-done)
                                               (local-set-key (kbd "w") 'tvd-org-agenda-wait)
+                                              (local-set-key (kbd "g") 'tvd-org-agenda-redo)
                                               (local-set-key (kbd "f") 'org-agenda-follow-mode)
                                               (local-set-key (kbd "e") 'org-agenda-entry-text-mode)
                                               (local-set-key (kbd "z") 'org-agenda-archive-to-archive-sibling)
