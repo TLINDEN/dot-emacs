@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version ("20181210.01")          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version ("20181212.01")          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -734,7 +734,10 @@
 ;;      (I already had this in 20181123 but overwrote it somehow!)
 
 ;; 20181210.01
-;;    - gixed agenda x command
+;;    - fixed agenda g command
+
+;; 20181212.01
+;;    - configured agenda sorting
 
 ;; ** TODO
 
@@ -763,7 +766,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20181210.01")
+(defvar tvd-emacs-version "20181212.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -3867,7 +3870,8 @@ down and unfold it, otherwise jump paragraph as usual."
           (tags "CATEGORY=\"WORK\""
                 ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("CANCEL" "START" "DONE" "TODO")))
                  (org-agenda-overriding-header "\nTasks Waiting:"))))
-         ((org-agenda-compact-blocks t)))))
+         ((org-agenda-compact-blocks t)
+          (org-agenda-sorting-strategy '(priority-down timestamp-down))))))
 
 ;; A shortcut to reach my custom view directly
 (defun agenda ()
