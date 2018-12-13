@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version ("20181212.01")          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version ("20181212.02")          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -739,6 +739,9 @@
 ;; 20181212.01
 ;;    - configured agenda sorting
 
+;; 20181212.02
+;;    - fixed agenda sorting, must be global
+
 ;; ** TODO
 
 ;; - check helpful https://github.com/wilfred/helpful
@@ -766,7 +769,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20181212.01")
+(defvar tvd-emacs-version "20181212.02")
 
 ;; --------------------------------------------------------------------------------
 
@@ -3870,8 +3873,7 @@ down and unfold it, otherwise jump paragraph as usual."
           (tags "CATEGORY=\"WORK\""
                 ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("CANCEL" "START" "DONE" "TODO")))
                  (org-agenda-overriding-header "\nTasks Waiting:"))))
-         ((org-agenda-compact-blocks t)
-          (org-agenda-sorting-strategy '(priority-down timestamp-down))))))
+         ((org-agenda-compact-blocks t)))))
 
 ;; A shortcut to reach my custom view directly
 (defun agenda ()
@@ -3983,7 +3985,8 @@ _a_: add a note to the entry        _B_: bulk action
 (add-hook 'org-agenda-mode-hook '(lambda () (progn
                                               (setq org-agenda-follow-mode t
                                                     org-log-into-drawer t
-                                                    org-agenda-entry-text-mode t)
+                                                    org-agenda-entry-text-mode t
+                                                    org-agenda-sorting-strategy '(priority-down timestamp-down))
                                               (local-set-key (kbd "n") 'tvd-org-agenda-capture)
                                               (local-set-key (kbd "o") 'tvd-org-agenda-solitair)
                                               (local-set-key (kbd "a") 'tvd-org-agenda-edit-entry)
