@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version ("20181212.02")          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version ("20181220.01")          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -742,6 +742,9 @@
 ;; 20181212.02
 ;;    - fixed agenda sorting, must be global
 
+;; 20181220.01
+;;    - added org table move cells functions
+
 ;; ** TODO
 
 ;; - check helpful https://github.com/wilfred/helpful
@@ -769,7 +772,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20181212.02")
+(defvar tvd-emacs-version "20181220.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -4280,13 +4283,73 @@ intended to be #'> to support reverse sorting."
     (delete-trailing-whitespace)
     (copy-region-as-kill (point-min) (point-max))))
 
+;; Move single cells using C-M-up C-M-down C-M-left C-M-right
+(add-hook 'org-mode-hook
+ '(lambda ()
+    (local-set-key [C-M-up] (quote org-table-move-single-cell-up))
+    (local-set-key [C-M-down] (quote org-table-move-single-cell-down))
+    (local-set-key [C-M-left] (quote org-table-move-single-cell-left))
+    (local-set-key [C-M-right] (quote org-table-move-single-cell-right))))
 
+(defun org-table-swap-cells (i1 j1 i2 j2)
+  "Swap two cells"
+  (let ((c1 (org-table-get i1 j1))
+        (c2 (org-table-get i2 j2)))
+    (org-table-put i1 j1 c2)
+    (org-table-put i2 j2 c1)
+    (org-table-align)))
+
+(defun org-table-move-single-cell (direction)
+  "Move the current cell in a cardinal direction according to the
+  parameter symbol: 'up 'down 'left 'right. Swaps contents of
+  adjacent cell with current one."
+  (unless (org-at-table-p)
+    (error "No table at point"))
+  (let ((di 0) (dj 0))
+    (cond ((equal direction 'up) (setq di -1))
+          ((equal direction 'down) (setq di +1))
+          ((equal direction 'left) (setq dj -1))
+          ((equal direction 'right) (setq dj +1))
+          (t (error "Not a valid direction, must be up down left right")))
+    (let* ((i1 (org-table-current-line))
+           (j1 (org-table-current-column))
+           (i2 (+ i1 di))
+           (j2 (+ j1 dj)))
+      (org-table-swap-cells i1 j1 i2 j2)
+      (org-table-goto-line i2)
+      (org-table-goto-column j2))))
+
+(defun org-table-move-single-cell-up ()
+  "Move a single cell up in a table; swap with anything in target cell"
+  (interactive)
+  (org-table-move-single-cell 'up))
+
+(defun org-table-move-single-cell-down ()
+  "Move a single cell down in a table; swap with anything in target cell"
+  (interactive)
+  (org-table-move-single-cell 'down))
+
+(defun org-table-move-single-cell-left ()
+  "Move a single cell left in a table; swap with anything in target cell"
+  (interactive)
+  (org-table-move-single-cell 'left))
+
+(defun org-table-move-single-cell-right ()
+  "Move a single cell right in a table; swap with anything in target cell"
+  (interactive)
+  (org-table-move-single-cell 'right))
+
+;; actual org table config
 (with-eval-after-load "org"
   (add-hook 'org-mode-hook
             (lambda ()
               (local-set-key (kbd "C-c t l") 'tvd-copy-org-table-col)
               (local-set-key (kbd "C-c t r") 'tvd-copy-org-table-row)
-              (local-set-key (kbd "C-c t c") 'tvd-copy-org-table-cell))))
+              (local-set-key (kbd "C-c t c") 'tvd-copy-org-table-cell)
+              (local-set-key (kbd "C-M-<left>")  'org-table-move-single-cell-left)
+              (local-set-key (kbd "C-M-<right>") 'org-table-move-single-cell-right)
+              (local-set-key (kbd "C-M-<up>")    'org-table-move-single-cell-up)
+              (local-set-key (kbd "C-M-<down>")  'org-table-move-single-cell-down))))
 
 ;; eval-after-load 'orgtbl doesn't work
 (add-hook 'orgtbl-mode-hook '(lambda ()
@@ -4306,10 +4369,10 @@ _sa_:  alphanumeric   _tc_: CSV           _cl_: Copy Column (C-c t l)    _ic_: I
 _sA_: -alphanumeric   _te_: Excel         _cr_: Copy Row    (C-c t r)    _ir_: Insert Row         _oe_: Enable Org-Tbl Mode
 _si_:  ip             _tl_: Latex         _cc_: Copy Cell   (C-c t c)    _il_: Insert Line        _oc_: Turn region to columns
 _sI_: -ip             _th_: HTML          _dd_: Delete Cell              _tr_: Transpose Table
-_sn_:  numeric        _tt_: Tab           _dc_: Delete Column
-_sN_: -numeric        _ta_: Aligned       _dr_: Delete Row
-_st_:  time           ^^                  _kr_: Kill Row
-_sT_: -time           ^^                  _kc_: Kill Column              ^^                       _q_: Cancel
+_sn_:  numeric        _tt_: Tab           _dc_: Delete Column            _mr_: Move Cell right
+_sN_: -numeric        _ta_: Aligned       _dr_: Delete Row               _ml_: Move Cell left
+_st_:  time           ^^                  _kr_: Kill Row                 _mu_: Move Cell up
+_sT_: -time           ^^                  _kc_: Kill Column              _md_: Move Cell down     _q_: Cancel
 
 
 ^^^^^^^^-----------------------------------------------------------------------------------------------------------------------
@@ -4318,6 +4381,10 @@ Reach this hydra with <C-x t>
 
 
 "
+  ("mr" org-table-move-single-cell-right)
+  ("ml" org-table-move-single-cell-left)
+  ("mu" org-table-move-single-cell-up)
+  ("md" org-table-move-single-cell-down)
   ("sa" sort-table-alphanumeric  nil)
   ("sA" sort-table-alphanumeric-desc nil)
   ("si" sort-table-ip nil)
