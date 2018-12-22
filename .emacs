@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version ("20181220.01")          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version ("20181222.01")          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -745,6 +745,9 @@
 ;; 20181220.01
 ;;    - added org table move cells functions
 
+;; 20181222.01
+;;    - removed duplicate key bindings, added via comment
+
 ;; ** TODO
 
 ;; - check helpful https://github.com/wilfred/helpful
@@ -772,7 +775,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20181220.01")
+(defvar tvd-emacs-version "20181222.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -4284,13 +4287,7 @@ intended to be #'> to support reverse sorting."
     (copy-region-as-kill (point-min) (point-max))))
 
 ;; Move single cells using C-M-up C-M-down C-M-left C-M-right
-(add-hook 'org-mode-hook
- '(lambda ()
-    (local-set-key [C-M-up] (quote org-table-move-single-cell-up))
-    (local-set-key [C-M-down] (quote org-table-move-single-cell-down))
-    (local-set-key [C-M-left] (quote org-table-move-single-cell-left))
-    (local-set-key [C-M-right] (quote org-table-move-single-cell-right))))
-
+;; [[https://cs.gmu.edu/~kauffman/software/org-table-move-single-cell.el][via Kauffmann]]
 (defun org-table-swap-cells (i1 j1 i2 j2)
   "Swap two cells"
   (let ((c1 (org-table-get i1 j1))
