@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version ("20181222.01")          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version ("20181227.01")          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -748,6 +748,9 @@
 ;; 20181222.01
 ;;    - removed duplicate key bindings, added via comment
 
+;; 20181227.01
+;;    - ena variable pitch w/ org, turned face config into theme
+
 ;; ** TODO
 
 ;; - check helpful https://github.com/wilfred/helpful
@@ -775,7 +778,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20181222.01")
+(defvar tvd-emacs-version "20181227.01")
 
 ;; --------------------------------------------------------------------------------
 
