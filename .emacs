@@ -3753,16 +3753,16 @@ down and unfold it, otherwise jump paragraph as usual."
                  (local-set-key (kbd "<C-left>") 'tvd-org-left-or-level-up)
 
                                         ; use nicer bullets
-                 (org-bullets-mode 1))
+                 (org-bullets-mode 1)
 
-               (org-babel-do-load-languages
-                'org-babel-load-languages
-                '((python     . t)
-                  (emacs-lisp . t)
-                  (shell      . t)
-                  (perl       . t)
-                  ))
-                 )))
+                 ;; looks better, esp. w/ agenda
+                 (variable-pitch-mode 1)
+
+                 (org-babel-do-load-languages 'org-babel-load-languages
+                                              '((python     . t)
+                                                (emacs-lisp . t)
+                                                (shell      . t)
+                                                (perl       . t)))))))
 
 ;; no more ... at the end of a heading
 (setq org-ellipsis " ⤵")
@@ -6511,51 +6511,11 @@ converted to PDF at the same location."
 ;; show available colors:
 (defalias 'colors 'list-colors-display)
 
-
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:family "DejaVu Sans Mono" :foundry "unknown" :slant normal :weight normal :width normal))))
- '(cperl-nonoverridable-face ((((class color) (background light)) (:foreground "Magenta"))))
- '(custom-documentation-face ((t (:foreground "Navy"))) t)
- '(custom-group-tag-face-1 ((((class color) (background light)) (:underline t :foreground "VioletRed"))) t)
- '(dired-directory ((t (:inherit font-lock-keyword-face))))
- '(font-lock-builtin-face ((t (:foreground "BlueViolet"))))
- '(font-lock-comment-face ((t (:foreground "DarkGreen"))))
- '(font-lock-constant-face ((t (:foreground "Magenta"))))
- '(font-lock-doc-face ((t (:foreground "DarkOrange3"))))
- '(font-lock-function-name-face ((t (:bold nil :foreground "DarkOrchid"))))
- '(font-lock-keyword-face ((t (:foreground "Blue"))))
- '(font-lock-string-face ((t (:foreground "Red"))))
- '(font-lock-type-face ((t (:foreground "DarkSlateBlue"))))
- '(font-lock-variable-name-face ((t (:foreground "Sienna"))))
- '(font-lock-warning-face ((t (:bold t :foreground "Red"))))
- '(highlight ((t (:background "DarkSeaGreen1"))))
- '(ido-only-match ((t (:foreground "dark green" :weight bold))))
- '(info-title-1 ((t (:inherit outline-1))))
- '(info-title-2 ((t (:inherit outline-2))))
- '(info-title-3 ((t (:inherit outline-3))))
- '(info-title-4 ((t (:inherit outline-4))))
- '(mmm-default-submode-face ((t nil)))
- '(mode-line ((t (:foreground "White" :background "Blue"))))
- '(mode-line-inactive ((t (:foreground "White" :background "DimGray"))))
- '(org-date ((t (:foreground "dark gray" :underline t))))
- '(org-level-1 ((t (:height 1.18 :foreground "medium slate blue" :underline t))))
- '(org-level-2 ((t (:height 1.16 :foreground "sea green" :underline t :weight normal))))
- '(org-level-3 ((t (:height 1.14 :foreground "saddle brown" :underline t))))
- '(org-level-4 ((t (:height 1.12 :foreground "OrangeRed2" :underline t))))
- '(org-level-5 ((t (:height 1.1 :underline t))))
- '(outline-1 ((t (:height 1.2 :inherit font-lock-function-name-face :underline t :weight bold))))
- '(outline-2 ((t (:height 1.15 :inherit font-lock-variable-name-face :underline t :weight bold))))
- '(outline-3 ((t (:height 1.1 :inherit font-lock-keyword-face :underline t :weight bold))))
- '(outline-4 ((t (:height 1.05 :foreground "DodgerBlue3" :underline t))))
- '(region ((t (:foreground "Aquamarine" :background "Darkblue"))))
- '(secondary-selection ((t (:foreground "Green" :background "darkslateblue"))))
- '(eyebrowse-mode-line-active ((t (:foreground "Blue" :background "White" :bold t))))
- '(which-func ((t (:background "blue" :foreground "white"))))
- '(which-key-key-face ((t (:weight bold)))))
+;; from 20181227 I outsourced my font  config into a theme, located in
+;; .emacs.d/tom-past-century.el,  so that  I  can  load another  theme
+;; anytime I  like AND  switch back  to my  own config  w/o restarting
+;; emacs
+(add-hook 'after-init-hook (lambda () (load-theme 'tom-past-century t)))
 
 ;; unless we're on windoze
 (if (not (null tvd-win-home))
