@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version ("20181222.01")          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version ("20190108.01")          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -748,8 +748,11 @@
 ;; 20181222.01
 ;;    - removed duplicate key bindings, added via comment
 
-;; 20181231.01
-;;    - revert to 20181222, themes are shit
+;; 20181227.01
+;;    - ena variable pitch w/ org, turned face config into theme
+
+;; 20190108.01
+;;    - added server
 
 ;; ** TODO
 
@@ -778,7 +781,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20181222.01")
+(defvar tvd-emacs-version "20190108.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -3756,16 +3759,16 @@ down and unfold it, otherwise jump paragraph as usual."
                  (local-set-key (kbd "<C-left>") 'tvd-org-left-or-level-up)
 
                                         ; use nicer bullets
-                 (org-bullets-mode 1))
+                 (org-bullets-mode 1)
 
-               (org-babel-do-load-languages
-                'org-babel-load-languages
-                '((python     . t)
-                  (emacs-lisp . t)
-                  (shell      . t)
-                  (perl       . t)
-                  ))
-                 )))
+                 ;; looks better, esp. w/ agenda
+                 (variable-pitch-mode 1)
+
+                 (org-babel-do-load-languages 'org-babel-load-languages
+                                              '((python     . t)
+                                                (emacs-lisp . t)
+                                                (shell      . t)
+                                                (perl       . t)))))))
 
 ;; no more ... at the end of a heading
 (setq org-ellipsis " ⤵")
@@ -6506,7 +6509,7 @@ converted to PDF at the same location."
                mode-line-end-spaces))
 
 ;; --------------------------------------------------------------------------------
-;; * Emacs Autoconfig / Customizegroup stuff
+;; * Emacs Autoconfig / Customize group / final stuff
 ;; --------------------------------------------------------------------------------
 ;; ** font faces
 ;; Font color config, must always be the last thing so all hook faces are loaded.
@@ -6514,55 +6517,28 @@ converted to PDF at the same location."
 ;; show available colors:
 (defalias 'colors 'list-colors-display)
 
-
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:family "DejaVu Sans Mono" :foundry "unknown" :slant normal :weight normal :width normal))))
- '(cperl-nonoverridable-face ((((class color) (background light)) (:foreground "Magenta"))))
- '(custom-documentation-face ((t (:foreground "Navy"))) t)
- '(custom-group-tag-face-1 ((((class color) (background light)) (:underline t :foreground "VioletRed"))) t)
- '(dired-directory ((t (:inherit font-lock-keyword-face))))
- '(font-lock-builtin-face ((t (:foreground "BlueViolet"))))
- '(font-lock-comment-face ((t (:foreground "DarkGreen"))))
- '(font-lock-constant-face ((t (:foreground "Magenta"))))
- '(font-lock-doc-face ((t (:foreground "DarkOrange3"))))
- '(font-lock-function-name-face ((t (:bold nil :foreground "DarkOrchid"))))
- '(font-lock-keyword-face ((t (:foreground "Blue"))))
- '(font-lock-string-face ((t (:foreground "Red"))))
- '(font-lock-type-face ((t (:foreground "DarkSlateBlue"))))
- '(font-lock-variable-name-face ((t (:foreground "Sienna"))))
- '(font-lock-warning-face ((t (:bold t :foreground "Red"))))
- '(highlight ((t (:background "DarkSeaGreen1"))))
- '(ido-only-match ((t (:foreground "dark green" :weight bold))))
- '(info-title-1 ((t (:inherit outline-1))))
- '(info-title-2 ((t (:inherit outline-2))))
- '(info-title-3 ((t (:inherit outline-3))))
- '(info-title-4 ((t (:inherit outline-4))))
- '(mmm-default-submode-face ((t nil)))
- '(mode-line ((t (:foreground "White" :background "Blue"))))
- '(mode-line-inactive ((t (:foreground "White" :background "DimGray"))))
- '(org-date ((t (:foreground "dark gray" :underline t))))
- '(org-level-1 ((t (:height 1.18 :foreground "medium slate blue" :underline t))))
- '(org-level-2 ((t (:height 1.16 :foreground "sea green" :underline t :weight normal))))
- '(org-level-3 ((t (:height 1.14 :foreground "saddle brown" :underline t))))
- '(org-level-4 ((t (:height 1.12 :foreground "OrangeRed2" :underline t))))
- '(org-level-5 ((t (:height 1.1 :underline t))))
- '(outline-1 ((t (:height 1.2 :inherit font-lock-function-name-face :underline t :weight bold))))
- '(outline-2 ((t (:height 1.15 :inherit font-lock-variable-name-face :underline t :weight bold))))
- '(outline-3 ((t (:height 1.1 :inherit font-lock-keyword-face :underline t :weight bold))))
- '(outline-4 ((t (:height 1.05 :foreground "DodgerBlue3" :underline t))))
- '(region ((t (:foreground "Aquamarine" :background "Darkblue"))))
- '(secondary-selection ((t (:foreground "Green" :background "darkslateblue"))))
- '(eyebrowse-mode-line-active ((t (:foreground "Blue" :background "White" :bold t))))
- '(which-func ((t (:background "blue" :foreground "white"))))
- '(which-key-key-face ((t (:weight bold)))))
+;; from 20181227 I outsourced my font  config into a theme, located in
+;; .emacs.d/tom-past-century.el,  so that  I  can  load another  theme
+;; anytime I  like AND  switch back  to my  own config  w/o restarting
+;; emacs
+(add-hook 'after-init-hook (lambda () (load-theme 'tom-past-century t)))
 
 ;; unless we're on windoze
 (if (not (null tvd-win-home))
     (set-face-font 'default "Courier New"))
+
+;; --------------------------------------------------------------------------------
+;; ** emacs server
+
+;; [[http://lists.gnu.org/archive/html/bug-gnu-emacs/2018-06/msg00723.html][Based on this]]
+;; I check both predicates, just to be sure, only one of them doesn't work.
+(require 'server)
+(unless (or (server-running-p)
+            (and (boundp 'server-process) server-process))
+  (progn
+    (advice-add 'save-buffers-kill-terminal :before
+                (lambda (&rest args) (server-edit)))
+    (server-start)))
 
 ;; --------------------------------------------------------------------------------
 ;; ** variables
@@ -6576,6 +6552,9 @@ converted to PDF at the same location."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("d88c43fe03ac912e35963695caf0ae54bc6ce6365c3a42da434ef639f7a37399" default)))
  '(package-selected-packages (quote (magit)))
  '(safe-local-variable-values (quote ((ruby-indent-level 4)))))
 
@@ -6585,3 +6564,9 @@ converted to PDF at the same location."
 ;; know easily that something went wrong.
 
 (message "loading done")
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
