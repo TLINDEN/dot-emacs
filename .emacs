@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version ("20190108.01")          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version ("20190112.01")          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -754,6 +754,9 @@
 ;; 20190108.01
 ;;    - added server
 
+;; 20190112.01
+;;    - added wdired cleanup function
+
 ;; ** TODO
 
 ;; - check helpful https://github.com/wilfred/helpful
@@ -781,7 +784,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20190108.01")
+(defvar tvd-emacs-version "20190112.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -1845,6 +1848,37 @@ might be bad."
   (indent-region (point-min) (point-max)))
 
 (defalias 'cb        'cleanup-buffer)
+
+;; related, I  use this  to cleanup directories  and rename  files and
+;; directories to  my liking.  Sometimes  I get  a disk or  stick from
+;; Windows  users and  they  use every  character  available on  their
+;; keyboards to name files and dirs. I can't have this shit.
+;;
+(defun cleanup-dired-buffer ()
+  "If inside a wdired (edit) buffer, rename everything"
+  (interactive)
+  (delete-trailing-whitespace)
+  (save-excursion
+    (replace-regexp "[\(\)'`]" "" nil (point-min) (point-max))
+    (replace-string " " "-" nil (point-min) (point-max))
+    (replace-string "---" "-" nil (point-min) (point-max))
+    (replace-string "ä" "ae" nil (point-min) (point-max))
+    (replace-string "ö" "oe" nil (point-min) (point-max))
+    (replace-string "ü" "ue" nil (point-min) (point-max))
+    (replace-string "Ä" "Ae" nil (point-min) (point-max))
+    (replace-string "Ö" "Oe" nil (point-min) (point-max))
+    (replace-string "Ü" "Ue" nil (point-min) (point-max))
+    (replace-string "ß" "ss" nil (point-min) (point-max))
+    (replace-string ".." "." nil (point-min) (point-max))))
+
+(defun cleanup-dir()
+  "Cleanup wdired buffer in one whole step, used for emacsclient buffers"
+  (interactive)
+  (wdired-change-to-wdired-mode)
+  (cleanup-dired-buffer)
+  (wdired-finish-edit)
+  (kill-this-buffer))
+
 
 ;; --------------------------------------------------------------------------------
 ;; ** Remove Umlauts and other crab in current buffer
@@ -6532,6 +6566,8 @@ converted to PDF at the same location."
 
 ;; [[http://lists.gnu.org/archive/html/bug-gnu-emacs/2018-06/msg00723.html][Based on this]]
 ;; I check both predicates, just to be sure, only one of them doesn't work.
+
+;; FIXME: check if 'server-socket-dir/server exists as well
 (require 'server)
 (unless (or (server-running-p)
             (and (boundp 'server-process) server-process))
