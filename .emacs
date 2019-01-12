@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version ("20190112.01")          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version ("20190112.02")          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -757,6 +757,9 @@
 ;; 20190112.01
 ;;    - added wdired cleanup function
 
+;; 20190112.02
+;;    - enhanced cleaner
+
 ;; ** TODO
 
 ;; - check helpful https://github.com/wilfred/helpful
@@ -784,7 +787,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20190112.01")
+(defvar tvd-emacs-version "20190112.02")
 
 ;; --------------------------------------------------------------------------------
 
@@ -1859,9 +1862,9 @@ might be bad."
   (interactive)
   (delete-trailing-whitespace)
   (save-excursion
-    (replace-regexp "[\(\)'`]" "" nil (point-min) (point-max))
+    (replace-regexp "[\(\)'`#,_&\!]" "" nil (point-min) (point-max))
     (replace-string " " "-" nil (point-min) (point-max))
-    (replace-string "---" "-" nil (point-min) (point-max))
+    (replace-regexp "--*" "-" nil (point-min) (point-max))
     (replace-string "ä" "ae" nil (point-min) (point-max))
     (replace-string "ö" "oe" nil (point-min) (point-max))
     (replace-string "ü" "ue" nil (point-min) (point-max))
