@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version ("20190112.02")          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version ("20190114.01")          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -760,6 +760,9 @@
 ;; 20190112.02
 ;;    - enhanced cleaner
 
+;; 20190114.01
+;;    - disabled variable pitch, annoys me
+
 ;; ** TODO
 
 ;; - check helpful https://github.com/wilfred/helpful
@@ -787,7 +790,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20190112.02")
+(defvar tvd-emacs-version "20190114.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -3797,9 +3800,6 @@ down and unfold it, otherwise jump paragraph as usual."
 
                                         ; use nicer bullets
                  (org-bullets-mode 1)
-
-                 ;; looks better, esp. w/ agenda
-                 (variable-pitch-mode 1)
 
                  (org-babel-do-load-languages 'org-babel-load-languages
                                               '((python     . t)
