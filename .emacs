@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version ("20190114.01")          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version ("20190214.01")          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -763,6 +763,9 @@
 ;; 20190114.01
 ;;    - disabled variable pitch, annoys me
 
+;; 20190214.01
+;;    - fixed C-c C-c in shell-script-mode
+
 ;; ** TODO
 
 ;; - check helpful https://github.com/wilfred/helpful
@@ -790,7 +793,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20190114.01")
+(defvar tvd-emacs-version "20190214.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -2113,6 +2116,16 @@ col1, col2"
 (setq auto-mode-alist
       (append '(("\\.\\(py\\)$"  . python-mode))
               auto-mode-alist))
+;; --------------------------------------------------------------------------------
+;; *** Shell-Script Mode
+
+;; C-c C-c [un-]comments everywhere, force in shell-script-mode as well
+(add-hook
+ 'sh-mode-hook
+ (function
+  (lambda()
+    (local-set-key (kbd "C-c C-c")  'comment-or-uncomment-region-or-line))))
+
 ;; --------------------------------------------------------------------------------
 
 ;; *** cperl mode
