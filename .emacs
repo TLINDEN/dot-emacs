@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version ("20190226.01")          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version ("20190412.01")          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -769,6 +769,9 @@
 ;; 20190226.01
 ;;    - unbound F6 and F5 from cperl mode
 
+;; 20190412.01
+;;    - added yaml mode and highlight indent mode
+
 ;; ** TODO
 
 ;; - check helpful https://github.com/wilfred/helpful
@@ -796,7 +799,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20190226.01")
+(defvar tvd-emacs-version "20190412.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -2937,6 +2940,14 @@ string).  It returns t if a new expansion is found, nil otherwise."
 
 (add-hook 'pod-mode-hook 'mmm-mode-on)
 
+;; *** Yaml Mode
+(require 'yaml-mode)
+(add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
+(add-to-list 'auto-mode-alist '("\\.j2\\'" . yaml-mode))
+
+(add-hook 'yaml-mode-hook
+          '(lambda ()
+             (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
 ;; ** Text Manupilation
 ;; *** expand-region
 
@@ -5990,6 +6001,16 @@ Use C-x C-x to access eyebrowse directly.
 (global-set-key (kbd "C-x C-x ?")       'hydra-eyebrowse/body)
 
 ;; There's also some face config, see defcustom at end of file!
+
+;; *** Highlighting Indentation
+;; provides: highlight-indentation-mode and highlight-indentation-current-column-mode
+(require 'highlight-indentation)
+
+(add-something-to-mode-hooks
+ '(yaml python ruby) 'highlight-indentation-current-column-mode)
+
+(set-face-background 'highlight-indentation-face "#e3e3d3")
+(set-face-background 'highlight-indentation-current-column-face "#c3b3b3")
 
 ;; ** Emacs Interface
 ;; *** Parens
