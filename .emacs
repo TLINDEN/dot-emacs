@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version ("20190412.01")          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version ("20190513.01")          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -772,6 +772,9 @@
 ;; 20190412.01
 ;;    - added yaml mode and highlight indent mode
 
+;; 20190513.01
+;;    - added scheduled task org capture template along with wrappers etc
+
 ;; ** TODO
 
 ;; - check helpful https://github.com/wilfred/helpful
@@ -799,7 +802,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20190412.01")
+(defvar tvd-emacs-version "20190513.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -3859,6 +3862,13 @@ down and unfold it, otherwise jump paragraph as usual."
         ("t" "Todo Item" entry (file+headline tvd-org-file "Manual-Agenda-Tasks")
          "* TODO %^{title}\n:LOGBOOK:\n%u:END:\n" :prepend t :immediate-finish t)
 
+        ;; ("s" "Scheduled Item" entry (file+headline tvd-org-file "Scheduled-Agenda-Tasks")
+        ;;  "* TODO %^{title}\n:SCHEDULED: <%(org-read-date)>\nLOGBOOK:\n%u:END:\n" :prepend t :immediate-finish t)
+
+        ("s" "Scheduled Item" entry (file+headline tvd-org-file "Scheduled-Agenda-Tasks")
+         "* TODO %^{title}\n:SCHEDULED: <%^t>\nLOGBOOK:\n%u:END:\n" :prepend t :immediate-finish t)
+
+
         ("j" "Journal" entry (file+headline tvd-org-file "Kurznotizen")
          "* TODO %^{title}\n%u\n  %i%?\n" :prepend t :jump-to-captured t)
 
@@ -3985,16 +3995,26 @@ down and unfold it, otherwise jump paragraph as usual."
 
 ;; A  wrapper which  executes  an  org capture  directly.  `t' is  the
 ;; shortcut for the capture, defined above in org mode.
-(defun tvd-org-agenda-capture (&optional vanilla)
-  "Capture a task in agenda mode, using the date at point.
+(defun tvd-org-agenda-capture (task)
+  "Capture a task in agenda mode, using the date at point"
+  (interactive)
+  (let ((org-overriding-default-time (org-get-cursor-date)))
+    (call-interactively (org-capture nil task))
+    (org-agenda-redo t)))
 
-If VANILLA is non-nil, run the standard `org-capture'."
-  (interactive "P")
-  (if vanilla
-      (org-capture)
-    (let ((org-overriding-default-time (org-get-cursor-date)))
-      (org-capture nil "t")
-      (org-agenda-redo t))))
+(defun tvd-org-agenda-capture-todo ()
+  "Capture a todo task in agenda mode"
+  (interactive)
+  (tvd-org-agenda-capture "t"))
+
+(defun tvd-org-agenda-capture-scheduled ()
+  "Capture a scheduled task in agenda mode"
+  (interactive)
+  (tvd-org-agenda-capture "s"))
+
+
+
+
 
 ;; Sometimes  it  is  nice  to  see  the  agenda  alone,  so  I  press
 ;; `o'. However, since follow mode is  enabled, once I move point, the
@@ -4022,11 +4042,12 @@ Org Agenda (_q_uit)
 
 ^Tasks^                             ^Options^             ^Movement^
 -^^^^^^-------------------------------------------------------------------------------------
-_n_: create new task                _f_: follow =?f?      ENTER:     switch to entry
-_d_: mark task done and archive     _e_: entry  =?e?      C-<up>:    go one entry up
-_w_: mark task waiting              _o_: one window       C-<down>:  go one entry down
-_t_: toggle todo state              ^^                    M-<up>:    move entry up
-_z_: archive task                   ^^                    M-<down>:  move entry down
+_n_: create new todo task           _f_: follow =?f?      ENTER:     switch to entry
+_N_: create new scheduled task      _e_: entry  =?e?      C-<up>:    go one entry up
+_d_: mark task done and archive     _o_: one window       C-<down>:  go one entry down
+_w_: mark task waiting              ^^                    M-<up>:    move entry up
+_t_: toggle todo state              ^^                    M-<down>:  move entry down
+_z_: archive task                   ^ ^
 _+_: increase prio                  ^Marking^
 _-_: decrease prio                  _m_: mark entry
 _g_: refresh                        _u_: un-mark entry
@@ -4035,7 +4056,8 @@ _a_: add a note to the entry        _B_: bulk action
 
 "
   ("a" tvd-org-agenda-edit-entry nil)
-  ("n" tvd-org-agenda-capture nil)
+  ("n" tvd-org-agenda-capture-todo nil)
+  ("N" tvd-org-agenda-capture-scheduled nil)
   ("o" tvd-org-agenda-solitair nil)
   ("g" tvd-org-agenda-redo)
   ("t" org-agenda-todo)
@@ -4061,7 +4083,8 @@ _a_: add a note to the entry        _B_: bulk action
                                                     org-log-into-drawer t
                                                     org-agenda-entry-text-mode t
                                                     org-agenda-sorting-strategy '(priority-down timestamp-down))
-                                              (local-set-key (kbd "n") 'tvd-org-agenda-capture)
+                                              (local-set-key (kbd "n") 'tvd-org-agenda-capture-todo)
+                                              (local-set-key (kbd "N") 'tvd-org-agenda-capture-scheduled)
                                               (local-set-key (kbd "o") 'tvd-org-agenda-solitair)
                                               (local-set-key (kbd "a") 'tvd-org-agenda-edit-entry)
                                               (local-set-key (kbd "d") 'tvd-org-agenda-done)
