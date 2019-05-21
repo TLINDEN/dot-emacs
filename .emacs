@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version ("20190520.01")          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version ("20190521.01")          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -778,6 +778,9 @@
 ;; 20190520.01
 ;;    - fixed 'n' in agenda, added 'k', fixed scheduled task template
 
+;; 20190521.01
+;;    - split agenda window left
+
 ;; ** TODO
 
 ;; - check helpful https://github.com/wilfred/helpful
@@ -805,7 +808,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20190520.01")
+(defvar tvd-emacs-version "20190521.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -3960,9 +3963,11 @@ down and unfold it, otherwise jump paragraph as usual."
 
 ;; A shortcut to reach my custom view directly
 (defun agenda ()
-  "Visit my org agenda directly."
+  "Visit my org agenda directly, splits left"
   (interactive)
-  (org-agenda nil "o"))
+  (org-agenda nil "o")
+  (tvd-flip-windows)
+  (other-window-or-switch-buffer))
 
 ;; Add a line of text to the top of an existing TODO entry and refresh
 ;; the agenda
