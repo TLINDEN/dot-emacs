@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version ("20190513.01")          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version ("20190520.01")          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -775,6 +775,9 @@
 ;; 20190513.01
 ;;    - added scheduled task org capture template along with wrappers etc
 
+;; 20190520.01
+;;    - fixed 'n' in agenda, added 'k', fixed scheduled task template
+
 ;; ** TODO
 
 ;; - check helpful https://github.com/wilfred/helpful
@@ -802,7 +805,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20190513.01")
+(defvar tvd-emacs-version "20190520.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -3862,12 +3865,8 @@ down and unfold it, otherwise jump paragraph as usual."
         ("t" "Todo Item" entry (file+headline tvd-org-file "Manual-Agenda-Tasks")
          "* TODO %^{title}\n:LOGBOOK:\n%u:END:\n" :prepend t :immediate-finish t)
 
-        ;; ("s" "Scheduled Item" entry (file+headline tvd-org-file "Scheduled-Agenda-Tasks")
-        ;;  "* TODO %^{title}\n:SCHEDULED: <%(org-read-date)>\nLOGBOOK:\n%u:END:\n" :prepend t :immediate-finish t)
-
         ("s" "Scheduled Item" entry (file+headline tvd-org-file "Scheduled-Agenda-Tasks")
-         "* TODO %^{title}\n:SCHEDULED: <%^t>\nLOGBOOK:\n%u:END:\n" :prepend t :immediate-finish t)
-
+         "* TODO %^t %^{title}\n:LOGBOOK:\n%u:END:\n" :prepend t :immediate-finish t)
 
         ("j" "Journal" entry (file+headline tvd-org-file "Kurznotizen")
          "* TODO %^{title}\n%u\n  %i%?\n" :prepend t :jump-to-captured t)
@@ -3999,7 +3998,7 @@ down and unfold it, otherwise jump paragraph as usual."
   "Capture a task in agenda mode, using the date at point"
   (interactive)
   (let ((org-overriding-default-time (org-get-cursor-date)))
-    (call-interactively (org-capture nil task))
+    (org-capture nil task)
     (org-agenda-redo t)))
 
 (defun tvd-org-agenda-capture-todo ()
@@ -4048,11 +4047,12 @@ _d_: mark task done and archive     _o_: one window       C-<down>:  go one entr
 _w_: mark task waiting              ^^                    M-<up>:    move entry up
 _t_: toggle todo state              ^^                    M-<down>:  move entry down
 _z_: archive task                   ^ ^
-_+_: increase prio                  ^Marking^
-_-_: decrease prio                  _m_: mark entry
-_g_: refresh                        _u_: un-mark entry
-_s_: save org buffer(s)             _U_: un-mark all
-_a_: add a note to the entry        _B_: bulk action
+_+_: increase prio
+_-_: decrease prio                  ^Marking^
+_g_: refresh                        _m_: mark entry
+_s_: save org buffer(s)             _u_: un-mark entry
+_a_: add a note to the entry        _U_: un-mark all
+_k_: delete a task w/o archiving    _B_: bulk action
 
 "
   ("a" tvd-org-agenda-edit-entry nil)
@@ -4075,6 +4075,7 @@ _a_: add a note to the entry        _B_: bulk action
   ("u" org-agenda-bulk-unmark nil)
   ("U" org-agenda-bulk-remove-all-marks nil)
   ("B" org-agenda-bulk-action nil)
+  ("k" org-agenda-kill nil)
   ("q" nil nil :color red))
 
 ;; Configuration and key bindings for org agenda (same as in the hydra)
@@ -4092,6 +4093,7 @@ _a_: add a note to the entry        _B_: bulk action
                                               (local-set-key (kbd "g") 'tvd-org-agenda-redo)
                                               (local-set-key (kbd "f") 'org-agenda-follow-mode)
                                               (local-set-key (kbd "e") 'org-agenda-entry-text-mode)
+                                              (local-set-key (kbd "k") 'org-agenda-kill)
                                               (local-set-key (kbd "z") 'org-agenda-archive-to-archive-sibling)
                                               (local-set-key (kbd "C-<up>") 'org-agenda-previous-item)
                                               (local-set-key (kbd "C-<down>") 'org-agenda-next-item)
