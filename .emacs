@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version ("20190521.01")          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version ("20190705.01")          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -781,6 +781,9 @@
 ;; 20190521.01
 ;;    - split agenda window left
 
+;; 20190705.01
+;;    - added smerge hydra plus alias 'merge
+
 ;; ** TODO
 
 ;; - check helpful https://github.com/wilfred/helpful
@@ -808,7 +811,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20190521.01")
+(defvar tvd-emacs-version "20190705.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -5521,6 +5524,9 @@ defun."
       (magit-status dir)))
   (define-key magit-mode-map (kbd "C") 'tvd-switch-magit-repo)
 
+  (require 'magit-gh-pulls)
+  (add-hook 'magit-mode-hook 'turn-on-magit-gh-pulls)
+
   ;; via
   ;; http://manuel-uberti.github.io/emacs/2018/02/17/magit-bury-buffer/:
   ;; a great  enhancement, when closing  the magit status  buffer, ALL
@@ -5832,6 +5838,29 @@ T - tag prefix
         (file2 (pop command-line-args-left)))
     (ediff file1 file2)))
 (add-to-list 'command-switch-alist '("diff" . command-line-diff))
+;; --------------------------------------------------------------------------------
+;; *** Smerge Config
+
+;; smerge-mode is being issued during editing of conflicts from magit,
+;; however, I  hate its default  prefix, but don't have  any practical
+;; prefixes  left AND  am using  it far  too rare  to deserve  its own
+;; prefix. So just a hydra will do.
+
+(defhydra hydra-smerge (:color blue :timeout 30.0)
+  "
+^Smerge Mode^
+^^-------------------------------------------------------
+_n_ext conflict         keep _u_pper    m_e_rge conflicts in Ediff
+_p_revious conflict     keep _l_ower    _q_uit"
+
+  ("n"  smerge-next       nil :exit nil)
+  ("p"  smerge-prev       nil :exit nil)
+  ("u"  smerge-keep-upper nil :exit nil)
+  ("l"  smerge-keep-lower nil :exit nil)
+  ("e"  smerge-ediff      nil :color red)
+  ("q"  nil               nil :color red))
+
+(defalias 'merge      'hydra-smerge/body)
 ;; --------------------------------------------------------------------------------
 ;; *** Projectile
 (require 'projectile)
