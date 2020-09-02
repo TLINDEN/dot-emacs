@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version ("20200101.01")          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version ("20200902.01")          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -785,6 +785,9 @@
 ;;    - added smerge hydra plus alias 'merge
 ;;    - fixed window resize hydra help
 
+;; 20200902.01
+;;    - added rust mode
+
 ;; ** TODO
 
 ;; - check helpful https://github.com/wilfred/helpful
@@ -812,7 +815,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20200101.01")
+(defvar tvd-emacs-version "20200902.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -2113,6 +2116,22 @@ col1, col2"
 (add-to-list 'auto-mode-alist '("\\.vapi$" . vala-mode))
 (add-to-list 'file-coding-system-alist '("\\.vala$" . utf-8))
 (add-to-list 'file-coding-system-alist '("\\.vapi$" . utf-8))
+
+;; --------------------------------------------------------------------------------
+;; *** rust  mode
+(autoload 'rust-mode "rust-mode" nil t)
+
+(defun rustlings-done ()
+  "I use this with rustlings"
+  (interactive)
+  (search-backward "DONE")
+  (move-beginning-of-line 1)
+  (kill-line)
+  (save-buffer))
+
+(setq auto-mode-alist
+      (append '(("\\.\\(rs\\)$"  . rust-mode))
+              auto-mode-alist))
 
 ;; --------------------------------------------------------------------------------
 
