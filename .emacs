@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version ("20200902.01")          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version ("20200904.01")          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -788,6 +788,9 @@
 ;; 20200902.01
 ;;    - added rust mode
 
+;; 20200904.01
+;;    - rust+smartparens
+
 ;; ** TODO
 
 ;; - check helpful https://github.com/wilfred/helpful
@@ -815,7 +818,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20200902.01")
+(defvar tvd-emacs-version "20200904.01")
 
 ;; --------------------------------------------------------------------------------
 
@@ -2340,7 +2343,7 @@ Used when enabling smartparens-mode."
 
 ;; automatically enable where needed
 (add-something-to-mode-hooks
- '(emacs-lisp ielm lisp lisp-interaction scheme slime-repl ) 'smartparens-mode)
+ '(rust emacs-lisp ielm lisp lisp-interaction scheme slime-repl ) 'smartparens-mode)
 
 ;; also in some select prog modes
 (add-something-to-mode-hooks
