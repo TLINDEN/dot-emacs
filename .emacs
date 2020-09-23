@@ -5500,11 +5500,13 @@ defun."
   "
 RCS revision control. Current buffer %(file-name-nondirectory (buffer-file-name)) is under RCS: %(rcs-is-under-revision).
 
- _co_: Checkout
- _ci_: Checkin
-  _d_: Diff
-  _u_: Undo Changes
-  _l_: View revision log
+ _co_: Checkout            (C-x v v)
+ _ci_: Checkin             (C-x v v)
+  _d_: Diff                (C-x v =)
+  _u_: Undo Changes        (C-x v u)
+  _l_: View revision log   (C-x v l)
+  _s_: Status              (C-x v d)
+  _m_: Merge               (C-x v m)
   _q_: Cancel
 
 ^^^^^^^^---------------------
@@ -5517,7 +5519,9 @@ Reach this hydra with <C-x R>
   ("d"  vc-version-diff)
   ("u"  vc-revert-buffer)
   ("l"  vc-print-log)
-  ("q" nil nil :color red))
+  ("s"  vc-dir)
+  ("m"  vc-merge)
+  ("q"  nil nil :color red))
 
 (global-set-key (kbd "C-x R") 'hydra-rcs/body)
 
