@@ -791,6 +791,9 @@
 ;; 20200904.01
 ;;    - rust+smartparens
 
+;; 20190923.01
+;;    - added RCS
+
 ;; ** TODO
 
 ;; - check helpful https://github.com/wilfred/helpful
@@ -5472,6 +5475,60 @@ defun."
 (require 'followcursor-mode)
 
 
+
+;; *** RCS Mode
+(defun rcs-ci-co nil
+  "check in check out the file if it is under vc with rcs
+        with a prefix other than 1 only check-in"
+  (when (eq (vc-backend (buffer-file-name)) 'RCS)
+    (if (= args 1)
+        (save-window-excursion
+          (vc-toggle-read-only)
+          (call-interactively 'log-edit-done)
+          (vc-toggle-read-only))
+      (vc-toggle-read-only))))
+
+(defun rcs-diff (historic &optional not-urgent)
+  "my vc diff, same as vc-diff but in case of rcs, display the
+diffs between current version and previous one (with a prefix
+calls vc-diff)"
+  (interactive (list current-prefix-arg t))
+  (let ((file (buffer-file-name)))
+  (if historic
+      (call-interactively 'vc-version-diff)
+    (if (eq (vc-backend file) 'RCS)
+        (vc-version-diff file  (vc-previous-version (vc-workfile-version file)) (vc-workfile-version file))
+    (call-interactively 'vc-diff)))))
+
+(defun rcs-is-under-revision ()
+    "Return t in case current buffer is RCS revisioned"
+    (if (eq (vc-backend (buffer-file-name)) 'RCS)
+        "[X]"  "[ ]"))
+
+(defhydra hydra-rcs (:color blue)
+  "
+RCS revision control. Current buffer %(file-name-nondirectory (buffer-file-name)) is under RCS: %(rcs-is-under-revision).
+
+ _co_: Checkout
+ _ci_: Checkin
+  _d_: Diff
+  _u_: Undo Changes
+  _l_: View revision log
+  _q_: Cancel
+
+^^^^^^^^---------------------
+Reach this hydra with <C-x R>
+^^^^^^^^---------------------
+
+"
+  ("co" rcs-ci-co)
+  ("ci" rcs-ci-co)
+  ("d"  rcs-diff)
+  ("u"  vc-revert-buffer)
+  ("l"  vc-print-log)
+  ("q" nil nil :color red))
+
+(global-set-key (kbd "C-x R") 'hydra-rcs/body)
 
 ;; *** Magit
 
