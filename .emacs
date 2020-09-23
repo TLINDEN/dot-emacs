@@ -5505,6 +5505,9 @@ calls vc-diff)"
     (if (eq (vc-backend (buffer-file-name)) 'RCS)
         "[X]"  "[ ]"))
 
+;; always lock after checkout
+(setq vc-rcs-checkin-switches "-l")
+
 (defhydra hydra-rcs (:color blue)
   "
 RCS revision control. Current buffer %(file-name-nondirectory (buffer-file-name)) is under RCS: %(rcs-is-under-revision).
