@@ -5488,18 +5488,6 @@ defun."
           (vc-toggle-read-only))
       (vc-toggle-read-only))))
 
-(defun rcs-diff (historic &optional not-urgent)
-  "my vc diff, same as vc-diff but in case of rcs, display the
-diffs between current version and previous one (with a prefix
-calls vc-diff)"
-  (interactive (list current-prefix-arg t))
-  (let ((file (buffer-file-name)))
-  (if historic
-      (call-interactively 'vc-version-diff)
-    (if (eq (vc-backend file) 'RCS)
-        (vc-version-diff file  (vc-previous-version (vc-workfile-version file)) (vc-workfile-version file))
-    (call-interactively 'vc-diff)))))
-
 (defun rcs-is-under-revision ()
     "Return t in case current buffer is RCS revisioned"
     (if (eq (vc-backend (buffer-file-name)) 'RCS)
@@ -5526,7 +5514,7 @@ Reach this hydra with <C-x R>
 "
   ("co" rcs-ci-co)
   ("ci" rcs-ci-co)
-  ("d"  rcs-diff)
+  ("d"  vc-version-diff)
   ("u"  vc-revert-buffer)
   ("l"  vc-print-log)
   ("q" nil nil :color red))
