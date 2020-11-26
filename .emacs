@@ -1,4 +1,4 @@
-;; Toms Emacs Config - portable - version ("20200904.01")          -*-emacs-lisp-*-
+;; Toms Emacs Config - portable - version ("20201126.01")          -*-emacs-lisp-*-
 ;; * Introduction
 
 ;; This  is my  emacs config,  it is  more than  twenty years  old. It
@@ -794,6 +794,9 @@
 ;; 20190923.01
 ;;    - added RCS
 
+;; 20201126.01
+;;    - -gh
+
 ;; ** TODO
 
 ;; - check helpful https://github.com/wilfred/helpful
@@ -821,7 +824,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20200904.01")
+(defvar tvd-emacs-version "20201126.01")
 
 ;; --------------------------------------------------------------------------------
 
