@@ -5599,8 +5599,9 @@ Reach this hydra with <C-x R>
       (magit-status dir)))
   (define-key magit-mode-map (kbd "C") 'tvd-switch-magit-repo)
 
-  (require 'magit-gh-pulls)
-  (add-hook 'magit-mode-hook 'turn-on-magit-gh-pulls)
+  ;; scheisse
+  ;; (require 'magit-gh-pulls)
+  ;; (add-hook 'magit-mode-hook 'turn-on-magit-gh-pulls)
 
   ;; via
   ;; http://manuel-uberti.github.io/emacs/2018/02/17/magit-bury-buffer/:
