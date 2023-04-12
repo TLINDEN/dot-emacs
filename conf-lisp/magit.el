@@ -24,9 +24,9 @@
 
              ;; configure magit
              (with-eval-after-load 'magit
-               (dolist (dir (list (expand-file-name "~/D/github")
+               (dolist (dir (list (expand-file-name "~/dev/D/github")
                                   (expand-file-name "~/fits/git")
-                                  (expand-file-name "~/dev/git")))
+                                  (expand-file-name "~/dev")))
                  (when (file-exists-p dir)
                    (add-to-list 'magit-repository-directories (cons dir 1))))
                (setq magit-completing-read-function 'magit-ido-completing-read)
