@@ -277,3 +277,6 @@ in between will be killed. If INS is non-nil, it will be inserted then."
 
              (advice-add 'iedit-mode :after '(lambda (&rest args)  ;; restore previously saved
                                                (setq buffer-undo-list tvd-buffer-undo-list))))
+
+(add-hook 'text-mode-hook
+         (lambda () (electric-indent-local-mode -1)))

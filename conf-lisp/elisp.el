@@ -122,7 +122,7 @@ Returns t if version changed, nil otherwise."
             ;; enable outshine mode
             (outshine-hook-function)
 
-            (electric-indent-mode t)))
+            (electric-indent-local-mode t)))
 
 ;; use UP arrow for history in *ielm* as well, just as C-up
 (add-hook 'comint-mode-hook
