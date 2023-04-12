@@ -5,7 +5,19 @@
 ;; I'm using an outdated config somewhere.
 (defvar tvd-emacs-version "20230412.01")
 
-;; from purcell's config
+;; I prefer a bare bones emacs window without any distractions, so turn them off.
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+(setq use-dialog-box nil)
+(scroll-bar-mode 0)
+
+;;; ** stay silent on startup
+(setq initial-scratch-message "")
+(setq inhibit-startup-message t)
+(setq inhibit-startup-screen t)
+(setq inhibit-startup-echo-area-message "scip")
+
+;; from purcell's config, used below
 (defun sanityinc/add-subdirs-to-load-path (parent-dir)
   "Add every non-hidden subdir of PARENT-DIR to `load-path'."
   (let ((default-directory parent-dir))
@@ -66,7 +78,6 @@
 ;; indent defaults, also look for indentation.el
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
-
 
 
 

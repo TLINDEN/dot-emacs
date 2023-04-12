@@ -50,22 +50,6 @@
 (define-key key-translation-map [?\C-h] [?\C-?])
 
 
-;;; ** hide menu- and tool-bar
-
-;; I prefer a bare bones emacs window without any distractions, so turn them off.
-(menu-bar-mode -1)
-(tool-bar-mode -1)
-(setq use-dialog-box nil)
-(scroll-bar-mode 0)
-
-
-;;; ** stay silent on startup
-(setq initial-scratch-message "")
-(setq inhibit-startup-message t)
-(setq inhibit-startup-screen t)
-(setq inhibit-startup-echo-area-message "scip")
-
-
 ;;; ** y means yes
 ;; y is shorter than yes and less error prone.
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -170,13 +154,10 @@
 ;; delete whole lines
 (setq kill-whole-line t)
 
-;; middle-mouse and C-y use both X-selection and Emacs-clipboard
-;; (if (null tvd-win-home)
-;;     (progn  ; unix
-;;       (setq x-select-enable-primary t)
-;;       (setq x-select-enable-clipboard nil))
-;;   (progn    ; win
-;;     (global-set-key (kbd "<up-mouse-2>") 'yank)))
+;; middle-mouse, shift-INSERT use both X-selection and Emacs-clipboard
+(setq x-select-enable-primary t)
+(setq x-select-enable-clipboard nil)
+(setq select-enable-primary t) ;; c-y use primary
 
 ;; marked region automatically copied, also on win
 (setq mouse-drag-copy-region t)
