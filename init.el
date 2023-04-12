@@ -151,7 +151,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(beacon which-key goto-last-change browse-kill-ring fringe-current-line swiper smex undo-tree fic-mode cmake-mode yaml-mode windresize web-mode use-package tablist solarized-theme smartparens rust-mode projectile persistent-scratch org-bullets markdown-mode magit iedit ibuffer-vc ibuffer-tramp hydra htmlize highlight-indentation go-mode eyebrowse elmacro dumb-jump dired-ranger dired-k dired-filter default-text-scale change-inner buffer-move))
+   '(dictcc beacon which-key goto-last-change browse-kill-ring fringe-current-line swiper smex undo-tree fic-mode cmake-mode yaml-mode windresize web-mode use-package tablist solarized-theme smartparens rust-mode projectile persistent-scratch org-bullets markdown-mode magit iedit ibuffer-vc ibuffer-tramp hydra htmlize highlight-indentation go-mode eyebrowse elmacro dumb-jump dired-ranger dired-k dired-filter default-text-scale change-inner buffer-move))
  '(safe-local-variable-values '((ruby-indent-level 4))))
 
 ;; ** done
