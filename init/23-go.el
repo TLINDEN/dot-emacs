@@ -1,0 +1,1 @@
+../conf-lisp/go.el
