@@ -10,6 +10,9 @@
 ;; Basic config
 (ido-mode t)
 (ido-everywhere nil)
+
+(use-package ido-completing-read+)
+
 (setq ido-enable-flex-matching t)
 (setq ido-use-filename-at-point nil)
 (setq ido-use-virtual-buffers t)
