@@ -100,7 +100,7 @@ Returns t if version changed, nil otherwise."
         (beginning-of-buffer)
         (re-search-forward ";; .. Changelog")
         (next-line)
-        (tvd-outshine-end-of-section)
+        ;; (tvd-outshine-end-of-section)
         (when newversion
           (insert (format "\n;; %s\n" tvd-emacs-version)))
         (insert (format ";;    - %s\n" entry)))))
@@ -116,11 +116,8 @@ Returns t if version changed, nil otherwise."
                   show-trailing-whitespace t)
             (eldoc-mode t)
 
-            ;; enable outline (with outshine)
+            ;; enable outline
             (outline-minor-mode)
-
-            ;; enable outshine mode
-            (outshine-hook-function)
 
             (electric-indent-local-mode t)))
 

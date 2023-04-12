@@ -57,16 +57,12 @@ otherwise fold current level and jump one level up."
   '(progn
      (add-hook 'outline-minor-mode-hook
                (lambda ()
-                 ;; narrowing, we use outshine functions, it's loaded anyway
-                 (defalias 'n 'outshine-narrow-to-subtree)
+                 ;; narrowing, we use org functions, it's loaded anyway
+                 (defalias 'n 'org-narrow-to-subtree)
                  (defalias 'w 'widen)
                  (define-key outline-minor-mode-map (kbd "<C-up>")   'tvd-outline-heading-up)
                  (define-key outline-minor-mode-map (kbd "<C-down>") 'tvd-outline-heading-down)
                  ;;(define-key outline-minor-mode-map (kbd "<C-left>") 'tvd-outline-left-or-level-up)
                  ))))
 
-;; orange fringe when narrowed
-(advice-add 'outshine-narrow-to-subtree :after
-            '(lambda (&rest args)
-               (set-face-attribute 'fringe nil :background tvd-fringe-narrow-bg)))
 
