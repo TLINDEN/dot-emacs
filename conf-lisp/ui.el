@@ -4,7 +4,7 @@
 
 (use-package fic-mode
           :config
-          (add-something-to-mode-hooks '(c c++ cperl vala web emacs-lisp ruby python yaml) 'turn-on-fic-mode))
+          (add-something-to-mode-hooks '(c c++ cperl vala web emacs-lisp ruby python yaml) 'fic-mode))
 
 
 ;;; *** UNDO Tree Mode
