@@ -279,4 +279,7 @@ in between will be killed. If INS is non-nil, it will be inserted then."
                                                (setq buffer-undo-list tvd-buffer-undo-list))))
 
 (add-hook 'text-mode-hook
+          (lambda () (electric-indent-local-mode -1)))
+
+(add-hook 'fundamental-mode-hook
          (lambda () (electric-indent-local-mode -1)))
