@@ -1,3 +1,4 @@
+# -*-text-*-
 auto-save-list
 backups
 el-get
@@ -10,5 +11,6 @@ smex-items
 ido.last
 transient
 places
+notizen.org
 daemon.log
 daemon.pid
