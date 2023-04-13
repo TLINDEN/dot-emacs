@@ -10,3 +10,5 @@ smex-items
 ido.last
 transient
 places
+daemon.log
+daemon.pid
