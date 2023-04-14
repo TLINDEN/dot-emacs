@@ -5,9 +5,39 @@
 ;; Sample: C-x-f /$host:/$file ($host as of .ssh/config or direct, $file including completion)
 
 ;; doku: [[http://www.gnu.org/software/tramp/][gnu.org]]
-(setq tramp-default-method "ssh"
-      tramp-default-user nil
-      tramp-verbose 1
-      ido-enable-tramp-completion t)
+;; use tramp version, see:
+;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=39399
+
+;; (setq tramppkg (expand-file-name "el-get/tramp" tvd-config-dir))
+
+;; doesnt work:
+;; (el-get-bundle tramp
+;;   :type git
+;;   :url "https://git.savannah.gnu.org/git/tramp.git"
+;;   ;; tramp-loaddefs.el uses `tramp-verion' before it's defined,
+;;   ;; work around this by loading trampver.el first.
+;;   :autoloads ("trampver.el" "tramp-loaddefs.el")
+;;   :checkout "ELPA-2.6.0.3")
+
+;;; Tramp version fix
+;; for  now  I have  to  install  tramp  from elpa  manually,  because
+;; use-package doesn't  do it,  since it's  already loaded  on startup
+;; (because enabled by default).
+;;
+;; The el-get  version above doesn't work  as well, it leads  to mixed
+;; loading of system tramp and git tramp.
+;;
+;; FIXME: find out how to force use-package to install and use elpa tramp!
+(setq tramppkg (expand-file-name "tramp-2.6.0.3" package-user-dir))
+
+(use-package tramp
+  :load-path tramppkg
+  :ensure t
+  :config
+  (setq tramp-default-method "ssh"
+        tramp-default-user nil
+        tramp-verbose 9
+        ;;ido-enable-tramp-completion t
+        ))
 
 ;; see also backup section in system.el
