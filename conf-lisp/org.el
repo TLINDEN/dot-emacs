@@ -152,10 +152,10 @@ down and unfold it, otherwise jump paragraph as usual."
                                         ; todo colors
                    (setq org-todo-keyword-faces '(
                                                   ("TODO"   . (:foreground "deepskyblue" :weight bold))
-                                                  ("START"  . (:foreground "olivedrab"        :weight bold))
+                                                  ("START"  . (:foreground "olivedrab"   :weight bold))
                                                   ("WAIT"   . (:foreground "darkorange"  :weight bold))
                                                   ("DONE"   . (:foreground "forestgreen" :weight bold))
-                                                  ("CANCEL" . (:foreground "red"         :weight bold))
+                                                  ("CANCEL" . (:foreground "darkorchid"  :weight bold))
                                                   ("FAIL"   . (:foreground "red"         :weight bold))
                                                   ))
 
