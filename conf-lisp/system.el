@@ -231,3 +231,7 @@
 ;; I think this is a recenter calculation bug.
 
 (setq recenter-positions '(1 middle bottom))
+
+;; On my new linux system running kubuntu I am unable to insert ^ ` or ~.
+;; see: https://unix.stackexchange.com/questions/28170/some-keys-are-invalid-on-emacs-when-using-german-keyboard
+(require 'iso-transl)
