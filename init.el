@@ -11,6 +11,9 @@
 (setq use-dialog-box nil)
 (scroll-bar-mode 0)
 
+;; needs to be disabled to be able to load it from elpa
+(setq tramp-mode nil)
+
 ;;; ** stay silent on startup
 (setq initial-scratch-message "")
 (setq inhibit-startup-message t)

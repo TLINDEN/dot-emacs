@@ -37,7 +37,7 @@
   (setq tramp-default-method "ssh"
         tramp-default-user nil
         tramp-verbose 9
-        ;;ido-enable-tramp-completion t
+        ido-enable-tramp-completion t
         ))
 
 ;; see also backup section in system.el
