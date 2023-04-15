@@ -12,7 +12,7 @@
 (scroll-bar-mode 0)
 
 ;; needs to be disabled to be able to load it from elpa
-(setq tramp-mode nil)
+;; (setq tramp-mode nil)
 
 ;;; ** stay silent on startup
 (setq initial-scratch-message "")
@@ -38,6 +38,7 @@
 
 ;;; ~/.emacs-init.d/init/ contains the rest of the init files
 (setq tvd-init-dir (expand-file-name "init" tvd-config-dir))
+(setq tvd-sitelisp-dir (expand-file-name "site-lisp" tvd-config-dir))
 
 ;;; initialize package manager
 (require 'package)
@@ -50,10 +51,17 @@
 (add-to-list 'package-archives '("gnu"   . "https://elpa.gnu.org/packages/"))
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 
+;; (setq package-archives
+;;       '(("gnu" . "https://elpa.gnu.org/packages/")
+;;         ("gnu-devel" . "https://elpa.gnu.org/devel/")
+;;         ("nongnu" . "https://elpa.nongnu.org/nongnu/")
+;;         ("melpa" . "https://melpa.org/packages/")))
+
 (package-initialize)
 
 ;; load'em
 (sanityinc/add-subdirs-to-load-path package-user-dir)
+(sanityinc/add-subdirs-to-load-path tvd-sitelisp-dir)
 
 ;;; dont mess around
 (setq package-enable-at-startup nil)
