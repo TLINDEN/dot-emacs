@@ -3,6 +3,7 @@ auto-save-list
 backups
 el-get
 elpa-27.1
+elpa-28.2
 elpa
 projectile-bookmarks.eld
 recentf
@@ -15,3 +16,4 @@ notizen.org
 daemon.log
 daemon.pid
 tramp
+eln-cache
