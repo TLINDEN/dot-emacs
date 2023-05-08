@@ -185,11 +185,11 @@ _k_: kill (C-k)  _s_: split                   _{_: wrap with { }
               ;;  Jump to  the beginning  of following balanced  expression. If
               ;;  there is no  following expression on the  current level, jump
               ;;  one level up backward, effectively doing sp-backward-up-sexp.
-              ("C-S-<left>" .  'sp-next-sexp)
+              ("C-S-<left>" .  'sp-previous-sexp)
               ;; Jump to the end of  the previous balanced expression. If there
               ;; is no previous expression on the current level, jupm one level
               ;; up forward, effectively doing sp-up-sexp.
-              ("C-S-<right>" . 'sp-previous-sexp)
+              ("C-S-<right>" . 'sp-next-sexp)
 
               ;; comment the whole sexp
               (";" . 'tvd-lisp-comment)
