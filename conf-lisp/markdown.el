@@ -8,8 +8,7 @@
 (defun tvd-cleanup-org-tables ()
   (save-excursion
     (goto-char (point-min))
-    (while (search-forward "-+-" nil t) (replace-match "-|-"))
-    ))
+    (while (search-forward "-+-" nil t) (replace-match "-|-"))))
 
 (defun tvd-markdown-todo ()
   "Create dynamically highlighted TODO list of MD list"
@@ -18,23 +17,39 @@
   (highlight-regexp "^- .*ok" "hi-green")
   (highlight-regexp "^- .*fail" "hi-pink"))
 
+(defun tvd-markdown-cleanup()
+  "Convert org  table into markdown  table if in  markdown-mode and
+save the buffer [again], also check if parens are balanced"
+  (when (equal major-mode 'markdown-mode)
+    (when (check-parens)
+      (tvd-cleanup-org-tables)
+      (save-buffer))))
+
 (use-package markdown-mode
              :mode "\\.text\\'"
              :mode "\\.markdown\\'"
              :mode "\\.md\\'"
 
              :config
-             (defun tvd-markdown-hooks ()
-               (when buffer-file-name
-                 (add-hook 'after-save-hook
-                           'check-parens
-                           nil t)
-                 (add-hook 'after-save-hook 'tvd-cleanup-org-tables  nil 'make-it-local))
+             (modify-syntax-entry ?\" "\"" markdown-mode-syntax-table)
 
-               (modify-syntax-entry ?\" "\"" markdown-mode-syntax-table)
+             ;; (defun tvd-markdown-hooks ()
+             ;;   (when buffer-file-name
+             ;;     (add-hook 'after-save-hook
+             ;;               'check-parens
+             ;;               nil t)
+             ;;     (add-hook 'after-save-hook 'tvd-cleanup-org-tables  nil 'make-it-local))
 
-               (when (fboundb 'orgtbl-mode)
-                 (add-hook 'markdown-mode-hook 'orgtbl-mode)))
+             ;;   (modify-syntax-entry ?\" "\"" markdown-mode-syntax-table)
 
-             :hook tvd-markdown-hooks
+             ;;   (when (fboundb 'orgtbl-mode)
+             ;;     (add-hook 'markdown-mode-hook 'orgtbl-mode))
+
+             ;;   ;; (when (fboundb 'orgalist))
+             ;;   (add-hook 'markdown-mode-hook 'orgalist-mode))
+
+             :hook ;; tvd-markdown-hooks
+             (markdown-mode . orgalist-mode)
+             (markdown-mode . orgtbl-mode)
+             (after-save . tvd-markdown-cleanup-orgtables)
              )
