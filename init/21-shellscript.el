@@ -1,1 +1,0 @@
-../conf-lisp/shellscript.el

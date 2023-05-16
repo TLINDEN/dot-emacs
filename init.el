@@ -39,6 +39,8 @@
 ;;; ~/.emacs-init.d/init/ contains the rest of the init files
 (setq tvd-init-dir (expand-file-name "init" tvd-config-dir))
 (setq tvd-sitelisp-dir (expand-file-name "site-lisp" tvd-config-dir))
+(setq tvd-lisp-dir (expand-file-name "lisp" tvd-config-dir))
+
 
 ;;; initialize package manager
 (require 'package)
@@ -77,9 +79,83 @@
 
 
 ;;; iterate over init dir and load all configs
-(defun tvd-load-init-file (f)
-  (load-file f))
-(mapc 'tvd-load-init-file (directory-files (expand-file-name "init" tvd-config-dir) t ".*el"))
+;; (defun tvd-load-init-file (f)
+;;   (load-file f))
+;; (mapc 'tvd-load-init-file (directory-files (expand-file-name "init" tvd-config-dir) t ".*el"))
+
+;; bootstrap emacs
+(add-to-list 'load-path tvd-lisp-dir)
+(require 'init-display)
+(require 'init-elget)
+(require 'init-system)
+(require 'init-windowmgmt)
+
+;; general comfort stuff
+(require 'init-imenu)
+(require 'init-autoscratch)
+(require 'init-globalbindings)
+(require 'init-textscale)
+
+;; general navigation
+(require 'init-hydra)
+(require 'init-functions)
+(require 'init-dumpjump)
+(require 'init-smartparens)
+
+(require 'init-grep)
+(require 'init-dictcc)
+
+;; programming and text modes
+(require 'init-lsp)
+(require 'init-rust)
+(require 'init-shellscript)
+(require 'init-perl)
+(require 'init-go)
+(require 'init-sgml)
+(require 'init-webmode)
+(require 'init-cisco)
+(require 'init-conf)
+(require 'init-config-general)
+(require 'init-xmodmap)
+(require 'init-yaml)
+(require 'init-textmanipulation)
+(require 'init-pod)
+(require 'init-elisp)
+(require 'init-org)
+(require 'init-orgagenda)
+(require 'init-orgalist)
+(require 'init-orgtable)
+(require 'init-outline)
+(require 'init-markdown)
+
+;; interactive modes
+(require 'init-eshell)
+(require 'init-tramp)
+(require 'init-narrow)
+(require 'init-ansiterm)
+(require 'init-info)
+(require 'init-novel)
+(require 'init-macros)
+(require 'init-ewww)
+(require 'init-tablist)
+(require 'init-help)
+(require 'init-suggest)
+(require 'init-followcursor)
+(require 'init-magit)
+(require 'init-dired)
+(require 'init-ediff)
+(require 'init-projectile)
+(require 'init-occur)
+
+;; emacs configuration
+(require 'init-windowmgmt)
+(require 'init-workspaces)
+(require 'init-indentation)
+(require 'init-completion)
+(require 'init-recentfiles)
+(require 'init-ibuffer)
+(require 'init-printing)
+(require 'init-ui)
 
 
 ;;; ** Some globals
