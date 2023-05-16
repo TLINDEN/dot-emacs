@@ -7,7 +7,9 @@
   ;; global overrides
   (("C-x C-b" . persp-ibuffer)
    ("C-x b" . persp-switch-to-buffer*)
-   ("C-x k" . persp-kill-buffer*))
+   ;; asks for confirmation
+   ;; ("C-x k" . persp-kill-buffer*)
+   )
 
   ;; perspective specifics
   (:map perspective-map
