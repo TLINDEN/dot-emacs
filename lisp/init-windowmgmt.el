@@ -214,6 +214,14 @@ Reach this hydra with <C-x w>
   (global-set-key (kbd "C-x w") 'hydra-windows/body))
 
 
+;; configure emacs window behavior
+;; see also https://www.masteringemacs.org/article/demystifying-emacs-window-manager
+(customize-set-variable 'display-buffer-base-action
+  '((display-buffer-reuse-window display-buffer-same-window)
+    (reusable-frames . t)))
+
+(customize-set-variable 'even-window-sizes nil)     ; avoid resizing
+
 
 (provide 'init-windowmgmt)
 ;;; init-windowmgmt.el ends here

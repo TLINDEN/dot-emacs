@@ -86,6 +86,7 @@
 ;; bootstrap emacs
 (add-to-list 'load-path tvd-lisp-dir)
 (require 'init-display)
+(require 'init-modeline)
 (require 'init-elget)
 (require 'init-system)
 (require 'init-windowmgmt)

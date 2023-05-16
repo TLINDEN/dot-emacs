@@ -18,6 +18,7 @@
   "Flag macro recording in mode-line"
   :group 'tvd-mode-line-faces)
 
+
 ;; custom modeline
 (setq-default mode-line-format
               (list
@@ -46,5 +47,5 @@
                mode-line-end-spaces))
 
 
-(provide 'init-moine.el)
+(provide 'init-modeline)
 ;;; init-modeline.el ends here
