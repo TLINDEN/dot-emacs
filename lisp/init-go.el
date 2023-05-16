@@ -24,9 +24,13 @@
                (add-hook 'go-mode-hook #'ivy-mode)
 
                ;; overwrite dump-jump settions here
-               (bind-key*  (kbd "C-c j") #'lsp-find-definition)
-               (bind-key*  (kbd "C-c b") #'xref-pop-marker-stack)
-               ))
+               ;; (bind-key*  (kbd "C-c j") #'lsp-find-definition)
+               ;; (bind-key*  (kbd "C-c b") #'xref-pop-marker-stack)
+               )
+
+             :bind (:map go-mode-map
+                         ( "C-c j" . #'lsp-find-definition)
+                         ("C-c b" . #'xref-pop-marker-stack)))
 
 
 (provide 'init-go)
