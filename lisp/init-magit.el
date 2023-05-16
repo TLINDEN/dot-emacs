@@ -18,7 +18,8 @@
     (let ((current-prefix-arg t))
       (call-interactively 'magit-status)))
 
-  (setq magit-view-git-manual-method 'woman)
+  (setq magit-view-git-manual-method 'woman
+        magit-commit-show-diff nil)
 
   (defalias 'git       'magit-status)
   (defalias 'gitlog    'magit-log-buffer-file)
