@@ -96,7 +96,7 @@
 ;; Modify the default ibuffer-formats
 (setq ibuffer-formats
       '((mark modified read-only " "
-              (name 20 40 :left :elide)
+              (name 30 60 :left :elide)
               " "
               (size-h 9 -1 :right)
               " "

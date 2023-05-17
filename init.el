@@ -156,7 +156,7 @@
 (require 'init-ibuffer)
 (require 'init-printing)
 
-;; (require 'init-completion)
+(require 'init-completion)
 (require 'init-smarter-than-emacs)
 (require 'init-marginalia)
 (require 'init-ui)

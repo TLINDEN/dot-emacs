@@ -8,7 +8,7 @@
 ;; Hint: Use C-f during file selection to switch to regular find-file
 
 ;; Basic config
-(ido-mode t)
+;; (ido-mode t)
 (ido-everywhere nil)
 
 (use-package ido-completing-read+)
@@ -85,7 +85,8 @@
            (progn
              (ido-set-current-directory "/ssh:")
              (ido-reread-directory))
-         (call-interactively 'self-insert-command))))))
+         (call-interactively 'self-insert-command))))
+   (define-key ido-file-completion-map (kbd "C-.") 'embark-act)))
 
 ;; by howardism: [re]open non-writable file with sudo
 (defadvice ido-find-file (after find-file-sudo activate)

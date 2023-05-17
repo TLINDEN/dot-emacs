@@ -23,7 +23,7 @@
   ;; (setq vertico-resize t)
 
   ;; Optionally enable cycling for `vertico-next' and `vertico-previous'.
-  ;; (setq vertico-cycle t)
+  (setq vertico-cycle t)
 
   :config
 
@@ -39,8 +39,24 @@ via [[http://whattheemacsd.com/setup-ido.el-02.html][whattheemacs.d]]"
 
   :bind (:map vertico-map
               ("~" . tvd-vertico-jump-home)
-              ("RET" . #'vertico-directory-enter)))
+              ("RET" . #'vertico-directory-enter)
+              ;; experimental,  pressing   tab  on  a   match  doesn't
+              ;; complete it but show the next match, that way I avoid
+              ;; being completed into nonsense matches
+              ("TAB" . #'vertico-next)))
 
+
+
+
+(use-package orderless
+  :init
+  ;; Configure a custom style dispatcher (see the Consult wiki)
+  ;; (setq orderless-style-dispatchers '(+orderless-consult-dispatch orderless-affix-dispatch)
+  ;;       orderless-component-separator #'orderless-escapable-split-on-space)
+  (setq completion-styles '(substring orderless basic)
+        orderless-matching-styles '(orderless-prefixes)
+        completion-category-defaults nil
+        completion-category-overrides '((file (styles partial-completion)))))
 
 
 
@@ -49,8 +65,8 @@ via [[http://whattheemacsd.com/setup-ido.el-02.html][whattheemacs.d]]"
 
   :bind
   (("C-." . embark-act)         ;; pick some comfortable binding
-   ("C-," . embark-dwim)        ;; good alternative: M-.
-   ) ;; alternative for `describe-bindings'
+   ("C-," . embark-dwim))        ;; good alternative: M-.
+
 
   :init
 
@@ -72,7 +88,9 @@ via [[http://whattheemacsd.com/setup-ido.el-02.html][whattheemacs.d]]"
 
 
 
-;;; *** Smarter Search
+
+
+
 
 ;; test, replace isearch-forward-regexp first only.
 ;; dir: ivy/
@@ -81,17 +99,6 @@ via [[http://whattheemacsd.com/setup-ido.el-02.html][whattheemacs.d]]"
              (setq ivy-wrap t)
              (global-set-key "\C-s" 'swiper))
 
-
-(use-package orderless
-  :init
-  ;; Configure a custom style dispatcher (see the Consult wiki)
-  ;; (setq orderless-style-dispatchers '(+orderless-consult-dispatch orderless-affix-dispatch)
-  ;;       orderless-component-separator #'orderless-escapable-split-on-space)
-  (setq completion-styles '(orderless basic)
-        completion-category-defaults nil
-        completion-category-overrides '((file (styles partial-completion))))
-
-  )
 
 
 (provide 'init-smarter-than-emacs)
