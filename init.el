@@ -156,6 +156,9 @@
 (require 'init-recentfiles)
 (require 'init-ibuffer)
 (require 'init-printing)
+
+;; doesn't work with smex, only after <tab><tab> and shows in another buffer
+;; (require 'init-marginalia)
 (require 'init-ui)
 
 

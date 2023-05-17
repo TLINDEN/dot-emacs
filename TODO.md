@@ -1,0 +1,3 @@
+- replace smex with https://github.com/DarwinAwardWinner/amx
+- try to marry amx and marginalia somehow
+- try https://github.com/oantolin/embark
