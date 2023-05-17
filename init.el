@@ -152,13 +152,13 @@
 (require 'init-windowmgmt)
 (require 'init-workspaces)
 (require 'init-indentation)
-(require 'init-completion)
 (require 'init-recentfiles)
 (require 'init-ibuffer)
 (require 'init-printing)
 
-;; doesn't work with smex, only after <tab><tab> and shows in another buffer
-;; (require 'init-marginalia)
+;; (require 'init-completion)
+(require 'init-smarter-than-emacs)
+(require 'init-marginalia)
 (require 'init-ui)
 
 

@@ -29,26 +29,6 @@
 
 
 
-;;; *** Smarter M-x Mode (smex)
-
-;; This is really cool and I don't know how I could ever live without it.
-(use-package smex
-             :config
-             (smex-initialize)
-             (global-set-key (kbd "M-x") 'smex)
-             (global-set-key (kbd "M-X") 'smex-major-mode-commands))
-
-
-
-;;; *** Smarter Search
-
-;; test, replace isearch-forward-regexp first only.
-;; dir: ivy/
-(use-package swiper
-             :config
-             (setq ivy-wrap t)
-             (global-set-key "\C-s" 'swiper))
-
 
 
 ;;; *** Which Func
