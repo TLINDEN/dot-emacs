@@ -103,5 +103,20 @@
   (define-key magit-status-mode-map (kbd "q") #'tvd-kill-magit-buffers))
 
 
+(use-package blamer
+  ;; :bind (("s-i" . blamer-show-commit-info)
+  ;;        ("C-c i" . ("s-i" . blamer-show-posframe-commit-info)))
+  :defer 20
+  :custom
+  (blamer-idle-time 0.3)
+  (blamer-min-offset 70)
+  :custom-face
+  (blamer-face ((t :foreground "#7a88cf"
+                    :background nil
+                    :height 140
+                    :italic t)))
+  :config
+  (defalias 'blame 'blamer-mode))
+
 (provide 'init-magit)
 ;;; init-magit.el ends here
