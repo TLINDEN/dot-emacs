@@ -102,13 +102,31 @@ via [[http://whattheemacsd.com/setup-ido.el-02.html][whattheemacs.d]]"
      --with-filename --line-number -I -r -A1 -B1")
 
   :config
-  (defalias 'egrep 'consult-grep))
+  (defalias 'egrep 'consult-grep)
+
+  (when (fboundp 'persp-new)
+    (consult-customize consult--source-buffer :hidden t :default nil)
+
+    (defvar consult--source-perspective
+      (list :name     "Perspective"
+            :narrow   ?s
+            :category 'buffer
+            :state    #'consult--buffer-state
+            :default  t
+            :items    #'persp-get-buffer-names))
+
+    (push consult--source-perspective consult-buffer-sources)))
 
 
 (use-package
   embark-consult
   :after (embark consult))
 
+;; Persist history over Emacs restarts. Vertico sorts by history position.
+(use-package savehist
+  :ensure nil ; builtin
+  :init
+  (savehist-mode))
 
 ;; test, replace isearch-forward-regexp first only.
 ;; dir: ivy/
