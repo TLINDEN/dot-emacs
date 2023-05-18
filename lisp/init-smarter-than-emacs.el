@@ -87,9 +87,27 @@ via [[http://whattheemacsd.com/setup-ido.el-02.html][whattheemacs.d]]"
                  (window-parameters (mode-line-format . none)))))
 
 
+(use-package consult
+  ;; Replace bindings. Lazily loaded due by `use-package'.
+  :bind (;; C-c bindings in `mode-specific-map'
+         ("C-x b" . consult-buffer))
+
+  ;; Enable automatic preview at point in the *Completions* buffer. This is
+  ;; relevant when you use the default completion UI.
+  :hook (completion-list-mode . consult-preview-at-point-mode)
+
+  :custom
+  ;; FIXME: does not ignore .git etc, try ripgrep or ag
+  (consult-grep-args "grep --null --line-buffered --color=never --ignore-case\
+     --with-filename --line-number -I -r -A1 -B1")
+
+  :config
+  (defalias 'egrep 'consult-grep))
 
 
-
+(use-package
+  embark-consult
+  :after (embark consult))
 
 
 ;; test, replace isearch-forward-regexp first only.

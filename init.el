@@ -103,7 +103,7 @@
 (require 'init-dumpjump)
 (require 'init-smartparens)
 
-(require 'init-grep)
+;; (require 'init-grep) => see consult in smarter
 (require 'init-dictcc)
 
 ;; programming and text modes
