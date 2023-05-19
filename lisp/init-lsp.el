@@ -6,8 +6,8 @@
      ("gopls.staticcheck" t t)))
 
   ;; disable infantile nonsense
-  (setq lsp-headerline-breadcrumb-enable nil)
-  (setq lsp-modeline-code-actions-enable nil)
+  (setq lsp-headerline-breadcrumb-enable nil
+        lsp-modeline-code-actions-enable nil)
 
   :init
   ;; I'm not using any of th  lsp commands, but better define a prefix

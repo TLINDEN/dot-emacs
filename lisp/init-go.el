@@ -21,7 +21,7 @@
 
                (add-hook 'go-mode-hook #'lsp-deferred)
                (add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
-               (add-hook 'go-mode-hook #'ivy-mode)
+               ;; (add-hook 'go-mode-hook #'ivy-mode)
 
                ;; overwrite dump-jump settions here
                ;; (bind-key*  (kbd "C-c j") #'lsp-find-definition)
