@@ -122,14 +122,37 @@ via [[http://whattheemacsd.com/setup-ido.el-02.html][whattheemacs.d]]"
   embark-consult
   :after (embark consult))
 
+
+
 ;; Persist history over Emacs restarts. Vertico sorts by history position.
 (use-package savehist
   :ensure nil ; builtin
   :init
   (savehist-mode))
 
-;; test, replace isearch-forward-regexp first only.
-;; dir: ivy/
+
+;; clever and nice looking  and feeling completion package, candidates
+;; show up in a mini popup, very nice
+(use-package corfu
+  :hook ((prog-mode . corfu-mode))
+
+  :custom
+  (corfu-quit-no-match t)
+  (corfu-auto nil)
+  (corfu-cycle t)
+  (corfu-preselect 'prompt)
+
+   :bind
+  (:map corfu-map
+        ("TAB" . corfu-next)
+        ([tab] . corfu-next)
+        ("S-TAB" . corfu-previous)
+        ([backtab] . corfu-previous)))
+
+
+;; much better  experience to seach current  buffer consult-line would
+;; do the job  as well and looks  similar, but I'm used  to swiper, so
+;; stick with it.
 (use-package swiper
              :config
              (setq ivy-wrap t)
