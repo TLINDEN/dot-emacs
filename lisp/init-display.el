@@ -13,6 +13,11 @@
              :config
              (load-theme 'solarized-dark-high-contrast t))
 
+;; matches solarized theme colors
+(use-package hl-line
+  :custom-face
+  (hl-line ((t (:background "#006400")))))
+
 ;;; ** increase default font size on startup
 (set-face-attribute 'default nil :height 133)
 
