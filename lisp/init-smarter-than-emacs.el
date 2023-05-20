@@ -50,10 +50,17 @@ via [[http://whattheemacsd.com/setup-ido.el-02.html][whattheemacs.d]]"
 
 (use-package orderless
   :init
-  ;; Configure a custom style dispatcher (see the Consult wiki)
-  ;; (setq orderless-style-dispatchers '(+orderless-consult-dispatch orderless-affix-dispatch)
-  ;;       orderless-component-separator #'orderless-escapable-split-on-space)
-  (setq completion-styles '(substring orderless basic)
+  ;; I  am using  the  actual  orderless completion  style  as a  last
+  ;; resort. Although it  is very flexible, it requires me  to enter a
+  ;; space (or  whatever one configures  as separator), which  is also
+  ;; annoying.   So, I  start  with emacs  standard  (basic), if  that
+  ;; doesn't suffice, initials  finds commands by initials  which I am
+  ;; used to  because smex  worked that way  already. If  that doesn't
+  ;; suffice  I use  the  flex  style which  is  fuzzy searching  (w/o
+  ;; separator) just like  what smex did as well. And  only after that
+  ;; comes orderless.  Maybe  I'll change this in the  future or throw
+  ;; orderless completely away...
+  (setq completion-styles '(basic initials flex orderless)
         orderless-matching-styles '(orderless-prefixes)
         completion-category-defaults nil
         completion-category-overrides '((file (styles partial-completion)))))
