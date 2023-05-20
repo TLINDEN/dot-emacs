@@ -201,8 +201,17 @@ _k_: kill (C-k)  _s_: split                   _{_: wrap with { }
 
 ;;; Parens config goes here as well
 
-;; display matching braces
+;; display matching parens, braces, brackets etc
 (show-paren-mode 1)
+
+;; show matching parens as white on green
+(set-face-background 'show-paren-match "#228b22")
+(set-face-foreground 'show-paren-match "#fff")
+(set-face-attribute 'show-paren-match nil :weight 'extra-bold)
+
+;; mismatching ones as white on red
+(set-face-background 'show-paren-mismatch "#b22222")
+(set-face-foreground 'show-paren-mismatch "#fff")
 
 ;; 'mixed: highlight all if the other paren is invisible
 ;; 'expression: highlight the whole sexp
