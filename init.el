@@ -153,10 +153,9 @@
 (require 'init-workspaces)
 (require 'init-indentation)
 (require 'init-recentfiles)
+;; (require 'init-completion) ;; replaced with vertico
 (require 'init-ibuffer)
 (require 'init-printing)
-
-(require 'init-completion)
 (require 'init-smarter-than-emacs)
 (require 'init-marginalia)
 (require 'init-ui)

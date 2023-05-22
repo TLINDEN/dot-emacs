@@ -33,7 +33,9 @@
                  (when file
                    (find-file file))))
 
-                          (global-set-key (kbd "C-x C-r") 'recentf-ido-find-file) ;; open recent files, same as M-x rf
+             ;; replaced by consult-recent-files
+             ;; (global-set-key (kbd "C-x C-r") 'recentf-find-file)
+             ;; open recent files, same as M-x rf
 
              ;; now if I incidentally closed a  buffer, I can re-open it, thanks to
              ;; recent-files

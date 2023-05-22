@@ -47,8 +47,7 @@ via [[http://whattheemacsd.com/setup-ido.el-02.html][whattheemacs.d]]"
               ;; FIXME: set this to complete*
               ;; ("TAB" . #'vertico-next)
               ;; next try: use vanilla complete on tab, maybe better?
-              ("TAB" . #'minibuffer-complete)
-              ))
+              ("TAB" . #'minibuffer-complete)))
 
 
 
@@ -102,7 +101,8 @@ via [[http://whattheemacsd.com/setup-ido.el-02.html][whattheemacs.d]]"
 (use-package consult
   ;; Replace bindings. Lazily loaded due by `use-package'.
   :bind (;; C-c bindings in `mode-specific-map'
-         ("C-x b" . consult-buffer))
+         ("C-x b" . consult-buffer)
+         ("C-x C-r" . consult-recent-file)) ;; replaces recentf
 
   ;; Enable automatic preview at point in the *Completions* buffer. This is
   ;; relevant when you use the default completion UI.
@@ -128,6 +128,20 @@ via [[http://whattheemacsd.com/setup-ido.el-02.html][whattheemacs.d]]"
             :items    #'persp-get-buffer-names))
 
     (push consult--source-perspective consult-buffer-sources)))
+
+
+;; change directory while opening a file etc
+(use-package consult-dir
+  :ensure t
+  :bind (("C-x C-d" . consult-dir)
+         :map vertico-map
+         ("C-x C-d" . consult-dir)
+         ("C-x C-j" . consult-dir-jump-file)
+
+         :map minibuffer-local-completion-map
+         ("C-x C-d" . consult-dir)
+         ))
+
 
 
 (use-package
