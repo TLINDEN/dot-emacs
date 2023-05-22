@@ -43,7 +43,12 @@ via [[http://whattheemacsd.com/setup-ido.el-02.html][whattheemacs.d]]"
               ;; experimental,  pressing   tab  on  a   match  doesn't
               ;; complete it but show the next match, that way I avoid
               ;; being completed into nonsense matches
-              ("TAB" . #'vertico-next)))
+
+              ;; FIXME: set this to complete*
+              ;; ("TAB" . #'vertico-next)
+              ;; next try: use vanilla complete on tab, maybe better?
+              ("TAB" . #'minibuffer-complete)
+              ))
 
 
 
