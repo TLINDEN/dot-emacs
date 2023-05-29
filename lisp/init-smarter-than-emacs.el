@@ -37,6 +37,15 @@ via [[http://whattheemacsd.com/setup-ido.el-02.html][whattheemacs.d]]"
           (insert "~/"))
       (call-interactively 'self-insert-command)))
 
+(defun tvd-vertico-jump-root()
+    "quickly go to root dir with / in minibuffer find-file, if we are in a local fs"
+    (interactive)
+    (if (file-directory-p (file-name-directory (minibuffer-contents-no-properties)))
+        (progn
+          (backward-kill-sentence)
+          (insert "/"))
+      (call-interactively 'self-insert-command)))
+
   (defun tvd-vertico-jump-ssh()
     "replaces current minibuffer input with  /ssh: so that I can edit
 a remote file  anytime and from everywhere I am  by just entering :"
@@ -47,9 +56,25 @@ a remote file  anytime and from everywhere I am  by just entering :"
           (insert "/ssh:"))
       (call-interactively 'self-insert-command)))
 
+  (defun tvd-vertico-del-dir()
+    "delete directory name in current minibuffer, if it is a directory."
+    (interactive)
+    (if (file-directory-p (minibuffer-contents-no-properties))
+        (progn
+          (if (looking-back "/")
+              (delete-char -1))
+          (if (search-backward "/" nil t)
+              (let ((beg (+ (point) 1)))
+              (end-of-buffer)
+              (delete-region beg (point)))
+            (delete-char -1)))
+      (delete-char -1)))
+
   :bind (:map vertico-map
               ("~" . tvd-vertico-jump-home)
               (":" . tvd-vertico-jump-ssh)
+              ("/" . tvd-vertico-jump-root) ;; experimental, not sure wether to keep this
+              ("<backspace>" . tvd-vertico-del-dir)
               ("RET" . #'vertico-directory-enter)
               ;; experimental,  pressing   tab  on  a   match  doesn't
               ;; complete it but show the next match, that way I avoid
