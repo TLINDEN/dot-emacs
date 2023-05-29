@@ -37,8 +37,19 @@ via [[http://whattheemacsd.com/setup-ido.el-02.html][whattheemacs.d]]"
           (insert "~/"))
       (call-interactively 'self-insert-command)))
 
+  (defun tvd-vertico-jump-ssh()
+    "replaces current minibuffer input with  /ssh: so that I can edit
+a remote file  anytime and from everywhere I am  by just entering :"
+    (interactive)
+    (if (looking-back "/")
+        (progn
+          (backward-kill-sentence)
+          (insert "/ssh:"))
+      (call-interactively 'self-insert-command)))
+
   :bind (:map vertico-map
               ("~" . tvd-vertico-jump-home)
+              (":" . tvd-vertico-jump-ssh)
               ("RET" . #'vertico-directory-enter)
               ;; experimental,  pressing   tab  on  a   match  doesn't
               ;; complete it but show the next match, that way I avoid
@@ -64,10 +75,14 @@ via [[http://whattheemacsd.com/setup-ido.el-02.html][whattheemacs.d]]"
   ;; separator) just like  what smex did as well. And  only after that
   ;; comes orderless.  Maybe  I'll change this in the  future or throw
   ;; orderless completely away...
+
+  ;; PS: the  file category  override now starts  with 'basic  so that
+  ;; tramp     hostname     completion     works     properly,     see
+  ;; https://github.com/minad/vertico#tramp-hostname-and-username-completion
   (setq completion-styles '(basic initials flex orderless)
         orderless-matching-styles '(orderless-prefixes)
         completion-category-defaults nil
-        completion-category-overrides '((file (styles partial-completion)))))
+        completion-category-overrides '((file (styles basic partial-completion)))))
 
 
 
