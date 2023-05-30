@@ -3,7 +3,7 @@
 ;; My emacs  config has a  version (consisting  of a timestamp  with a
 ;; serial), which I display in the mode line. So I can clearly see, if
 ;; I'm using an outdated config somewhere.
-(defvar tvd-emacs-version "20230412.01")
+(defvar tvd-emacs-version "20230530.01")
 
 ;; I prefer a bare bones emacs window without any distractions, so turn them off.
 (menu-bar-mode -1)
