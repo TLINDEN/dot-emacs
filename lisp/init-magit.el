@@ -46,7 +46,6 @@
                        (expand-file-name "~/dev")))
       (when (file-exists-p dir)
         (add-to-list 'magit-repository-directories (cons dir 1))))
-    (setq magit-completing-read-function 'magit-ido-completing-read)
 
     ;; use timestamps in log buffers
     (setq magit-log-margin '(t "%Y-%m-%d " magit-log-margin-width t 18))
