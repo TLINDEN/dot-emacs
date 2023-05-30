@@ -70,6 +70,23 @@ a remote file  anytime and from everywhere I am  by just entering :"
             (delete-char -1)))
       (delete-char -1)))
 
+  ;; via vertico wiki, prefix current candidate with an arrow
+  (defvar +vertico-current-arrow t)
+  (cl-defmethod vertico--format-candidate :around
+    (cand prefix suffix index start &context ((and +vertico-current-arrow
+                                                   (not (bound-and-true-p vertico-flat-mode)))
+                                              (eql t)))
+    (setq cand (cl-call-next-method cand prefix suffix index start))
+    (if (bound-and-true-p vertico-grid-mode)
+        (if (= vertico--index index)
+            (concat #("▶" 0 1 (face vertico-current)) cand)
+          (concat #("_" 0 1 (display " ")) cand))
+      (if (= vertico--index index)
+          (concat
+           #(" " 0 1 (display (left-fringe right-triangle vertico-current)))
+           cand)
+        cand)))
+
   :bind (:map vertico-map
               ("~" . tvd-vertico-jump-home)
               (":" . tvd-vertico-jump-ssh)
