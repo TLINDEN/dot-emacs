@@ -168,10 +168,10 @@ a remote file  anytime and from everywhere I am  by just entering :"
   :custom
   ;; FIXME: does not ignore .git etc, try ripgrep or ag
   (consult-grep-args "grep --null --line-buffered --color=never --ignore-case\
-     --with-filename --line-number -I -r -A1 -B1")
+     --with-filename --line-number -I -r -A1 -B1 --exclude-from=.gitignore")
 
   :config
-  (defalias 'egrep 'consult-grep)
+  (defalias 'egrep 'consult-ripgrep)
 
   (when (fboundp 'persp-new)
     (consult-customize consult--source-buffer :hidden t :default nil)
