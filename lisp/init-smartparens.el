@@ -48,8 +48,8 @@ Used when enabling smartparens-mode."
   (add-something-to-mode-hooks
    '(rust emacs-lisp ielm lisp elisp lisp-interaction scheme slime-repl ) 'smartparens-mode)
 
-  (add-something-to-mode-hooks
-   '(emacs-lisp ielm lisp elisp lisp-interaction scheme slime-repl ) 'electric-pair-mode)
+  ;; (add-something-to-mode-hooks
+  ;;  '(emacs-lisp ielm lisp elisp lisp-interaction scheme slime-repl ) 'electric-pair-mode)
 
   ;; also in some select prog modes
   ;; (add-something-to-mode-hooks
@@ -193,6 +193,9 @@ _k_: kill (C-k)  _s_: split                   _{_: wrap with { }
 
               ;; comment the whole sexp
               (";" . 'tvd-lisp-comment)
+
+              ;; move up closing parens
+              (")" . #'sp-up-sexp)
 
               ;; replace my global setting
               ;; FIXME: fhceck/fix M<up+down>!
