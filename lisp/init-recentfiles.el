@@ -58,9 +58,11 @@
 
              ;; exclude some auto generated files
              (setq recentf-exclude (list "ido.last"
-                                         "/elpa/"
+                                         "/elpa"
                                          ".el.gz$"
-                                         '(not (file-readable-p)))))
+                                         "COMMIT_EDITMSG"
+                                         '(not (file-readable-p))))
+             )
 
 
 (provide 'init-recentfiles)
