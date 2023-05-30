@@ -47,7 +47,13 @@
   (interactive)
   (progn
     (if mark-active
-        (eval-region)
+        (progn
+          (let ((beg (mark))
+                (end (point)))
+            (when (> beg end) ;; point and mark are reversed
+              (setq beg (point)
+                    end (mark)))
+            (eval-region beg end)))
       (eval-buffer))))
 
 (defun ff ()
