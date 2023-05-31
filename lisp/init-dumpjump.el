@@ -23,6 +23,7 @@
              (global-set-key (kbd "C-c j") 'dumb-jump-go)
              (global-set-key (kbd "C-c b") 'dumb-jump-back))
 
+;; TODO: look at https://github.com/jojojames/smart-jump, maybe better?
 
 (provide 'init-dumpjump)
 ;;; init-dumpjump.el ends here
