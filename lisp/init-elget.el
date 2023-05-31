@@ -71,6 +71,11 @@
                :type http
                :url "http://nschum.de/src/emacs/rotate-text/rotate-text.el")
 
+;; (el-get-bundle matcha
+;;                :type github
+;;                :pkgname "jojojames/matcha"
+;;                :features matcha)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; These packages doesn't install via melpa for unknown reasons
 ;; see https://github.com/melpa/melpa/issues/8480
