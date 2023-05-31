@@ -18,6 +18,13 @@
   "Flag macro recording in mode-line"
   :group 'tvd-mode-line-faces)
 
+(when nil
+  (use-package keycast
+    :custom
+    (keycast-mode-line-remove-tail-elements nil)
+    (keycast-mode-line-insert-after 'mode-line-misc-info) ;; FIXME: doesn't work, keycast is placed on the front!
+
+    (keycast-mode)))
 
 ;; custom modeline
 (setq-default mode-line-format
