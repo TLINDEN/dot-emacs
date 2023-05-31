@@ -156,9 +156,12 @@ a remote file  anytime and from everywhere I am  by just entering :"
 
 
 (use-package consult
+  :defer nil ;; the alias doesn't work otherwise
+  
   ;; Replace bindings. Lazily loaded due by `use-package'.
   :bind (;; C-c bindings in `mode-specific-map'
          ("C-x b" . consult-buffer)
+         ("C-c C-j" . consult-imenu)
          ("C-x C-r" . consult-recent-file)) ;; replaces recentf
 
   ;; Enable automatic preview at point in the *Completions* buffer. This is
@@ -169,6 +172,8 @@ a remote file  anytime and from everywhere I am  by just entering :"
   ;; FIXME: does not ignore .git etc, try ripgrep or ag
   (consult-grep-args "grep --null --line-buffered --color=never --ignore-case\
      --with-filename --line-number -I -r -A1 -B1 --exclude-from=.gitignore")
+  (consult-narrow-key "<")
+  (consult-widen-key ">")
 
   :config
   (defalias 'egrep 'consult-ripgrep)
@@ -196,8 +201,7 @@ a remote file  anytime and from everywhere I am  by just entering :"
          ("C-x C-j" . consult-dir-jump-file)
 
          :map minibuffer-local-completion-map
-         ("C-x C-d" . consult-dir)
-         ))
+         ("C-x C-d" . consult-dir)))
 
 
 
