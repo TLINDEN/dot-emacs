@@ -55,7 +55,7 @@ Symbols matching the text at point are put first in the completion list."
           (goto-char (overlay-start position))
         (goto-char position)))))
 
-(global-set-key (kbd "C-c C-j") 'ido-imenu)
+;; (global-set-key (kbd "C-c C-j") 'ido-imenu)
 
 
 (provide 'init-imenu)
