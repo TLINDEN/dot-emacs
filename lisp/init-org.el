@@ -235,16 +235,8 @@ down and unfold it, otherwise jump paragraph as usual."
               '(lambda (&rest args)
                  (set-face-attribute 'fringe nil :background tvd-fringe-narrow-bg)))
 
-  ;; always use the latest docs
-  (with-eval-after-load 'info
-    (info-initialize)
-    (add-to-list 'Info-directory-list
-                 (expand-file-name "~/.emacs.d/lisp/org/doc")))
-
-  ;; orange fringe when narrowed
-  (advice-add 'org-narrow-to-subtree :after
-              '(lambda (&rest args)
-                 (set-face-attribute 'fringe nil :background tvd-fringe-narrow-bg))))
+  ;; I hate fundamental mode!
+  (setq default-major-mode 'org-mode))
 
 
 (provide 'init-org)
