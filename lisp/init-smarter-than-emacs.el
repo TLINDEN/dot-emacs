@@ -156,8 +156,6 @@ a remote file  anytime and from everywhere I am  by just entering :"
 
 
 (use-package consult
-  :defer nil ;; the alias doesn't work otherwise
-  
   ;; Replace bindings. Lazily loaded due by `use-package'.
   :bind (;; C-c bindings in `mode-specific-map'
          ("C-x b" . consult-buffer)
@@ -176,7 +174,6 @@ a remote file  anytime and from everywhere I am  by just entering :"
   (consult-widen-key ">")
 
   :config
-  (defalias 'egrep 'consult-ripgrep)
 
   (when (fboundp 'persp-new)
     (consult-customize consult--source-buffer :hidden t :default nil)
@@ -191,6 +188,8 @@ a remote file  anytime and from everywhere I am  by just entering :"
 
     (push consult--source-perspective consult-buffer-sources)))
 
+;; needs to be defined outside
+(defalias 'egrep 'consult-ripgrep)
 
 ;; change directory while opening a file etc
 (use-package consult-dir
