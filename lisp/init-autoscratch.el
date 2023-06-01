@@ -10,28 +10,28 @@
 ;; *** Autoscratch
 ;; use autoscratch otherwise
 ;; [[https://github.com/TLINDEN/autoscratch][autoscratch github]]
-(use-package autoscratch-mode
-             :ensure nil
-             :config
-             (setq initial-major-mode 'autoscratch-mode)
-             (add-hook 'autoscratch-mode-hook '(lambda ()
-                                                 (setq autoscratch-triggers-alist
-                                                       '(("[(;]"         . (progn
-                                                                             (call-interactively 'emacs-lisp-mode)
-                                                                             (call-interactively 'enable-paredit-mode)
-                                                                             (call-interactively 'electric-pair-mode)))
-                                                         ("#"            . (progn
-                                                                             (call-interactively 'config-general-mode)
-                                                                             (electric-indent-local-mode t)))
-                                                         ("[-a-zA-Z0-9]" . (text-mode))
-                                                         ("/"            . (c-mode))
-                                                         ("*"            . (progn (insert " ") (org-mode)))
-                                                         ("."            . (fundamental-mode)))
-                                                       autoscratch-trigger-on-first-char t
-                                                       autoscratch-reset-default-directory t)
-                                                 (electric-indent-local-mode nil)
-                                                 ))
-             (defalias 'scratch 'autoscratch-buffer))
+(use-package autoscratch
+  :ensure nil
+  :config
+  (setq initial-major-mode 'autoscratch-mode)
+  (add-hook 'autoscratch-mode-hook '(lambda ()
+                                      (setq autoscratch-triggers-alist
+                                            '(("[(;]"         . (progn
+                                                                  (call-interactively 'emacs-lisp-mode)
+                                                                  (call-interactively 'enable-paredit-mode)
+                                                                  (call-interactively 'electric-pair-mode)))
+                                              ("#"            . (progn
+                                                                  (call-interactively 'config-general-mode)
+                                                                  (electric-indent-local-mode t)))
+                                              ("[-a-zA-Z0-9]" . (text-mode))
+                                              ("/"            . (c-mode))
+                                              ("*"            . (progn (insert " ") (org-mode)))
+                                              ("."            . (fundamental-mode)))
+                                            autoscratch-trigger-on-first-char t
+                                            autoscratch-reset-default-directory t)
+                                      (electric-indent-local-mode nil)
+                                      ))
+  (defalias 'scratch 'autoscratch-buffer))
 
 ;;; *** Persistent Scratch
 ;; I also like to be scratch buffers persistent with

@@ -20,7 +20,7 @@
 (el-get-bundle autoscratch
                :type github
                :pkgname "tlinden/autoscratch"
-               :features autoscratch-mode)
+               :features autoscratch)
 
 (el-get-bundle novel-mode
                :type github
