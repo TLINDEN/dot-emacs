@@ -123,7 +123,12 @@
 (use-package which-key
              :config
              (which-key-mode)
-             (which-key-setup-side-window-right))
+             (which-key-setup-side-window-right)
+
+             :init
+             (setq which-key-side-window-max-width 0.4
+                   which-key-max-description-length 50
+                   which-key-max-display-columns 1))
 
 
 
@@ -151,6 +156,7 @@
 ;;; other aliases
 ;; show available colors:
 (defalias 'colors 'list-colors-display)
+
 
 
 (provide 'init-ui)
