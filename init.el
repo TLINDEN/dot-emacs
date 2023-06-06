@@ -147,6 +147,7 @@
 (require 'init-ediff)
 (require 'init-projectile)
 (require 'init-occur)
+(require 'init-audio)
 
 ;; emacs configuration
 (require 'init-windowmgmt)
