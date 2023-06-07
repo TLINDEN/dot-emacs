@@ -48,8 +48,10 @@ Used when enabling smartparens-mode."
   (add-something-to-mode-hooks
    '(rust emacs-lisp ielm lisp elisp lisp-interaction scheme slime-repl ) 'smartparens-mode)
 
-  ;; (add-something-to-mode-hooks
-  ;;  '(emacs-lisp ielm lisp elisp lisp-interaction scheme slime-repl ) 'electric-pair-mode)
+  ;; TODO: https://github.com/Fuco1/smartparens/issues/1160#event-9374528894
+  ;; try to find a way around the problem of closing paren below.
+  (add-something-to-mode-hooks
+   '(emacs-lisp ielm lisp elisp lisp-interaction scheme slime-repl ) 'electric-pair-mode)
 
   ;; also in some select prog modes
   ;; (add-something-to-mode-hooks
@@ -194,8 +196,9 @@ _k_: kill (C-k)  _s_: split                   _{_: wrap with { }
               ;; comment the whole sexp
               (";" . 'tvd-lisp-comment)
 
-              ;; move up closing parens
-              (")" . #'sp-up-sexp)
+              ;; move  up  closing  parens  unable  to  insert  parens
+              ;; everywhere else, especially if  one is missing!  (")"
+              ;; . #'sp-up-sexp)
 
               ;; replace my global setting
               ;; FIXME: fhceck/fix M<up+down>!
