@@ -124,7 +124,11 @@ a remote file  anytime and from everywhere I am  by just entering :"
   (setq completion-styles '(basic initials flex orderless)
         orderless-matching-styles '(orderless-prefixes)
         completion-category-defaults nil
-        completion-category-overrides '((file (styles basic partial-completion)))))
+        completion-category-overrides '((file (styles basic partial-completion))))
+
+  (setq read-file-name-completion-ignore-case t
+      read-buffer-completion-ignore-case t
+      completion-ignore-case t))
 
 
 
