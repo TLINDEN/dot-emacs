@@ -107,16 +107,29 @@
   ;; :bind (("s-i" . blamer-show-commit-info)
   ;;        ("C-c i" . ("s-i" . blamer-show-posframe-commit-info)))
   :defer 20
+
   :custom
   (blamer-idle-time 0.3)
   (blamer-min-offset 70)
+
   :custom-face
   (blamer-face ((t :foreground "#7a88cf"
                     :background nil
                     :height 140
                     :italic t)))
+
   :config
-  (defalias 'blame 'blamer-mode))
+  (defalias 'blame 'blamer-mode)
+
+  ;; in addition  to blaming I also  like to follow the  lead, so make
+  ;; the hash lead to the commit by clicking on it.
+  (defun blamer-callback-show-commit-diff (commit-info)
+  (interactive)
+  (let ((commit-hash (plist-get commit-info :commit-hash)))
+    (when commit-hash
+      (magit-show-commit commit-hash))))
+
+  (setq blamer-bindings '(("<mouse-1>" . blamer-callback-show-commit-diff))))
 
 (provide 'init-magit)
 ;;; init-magit.el ends here
