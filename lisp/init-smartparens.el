@@ -37,28 +37,12 @@ Used when enabling smartparens-mode."
   ;; :custom-face
   ;; (sp-show-pair-match-face ((t (:foreground "White"))))
 
+  :hook (prog-mode config-general yaml markdown-mode ielm lisp-interaction)
+
   :config
-  ;; enable sp in minibuffer as well
-  ;; maybe, see: https://github.com/Fuco1/smartparens/issues/33:
-  ;; (sp-local-pair 'minibuffer-inactive-mode "'" nil :actions nil)
   (setq sp-ignore-modes-list
         (delete 'minibuffer-inactive-mode sp-ignore-modes-list)
         sp-navigate-close-if-unbalanced t)
-
-  ;; automatically enable where needed
-  (add-something-to-mode-hooks
-   '(rust emacs-lisp ielm lisp elisp lisp-interaction scheme slime-repl ) 'smartparens-mode)
-
-  ;; TODO: https://github.com/Fuco1/smartparens/issues/1160#event-9374528894
-  ;; try to find a way around the problem of closing paren below.
-  ;; (add-something-to-mode-hooks
-  ;;  '(emacs-lisp ielm lisp elisp lisp-interaction scheme slime-repl ) 'electric-pair-mode)
-
-  ;; also in some select prog modes
-  ;; (add-something-to-mode-hooks
-  ;;  '(perl ruby c c++ sh makefile config-general yaml go) (smartparens-mode t))
-  ;; the above doesn't work anymore, for whatever reasons, so I enable it for all
-  (smartparens-global-mode t)
 
   ;; via https://ebzzry.io/en/emacs-pairs/:
   (defmacro def-pairs (pairs)
@@ -88,9 +72,6 @@ respectively."
               (single-quote . "'")
               (double-quote . "\"")
               (back-quote . "`")))
-
-  ;;(add-hook 'smartparens-enabled-hook #'tvd-disable-par-and-pair)
-  ;;(add-hook 'smartparens-enabled-hook #'turn-on-smartparens-strict-mode)
 
   (defun tvd-insert-paren-or-close-move-up ()
     "First hitting key (closing paren) executes 'sp-up-sexp, next time hitting
