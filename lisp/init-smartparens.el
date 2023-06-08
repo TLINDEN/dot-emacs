@@ -42,7 +42,8 @@ Used when enabling smartparens-mode."
   ;; maybe, see: https://github.com/Fuco1/smartparens/issues/33:
   ;; (sp-local-pair 'minibuffer-inactive-mode "'" nil :actions nil)
   (setq sp-ignore-modes-list
-        (delete 'minibuffer-inactive-mode sp-ignore-modes-list))
+        (delete 'minibuffer-inactive-mode sp-ignore-modes-list)
+        sp-navigate-close-if-unbalanced t)
 
   ;; automatically enable where needed
   (add-something-to-mode-hooks
@@ -50,8 +51,8 @@ Used when enabling smartparens-mode."
 
   ;; TODO: https://github.com/Fuco1/smartparens/issues/1160#event-9374528894
   ;; try to find a way around the problem of closing paren below.
-  (add-something-to-mode-hooks
-   '(emacs-lisp ielm lisp elisp lisp-interaction scheme slime-repl ) 'electric-pair-mode)
+  ;; (add-something-to-mode-hooks
+  ;;  '(emacs-lisp ielm lisp elisp lisp-interaction scheme slime-repl ) 'electric-pair-mode)
 
   ;; also in some select prog modes
   ;; (add-something-to-mode-hooks
@@ -90,6 +91,21 @@ respectively."
 
   ;;(add-hook 'smartparens-enabled-hook #'tvd-disable-par-and-pair)
   ;;(add-hook 'smartparens-enabled-hook #'turn-on-smartparens-strict-mode)
+
+  (defun tvd-insert-paren-or-close-move-up ()
+    "First hitting key (closing paren) executes 'sp-up-sexp, next time hitting
+it, insert a closing paren. Requires viking mode to be installed."
+  (interactive)
+  (let* ((key-times (viking-last-key-repeats)))
+    (cond
+     ((> key-times 1)
+      (progn
+        (message "inserting )")
+        (insert ")")))
+     ((eq key-times 1)
+      (progn
+        (message "sp-up-sexp")
+        (call-interactively #'sp-up-sexp))))))
 
   (when (fboundp 'defhydra)
     (defhydra hydra-smartparens (:hint nil)
@@ -196,9 +212,8 @@ _k_: kill (C-k)  _s_: split                   _{_: wrap with { }
               ;; comment the whole sexp
               (";" . 'tvd-lisp-comment)
 
-              ;; move  up  closing  parens  unable  to  insert  parens
-              ;; everywhere else, especially if  one is missing!  (")"
-              ;; . #'sp-up-sexp)
+              ;; move  up  closing  parens or insert closing paren
+              (")" . #'tvd-insert-paren-or-close-move-up)
 
               ;; replace my global setting
               ;; FIXME: fhceck/fix M<up+down>!
