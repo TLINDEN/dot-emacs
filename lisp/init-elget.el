@@ -71,6 +71,11 @@
                :type http
                :url "http://nschum.de/src/emacs/rotate-text/rotate-text.el")
 
+(el-get-bundle consult-emms
+  :type github
+  :pkgname "Hugo-Heagren/consult-emms"
+  :features consult-emms)
+
 ;; (el-get-bundle matcha
 ;;                :type github
 ;;                :pkgname "jojojames/matcha"
