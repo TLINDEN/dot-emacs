@@ -46,6 +46,8 @@
                 ( "c" . 'emms-playlist-set-playlist-buffer)
                 ( "b" . 'tvd-emms-beginning-of-song)))
 
+  ;; TODO: check consult-emms functions, already installed with elget)
+
 (defalias 'audio 'emms)
 
 (provide 'init-audio)
