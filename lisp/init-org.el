@@ -91,6 +91,21 @@ down and unfold it, otherwise jump paragraph as usual."
           (org-cycle))
       (forward-paragraph)))
 
+  ;; TODO: implement c-<left+right> to demote+promote again
+  (defun tvd-org-demote-heading()
+    "Demote heading if on a heading."
+    (interactive)
+    (if (org-at-heading-p)
+        (org-demote-subtree)
+      (call-interactively 'right-word)))
+
+  (defun tvd-org-promote-heading()
+    "Promote heading if on a heading."
+    (interactive)
+    (if (org-at-heading-p)
+        (org-promote-subtree)
+      (call-interactively 'left-word)))
+
   ;; org-mode specific config, after load
   (eval-after-load "org"
     '(progn
@@ -177,7 +192,8 @@ down and unfold it, otherwise jump paragraph as usual."
                    (local-set-key (kbd "<C-down>") 'tvd-org-heading-down)
 
                    ;; move word left or heading up, depending where point is
-                   (local-set-key (kbd "<C-left>") 'tvd-org-left-or-level-up)
+                   (local-set-key (kbd "<C-right>") 'tvd-org-demote-heading)
+                   (local-set-key (kbd "<C-left>") 'tvd-org-promote-heading)
 
                    ;; use nicer bullets
                    (when (fboundp 'org-bullets-mode)
