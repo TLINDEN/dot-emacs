@@ -61,8 +61,7 @@
 
 (package-initialize)
 
-;; load'em
-(sanityinc/add-subdirs-to-load-path package-user-dir)
+;; add additional dirs, if any
 (sanityinc/add-subdirs-to-load-path tvd-sitelisp-dir)
 
 ;;; dont mess around
@@ -154,12 +153,19 @@
 (require 'init-workspaces)
 (require 'init-indentation)
 (require 'init-recentfiles)
-;; (require 'init-completion) ;; replaced with vertico
 (require 'init-ibuffer)
 (require 'init-printing)
 (require 'init-smarter-than-emacs)
 (require 'init-marginalia)
 (require 'init-ui)
+
+
+(defun package-list-installed ()
+  "Display a list of all installed packages using package list."
+  (interactive)
+  (package-list-packages nil)
+  (tablist-forward-column 3)
+  (tablist-push-regexp-filter "Status" "installed"))
 
 
 ;;; ** Some globals
