@@ -123,7 +123,7 @@ Returns t if version changed, nil otherwise."
             (eldoc-mode t)
 
             ;; enable outline
-            (outline-minor-mode)
+            ;; (outline-minor-mode)
 
             (electric-indent-local-mode t)))
 
