@@ -9,9 +9,9 @@
   (invert-face 'mode-line))
 
 (use-package solarized-theme
-             :ensure t
-             :config
-             (load-theme 'solarized-dark-high-contrast t))
+  :ensure t)
+
+(load-theme 'solarized-dark-high-contrast t)
 
 ;; matches solarized theme colors
 (use-package hl-line
