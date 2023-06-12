@@ -203,7 +203,9 @@ down and unfold it, otherwise jump paragraph as usual."
                                                 '((python     . t)
                                                   (emacs-lisp . t)
                                                   (shell      . t)
-                                                  (perl       . t)))))))
+                                                  (perl       . t)))
+                   ;; I need the short templates
+                   (require 'org-tempo)))))
 
   ;; no more ... at the end of a heading
   (setq org-ellipsis " ⤵")
