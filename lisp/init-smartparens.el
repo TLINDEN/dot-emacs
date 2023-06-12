@@ -37,7 +37,7 @@ Used when enabling smartparens-mode."
   ;; :custom-face
   ;; (sp-show-pair-match-face ((t (:foreground "White"))))
 
-  :hook (prog-mode config-general yaml markdown-mode ielm lisp-interaction)
+  :hook (prog-mode config-general yaml markdown-mode ielm-mode lisp-interaction)
 
   :config
   (setq sp-ignore-modes-list
