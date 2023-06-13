@@ -44,7 +44,9 @@
                 ( "<left>" .  'emms-seek-backward)
                 ( "<SPC>" . 'emms-pause)
                 ( "c" . 'emms-playlist-set-playlist-buffer)
-                ( "b" . 'tvd-emms-beginning-of-song)))
+                ( "b" . 'tvd-emms-beginning-of-song)
+                ( "r" . 'emms-toggle-repeat-track)
+                ( "R" . 'emms-toggle-repeat-playlist)))
 
   ;; TODO: check consult-emms functions, already installed with elget)
 
