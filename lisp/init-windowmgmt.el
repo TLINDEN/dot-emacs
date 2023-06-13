@@ -74,7 +74,7 @@
 (when (and (fboundp 'windmove-up) (fboundp 'buf-move-up) (fboundp 'defhydra))
   (defhydra hydra-switch-windows (:color pink: :timeout 2.5)
     "
-Switch to buffer: ← ↑ → ↓   | _o_: previous | _f_: flip | MOVE: _u_: up    _d_: down   _l_: left   _r_: right"
+Switch to buffer: ← ↑ → ↓   | _o_: previous | _f_: flip | MOVE: _u_: up    _d_: down   _l_: left   _r_: right   _M-o_: cycle"
     ("<up>"    windmove-up    nil)
     ("<down>"  windmove-down  nil)
     ("<left>"  windmove-left  nil)
@@ -85,6 +85,7 @@ Switch to buffer: ← ↑ → ↓   | _o_: previous | _f_: flip | MOVE: _u_: up 
     ("d"       buf-move-down       nil :color blue)
     ("l"       buf-move-left       nil :color blue)
     ("r"       buf-move-right      nil :color blue)
+    ("M-o"     other-window        nil :color blue)
     ("q" nil nil :color red))
 
   ;; via [[http://mbork.pl/2017-02-26_other-window-or-switch-buffer][mbork]]
