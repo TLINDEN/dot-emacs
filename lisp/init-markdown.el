@@ -6,9 +6,11 @@
 
 ;; via https://stackoverflow.com/a/26297700
 (defun tvd-cleanup-org-tables ()
-  (save-excursion
-    (goto-char (point-min))
-    (while (search-forward "-+-" nil t) (replace-match "-|-"))))
+  (interactive)
+  (when (equal major-mode 'markdown-mode)
+    (save-excursion
+      (goto-char (point-min))
+      (while (search-forward "-+-" nil t) (replace-match "-|-")))))
 
 (defun tvd-markdown-todo ()
   "Create dynamically highlighted TODO list of MD list"
@@ -33,24 +35,9 @@ save the buffer [again], also check if parens are balanced"
   :config
   (modify-syntax-entry ?\" "\"" markdown-mode-syntax-table)
 
-  ;; (defun tvd-markdown-hooks ()
-  ;;   (when buffer-file-name
-  ;;     (add-hook 'after-save-hook
-  ;;               'check-parens
-  ;;               nil t)
-  ;;     (add-hook 'after-save-hook 'tvd-cleanup-org-tables  nil 'make-it-local))
+  (add-hook 'before-save-hook 'tvd-cleanup-org-tables)
 
-  ;;   (modify-syntax-entry ?\" "\"" markdown-mode-syntax-table)
-
-  ;;   (when (fboundb 'orgtbl-mode)
-  ;;     (add-hook 'markdown-mode-hook 'orgtbl-mode))
-
-  ;;   ;; (when (fboundb 'orgalist))
-  ;;   (add-hook 'markdown-mode-hook 'orgalist-mode))
-
-  (add-hook 'after-save-hook 'tvd-cleanup-org-tables  nil 'make-it-local)
-
-  :hook ;; tvd-markdown-hooks
+  :hook
   (markdown-mode . orgalist-mode)
   (markdown-mode . orgtbl-mode))
 
