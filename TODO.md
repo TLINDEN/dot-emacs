@@ -1,6 +1,3 @@
-- replace smex with https://github.com/DarwinAwardWinner/amx
-- try to marry amx and marginalia somehow
-- try https://github.com/oantolin/embark
 - play with embark: https://karthinks.com/software/fifteen-ways-to-use-embark/
-- FIXME: orglist mode: not more able to jump word wise with M-<left|right>
-- FIXME: how to get rid of IDO?
+- Check smart-forward
+- Check smart-jump
