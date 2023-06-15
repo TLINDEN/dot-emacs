@@ -164,6 +164,9 @@ down and unfold it, otherwise jump paragraph as usual."
                                         ; run presenter, org-present must be installed and loadedwhite
                    (local-set-key (kbd "C-p") 'org-present)
 
+                   ;; we need to remove the narrowing prefix, because we use 'narrow-or-widen-dwim globally
+                   (define-key org-mode-map (kbd "C-x n") nil)
+
                                         ; todo colors
                    (setq org-todo-keyword-faces '(
                                                   ("TODO"   . (:foreground "deepskyblue" :weight bold))
