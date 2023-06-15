@@ -214,7 +214,7 @@ in between will be killed. If INS is non-nil, it will be inserted then."
              ;; used in org-mode for org-todo (see below) FIXME: I only use the "t"
              ;; short command anymore, so C-t would be free now, wouldn't it?
              (add-something-to-mode-hooks
-              '(c c++ cperl vala web emacs-lisp python ruby)
+              '(c c++ cperl vala web emacs-lisp python ruby yaml go)
               '(lambda ()
                  (local-set-key (kbd "C-t") 'rotate-text))))
 
