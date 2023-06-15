@@ -237,5 +237,48 @@
 (require 'iso-transl)
 
 
+;; via: http://paste.lisp.org/display/304865
+;; examples:
+;;
+;; (th/define-context-key outline-minor-mode-map
+;; 		       (kbd "TAB")
+;; 		       (when (th/outline-context-p)
+;; 			 'org-cycle))
+;;
+;; ;; Jump out of a TeX macro when pressing TAB twice.
+;; (th/define-context-key TeX-mode-map (kbd "TAB")
+;; 	 (when (and (= 1 (length (this-command-keys-vector)))
+;; 		    (equal last-command-event (elt (this-command-keys-vector) 0))
+;; 		    (TeX-current-macro))
+;; 	   #'th/TeX-goto-macro-end)))
+;;
+;; TODO: find uses :)
+(defmacro define-context-key (keymap key dispatch)
+  "Define KEY in KEYMAP to execute according to DISPATCH.
+
+DISPATCH is a form that is evaluated and should return the
+command to be executed.
+
+If DISPATCH returns nil, then the command normally bound to KEY
+will be executed.
+
+Example:
+
+  (th/define-context-key hs-minor-mode-map
+     (kbd \"<C-tab>\")
+     (cond
+      ((not (hs-already-hidden-p))
+       'hs-hide-block)
+      ((hs-already-hidden-p)
+       'hs-show-block)))
+
+This will make <C-tab> show a hidden block.  If the block is
+shown, then it'll be hidden."
+  `(define-key ,keymap ,key
+     `(menu-item "context-key" ignore
+                 :filter ,(lambda (&optional ignored)
+                            ,dispatch))))
+
+
 (provide 'init-system)
 ;;; init-system.el ends here
