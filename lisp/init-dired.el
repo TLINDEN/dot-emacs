@@ -55,7 +55,7 @@ URL `http://ergoemacs.org/emacs/dired_sort.html'
 Version 2015-07-30"
   (interactive)
   (let (sort-by arg)
-    (setq sort-by (ido-completing-read "Sort by:" '( "date" "size" "name" "dir" "date-desc" "size-desc" "name-desc" "dir-desc" )))
+    (setq sort-by (completing-read "Sort by:" '( "date" "size" "name" "dir" "date-desc" "size-desc" "name-desc" "dir-desc" )))
     (cond
      ((equal sort-by "name") (setq arg "-Al --si --time-style long-iso "))
      ((equal sort-by "date") (setq arg "-Al --si --time-style long-iso -t"))
@@ -152,6 +152,32 @@ files marked, always operate on current line in dired-mode"
                (with-current-buffer buffer
                  (rename-buffer (format "*dired: %s*" default-directory)))
                buffer))
+
+;; not strictly  dired related but  fs related  which is at  least the
+;; same topic.  From: https://zck.org/emacs-move-file.  I  modified it
+;; to accept a directory as target so I don't have to manually enter a
+;; new file name if I'd like to keep the old one.
+(defun move-file (new-location)
+  "Write this file to NEW-LOCATION, and delete the old one."
+  (interactive (list (expand-file-name
+                      (if buffer-file-name
+                          (read-file-name "Move file to: ")
+                        (read-file-name "Move file to: "
+                                        default-directory
+                                        (expand-file-name (file-name-nondirectory (buffer-name))
+                                                          default-directory))))))
+  (when (file-directory-p new-location)
+    (setq new-location (expand-file-name (file-name-nondirectory buffer-file-name) new-location)))
+  (when (file-exists-p new-location)
+    (delete-file new-location))
+  (message "start")
+  (let ((old-location (expand-file-name (buffer-file-name))))
+    (message (format "old: %s => new: %s" old-location new-location))
+    (write-file new-location t)
+    (when (and old-location
+               (file-exists-p new-location)
+               (not (string-equal old-location new-location)))
+      (delete-file old-location))))
 
 ;; **** dired config and key bindings
 
