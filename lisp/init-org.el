@@ -192,8 +192,8 @@ down and unfold it, otherwise jump paragraph as usual."
                    (local-set-key (kbd "<C-down>") 'tvd-org-heading-down)
 
                    ;; move word left or heading up, depending where point is
-                   (local-set-key (kbd "<C-right>") 'tvd-org-demote-heading)
-                   (local-set-key (kbd "<C-left>") 'tvd-org-promote-heading)
+                   ;; (local-set-key (kbd "<C-right>") 'tvd-org-demote-heading)
+                   ;; (local-set-key (kbd "<C-left>") 'tvd-org-promote-heading)
 
                    ;; use nicer bullets
                    (when (fboundp 'org-bullets-mode)
@@ -218,43 +218,43 @@ down and unfold it, otherwise jump paragraph as usual."
   (global-set-key (kbd "C-n")             (lambda () (interactive) (org-capture)))
 
   ;; must be global since code edit sub buffers run their own major mode, not org
-  (global-set-key (kbd "C-c C-#")         'org-edit-src-exit)
+  (global-set-key (kbd "C-c C-#")         'org-edit-src-exit))
 
-  ;; some org mode vars must be set globally
-  (setq org-default-notes-file tvd-org-file
-        org-startup-indented t
-        org-indent-indentation-per-level 4)
+;; some org mode vars must be set globally
+(setq org-default-notes-file tvd-org-file
+      org-startup-indented t
+      org-indent-indentation-per-level 4)
 
-  ;; my own capture templates
-  (setq org-capture-templates
-        '(("n" "Project" entry (file+headline tvd-org-file "Unsorted Tasks")
-           "* TODO %^{title}\n%u\n** Kostenstelle\n** Contact Peer\n** Contact Customer\n** Aufträge\n** Daten\n** Notizen\n  %i%?\n"
-           :prepend t :jump-to-captured t)
+;; my own capture templates
+(setq org-capture-templates
+      '(("n" "Project" entry (file+headline tvd-org-file "Unsorted Tasks")
+         "* TODO %^{title}\n%u\n** Kostenstelle\n** Contact Peer\n** Contact Customer\n** Aufträge\n** Daten\n** Notizen\n  %i%?\n"
+         :prepend t :jump-to-captured t)
 
-          ("t" "Todo Item" entry (file+headline tvd-org-file "Manual-Agenda-Tasks")
-           "* TODO %^{title}\n:LOGBOOK:\n%u:END:\n" :prepend t :immediate-finish t)
+        ("t" "Todo Item" entry (file+headline tvd-org-file "Manual-Agenda-Tasks")
+         "* TODO %^{title}\n:LOGBOOK:\n%u:END:\n" :prepend t :immediate-finish t)
 
-          ("s" "Scheduled Item" entry (file+headline tvd-org-file "Scheduled-Agenda-Tasks")
-           "* TODO %^t %^{title}\n:LOGBOOK:\n%u:END:\n" :prepend t :immediate-finish t)
+        ("s" "Scheduled Item" entry (file+headline tvd-org-file "Scheduled-Agenda-Tasks")
+         "* TODO %^t %^{title}\n:LOGBOOK:\n%u:END:\n" :prepend t :immediate-finish t)
 
-          ("j" "Journal" entry (file+headline tvd-org-file "Kurznotizen")
-           "* TODO %^{title}\n%u\n  %i%?\n" :prepend t :jump-to-captured t)
+        ("j" "Journal" entry (file+headline tvd-org-file "Kurznotizen")
+         "* TODO %^{title}\n%u\n  %i%?\n" :prepend t :jump-to-captured t)
 
-          ("c" "Copy/Paste" entry (file+headline tvd-org-file "Kurznotizen")
-           "* TODO %^{title}\n%u\n  %x\n" :immediate-finish t :prepend t :jump-to-captured t)))
+        ("c" "Copy/Paste" entry (file+headline tvd-org-file "Kurznotizen")
+         "* TODO %^{title}\n%u\n  %x\n" :immediate-finish t :prepend t :jump-to-captured t)))
 
-  ;; follow links using eww, if present
-  ;; (if (fboundp 'eww-browse-url)
-  ;;     (setq browse-url-browser-function 'eww-browse-url))
+;; follow links using eww, if present
+;; (if (fboundp 'eww-browse-url)
+;;     (setq browse-url-browser-function 'eww-browse-url))
 
-  ;; mark narrowing with an orange fringe, the advice for 'widen
-  ;; is in the outline section.
-  (advice-add 'org-narrow-to-subtree :after
-              '(lambda (&rest args)
-                 (set-face-attribute 'fringe nil :background tvd-fringe-narrow-bg)))
+;; mark narrowing with an orange fringe, the advice for 'widen
+;; is in the outline section.
+(advice-add 'org-narrow-to-subtree :after
+            '(lambda (&rest args)
+               (set-face-attribute 'fringe nil :background tvd-fringe-narrow-bg)))
 
-  ;; I hate fundamental mode!
-  (setq default-major-mode 'org-mode))
+;; I hate fundamental mode!
+(setq default-major-mode 'org-mode)
 
 
 (provide 'init-org)
