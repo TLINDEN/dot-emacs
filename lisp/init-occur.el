@@ -14,6 +14,9 @@
         regexp-history)
   (call-interactively 'occur))
 
+(use-package loccur
+  :bind
+  (("C-o" . loccur-current)))
 
 (provide 'init-occur)
 ;;; init-occur.el ends here

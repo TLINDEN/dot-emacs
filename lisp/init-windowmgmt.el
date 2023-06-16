@@ -105,7 +105,8 @@ to next buffer otherwise."
 
   ;; M-o doesn't  work when using emacs  via Win->RDP->VNC->X11->Xmonad,
   ;; so fall back to C-o.
-  (global-set-key (kbd "C-o")             'other-window-or-switch-buffer)
+  ;; I'm not using windows anymore
+  ;; (global-set-key (kbd "C-o")             'other-window-or-switch-buffer)
 
   ;; Use only in  X11 emacs - setting M-O inside console  causes <up> and
   ;; <down> to stop working properly, for whatever reasons.
