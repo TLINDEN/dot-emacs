@@ -284,6 +284,13 @@ in between will be killed. If INS is non-nil, it will be inserted then."
 (add-hook 'fundamental-mode-hook
          (lambda () (electric-indent-local-mode -1)))
 
+(use-package hungry-delete
+  :config
+  (global-hungry-delete-mode)
+  (setq hungry-delete-join-reluctantly t)
+  ;; I use 'backward-delete-char, so I've got to remap it as well
+  (if (fboundp 'backward-delete-char)
+    (define-key hungry-delete-mode-map [remap backward-delete-char] 'hungry-delete-backward)))
 
 (provide 'init-textmanipulation)
 ;;; init-textmanipulation.el ends here
