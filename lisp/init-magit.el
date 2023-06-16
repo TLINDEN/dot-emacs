@@ -9,6 +9,12 @@
   :init
   (use-package magit-todos)
 
+  :bind
+  ;; C-x    g     starts    magit-status,    but     there's    also
+  ;; magit-file-dispatch, which  works directly on current  file w/o
+  ;; the hassle to go to status before just committing etc. So:
+  (("C-c g" . magit-file-dispatch))
+
   :config
   (magit-todos-mode)
 
