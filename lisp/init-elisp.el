@@ -139,6 +139,9 @@ Returns t if version changed, nil otherwise."
   (call-interactively 'eval-expression)
   (electric-pair-mode))
 
+;; lets have eldoc in minibuffer as well
+(add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode)
+
 ;; sometimes I eval regions
 (defalias 'er        'eval-region)
 
