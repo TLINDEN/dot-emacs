@@ -137,5 +137,8 @@
 
   (setq blamer-bindings '(("<mouse-1>" . blamer-callback-show-commit-diff))))
 
+(use-package forge
+  :after magit)
+
 (provide 'init-magit)
 ;;; init-magit.el ends here
