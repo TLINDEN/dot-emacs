@@ -157,6 +157,9 @@ files marked, always operate on current line in dired-mode"
 ;; same topic.  From: https://zck.org/emacs-move-file.  I  modified it
 ;; to accept a directory as target so I don't have to manually enter a
 ;; new file name if I'd like to keep the old one.
+;;
+;; I also incorporated git awareness into the function from:
+;; https://emacsredux.com/blog/2013/05/04/rename-file-and-buffer/
 (defun move-file (new-location)
   "Write this file to NEW-LOCATION, and delete the old one."
   (interactive (list (expand-file-name
@@ -173,11 +176,15 @@ files marked, always operate on current line in dired-mode"
   (message "start")
   (let ((old-location (expand-file-name (buffer-file-name))))
     (message (format "old: %s => new: %s" old-location new-location))
-    (write-file new-location t)
-    (when (and old-location
-               (file-exists-p new-location)
-               (not (string-equal old-location new-location)))
-      (delete-file old-location))))
+    (cond
+     ((vc-backend old-location)
+      (vc-rename-file old-location new-location))
+     (t
+      (write-file new-location t)
+      (when (and old-location
+                 (file-exists-p new-location)
+                 (not (string-equal old-location new-location)))
+        (delete-file old-location))))))
 
 ;; **** dired config and key bindings
 
