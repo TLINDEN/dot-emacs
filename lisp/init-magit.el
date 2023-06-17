@@ -73,6 +73,7 @@
         (when (re-search-forward "Magit requires Git >=")
           (kill-buffer-and-window)))))
 
+  ;; FIXME: still needed?
   (add-hook 'after-init-hook 'tvd-ignore-magit-warnings-if-any t)
 
   ;; now, THIS is the pure genius me: hit "ls in magit-status buffer
@@ -149,6 +150,9 @@
 
 (use-package forge
   :after magit)
+
+(use-package sqlite3
+  :defer nil)
 
 (provide 'init-magit)
 ;;; init-magit.el ends here
