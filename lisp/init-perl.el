@@ -107,6 +107,7 @@
                 (local-set-key "\C-cr" 'perl-run)
                 (local-set-key "\C-ck" 'perl-kill)
                 (local-set-key "\C-c#" 'perl-next-error)
+                (local-set-key "{" nil) ;; disable electric brace, because smartparens already does the job!
                 (local-set-key "\M-\C-q" 'own-cperl-indent-region-or-paragraph)
                 (setq mode-name "PL"))
 
