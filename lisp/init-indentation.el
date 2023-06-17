@@ -18,7 +18,12 @@
 
 ;; FIXME: also check [[https://github.com/glasserc/ethan-wspace][ethan-wspace]] !
 
-(setq indent-line-function 'insert-tab)
+;; TODO:  check for  side effects  when disabling  this. Currently  it
+;; disturbs auto-fill in fundamental-mode, see also:
+;; https://superuser.com/a/641778
+;;; (setq indent-line-function 'insert-tab)
+
+
 (setq tab-stop-list (quote (4 8 12 16 20 24 28 32 36 40 44 48 52 56 60 64 68 72 76 80 84 88 92 96 100 104 108 112 116 120)))
 (setq tab-always-indent 'complete) ; FIXME: doesnt work in cperl-mode
 (setq show-trailing-whitespace t)
