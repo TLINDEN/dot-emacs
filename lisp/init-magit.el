@@ -85,6 +85,16 @@
   (transient-append-suffix 'magit-log "l"
     '("s" "dired" magit-dired-jump))
 
+  ;; for a one file commit just do  the stage+commit in 1 step just as
+  ;; with git commit -am
+  (defun tvd-stage-and-commit-current-buffer()
+    (interactive)
+    (magit-stage buffer-file-name)
+    (magit-commit-create))
+
+  (transient-append-suffix 'magit-file-dispatch "s"
+    '("C" "Stage+Commit" tvd-stage-and-commit-current-buffer))
+
   ;; after an exhausting discussion on magit#3139 I use this function
   ;; to (kind of) switch to another repository from inside magit-status.
   (defun tvd-switch-magit-repo ()
