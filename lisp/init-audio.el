@@ -39,6 +39,32 @@
   (emms-playlist-set-playlist-buffer)
   (emms-play-playlist filename))
 
+  (defun audio-create-playlist(name)
+    "Create a new audio playlist for EMMS player."
+    (interactive "sPlaylist name: ")
+    (emms-playlist-new name)
+    (switch-to-buffer name)
+    (emms-playlist-set-playlist-buffer name)
+    (let ((read-answer-short t)
+          (answer (read-answer "add [D]irectory or [F]ile? "
+                               '(("dir" ?d "add dir")
+                                 ("file" ?f "add file"))))
+          (done nil))
+      (message answer)
+      (cond
+       ((equal answer "dir")
+        (emms-add-directory-tree (read-directory-name "Select directory:")))
+       ((equal answer "file")
+        (while (not done)
+          ;; FIXME: ask to continue
+          (emms-playlist-set-playlist-buffer name)
+          (let ((file (read-file-name "Select audio file:")))
+            (if file
+                (emms-add-file file)
+              (setq done t))))))
+      (emms-playlist-save 'native (expand-file-name (format "playlist-%s" name) "~/MP3"))
+      (emms-playlist-mode)))
+
   :bind (:map   emms-playlist-mode-map
                 ( "<right>" .  'emms-seek-forward)
                 ( "<left>" .  'emms-seek-backward)
