@@ -65,7 +65,7 @@ the user declines to add another file."
           (switch-to-buffer name)
           (emms-playlist-set-playlist-buffer name)
           (let ((read-answer-short t)
-                (answer (read-answer "add [D]irectory or [F]ile? "
+                (answer (read-answer "add [D]irectory or [F]ile(s)? "
                                      '(("dir" ?d "add dir")
                                        ("file" ?f "add file")
                                        ("url" ?u "add a streaming url")
