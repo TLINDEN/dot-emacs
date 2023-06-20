@@ -40,30 +40,72 @@
   (emms-play-playlist filename))
 
   (defun audio-create-playlist(name)
-    "Create a new audio playlist for EMMS player."
+    "Create a new audio playlist for EMMS player.
+
+It asks interactively for NAME.  The playlistname will be derived
+as     this: 'source-file-default-directory + \"playlist-\" + NAME.
+
+If the playlist already exists nothing will be done.
+
+Otherwise the  user will be  asked wether  to add a  directory or
+file[s] to  the playlist.  In the  first case  the user  can then
+interactively select a directory. In the latter case the user can
+add interactively one or more files.
+
+The playlist will be saved when  a directory has been selected or
+the user declines to add another file."
     (interactive "sPlaylist name: ")
-    (emms-playlist-new name)
-    (switch-to-buffer name)
-    (emms-playlist-set-playlist-buffer name)
-    (let ((read-answer-short t)
-          (answer (read-answer "add [D]irectory or [F]ile? "
-                               '(("dir" ?d "add dir")
-                                 ("file" ?f "add file"))))
-          (done nil))
-      (message answer)
-      (cond
-       ((equal answer "dir")
-        (emms-add-directory-tree (read-directory-name "Select directory:")))
-       ((equal answer "file")
-        (while (not done)
-          ;; FIXME: ask to continue
+    (let ((filename (expand-file-name (format "playlist-%s" name) emms-source-file-default-directory)))
+      (message filename)
+      (if (file-exists-p filename)
+          (message (format "Playlist %s already exists!" filename))
+        (progn
+          (emms-playlist-new name)
+          (switch-to-buffer name)
           (emms-playlist-set-playlist-buffer name)
-          (let ((file (read-file-name "Select audio file:")))
-            (if file
-                (emms-add-file file)
-              (setq done t))))))
-      (emms-playlist-save 'native (expand-file-name (format "playlist-%s" name) "~/MP3"))
-      (emms-playlist-mode)))
+          (let ((read-answer-short t)
+                (answer (read-answer "add [D]irectory or [F]ile? "
+                                     '(("dir" ?d "add dir")
+                                       ("file" ?f "add file")
+                                       ("url" ?u "add a streaming url")
+                                       ("quit" ?q "quit"))))
+                (done nil)
+                (abort nil))
+            (setq default-directory emms-source-file-default-directory)
+            (cond
+             ((equal answer "url")
+              (let ((url (read-string "Enter a url: ")))
+                (when url
+                  (emms-add-url url))))
+             ((equal answer "dir")
+              (while (not done)
+                (emms-playlist-set-playlist-buffer name)
+                (let ((dir (read-directory-name "Select directory:")))
+                  (when dir
+                    (emms-add-directory-tree dir))
+                  (setq answer (read-char-from-minibuffer "Add another dir [Yn]? "))
+                  (when (equal answer ?n)
+                    (setq done t)))))
+             ((equal answer "file")
+              (while (not done)
+                (emms-playlist-set-playlist-buffer name)
+                (let ((file (read-file-name "Select audio file:")))
+                  (when file
+                    (emms-add-file file)
+                    (setq default-directory (file-name-directory file)))
+                  (setq answer (read-char-from-minibuffer "Add another file [Yn]? "))
+                  (when (equal answer ?n)
+                    (setq done t)))))
+             (t (setq abort t)))
+            (if abort
+                (kill-buffer)
+              (progn
+                (emms-playlist-save 'native filename)
+                (emms-playlist-mode))))))))
+
+  :hook
+  (emms-playlist-mode . hl-line-mode)
+  (emms-playlist-source-inserted . beginning-of-buffer)
 
   :bind (:map   emms-playlist-mode-map
                 ( "<right>" .  'emms-seek-forward)
