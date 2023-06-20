@@ -87,7 +87,8 @@
     '("s" "dired" magit-dired-jump))
 
   ;; for a one file commit just do  the stage+commit in 1 step just as
-  ;; with git commit -am
+  ;; with git commit  -am, the command is "ci" just  like my git alias
+  ;; for the same pupose, which does "git commit -am"
   (defun tvd-stage-and-commit-current-buffer()
     (interactive)
     (magit-stage buffer-file-name)
