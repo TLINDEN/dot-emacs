@@ -25,19 +25,20 @@
   (emms-all)
   (emms-default-players)
 
-  (defun tvd-emms-beginning-of-song
-      (interactive)
+  (defun tvd-emms-beginning-of-song()
+      "Jump to beginning of a song"
+    (interactive)
     (emms-seek-to '00:00))
 
   (defun audio-open-playlist (filename &optional wildcards)
-  "makes a new EMMS playlist buffer from the playlist of filename"
-  (interactive
-   (find-file-read-args "Find file: "
-                        (confirm-nonexistent-file-or-buffer)))
-  (emms-playlist-new (file-name-base filename))
-  (switch-to-buffer (file-name-base filename))
-  (emms-playlist-set-playlist-buffer)
-  (emms-play-playlist filename))
+    "makes a new EMMS playlist buffer from the playlist of filename"
+    (interactive
+     (find-file-read-args "Find file: "
+                          (confirm-nonexistent-file-or-buffer)))
+    (emms-playlist-new (file-name-base filename))
+    (switch-to-buffer (file-name-base filename))
+    (emms-playlist-set-playlist-buffer)
+    (emms-play-playlist filename))
 
   (defun audio-create-playlist(name)
     "Create a new audio playlist for EMMS player.
