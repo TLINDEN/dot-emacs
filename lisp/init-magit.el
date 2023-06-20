@@ -96,6 +96,9 @@
   (transient-append-suffix 'magit-file-dispatch "s"
     '("C" "Stage+Commit" tvd-stage-and-commit-current-buffer))
 
+  (transient-append-suffix 'magit-commit "c"
+    '("i" "Stage+Commit" tvd-stage-and-commit-current-buffer))
+
   ;; after an exhausting discussion on magit#3139 I use this function
   ;; to (kind of) switch to another repository from inside magit-status.
   (defun tvd-switch-magit-repo ()
