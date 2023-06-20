@@ -21,6 +21,26 @@
 
 (add-hook 'post-command-hook 'tvd-narrowed-fringe-status)
 
+;; I  have  to  write  my   own  version  of  narrow-to-defun  because
+;; beginning+end-of-defun  doesn't find  a function  which is  defined
+;; inside a use-package block
+(defun tvd-narrow-to-defun()
+  "Same as 'narrow-to-defun but also considers indented defuns.
+
+It uses smart-parens to find the defun end. Must be inside a (defun) form."
+  (interactive)
+  (let ((here (point))
+        (beg 0)
+        (end 0))
+    (save-excursion
+      (search-backward "(defun")
+      (setq beg (point))
+      (forward-char)
+      (sp-end-of-sexp)
+      (forward-char)
+      (setq end (point)))
+    (narrow-to-region beg end)))
+
 ;; via https://endlessparentheses.com/emacs-narrow-or-widen-dwim.html
 ;; pure genius, never ever have to think about how to widen
 (defun narrow-or-widen-dwim (p)
@@ -47,7 +67,7 @@ is already narrowed."
                (t (org-narrow-to-subtree))))
         ((derived-mode-p 'latex-mode)
          (LaTeX-narrow-to-environment))
-        (t (narrow-to-defun))))
+        (t (tvd-narrow-to-defun))))
 
 ;; This line actually replaces Emacs' entire narrowing
 ;; keymap, that's how much I like this command. Only
