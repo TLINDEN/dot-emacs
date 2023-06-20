@@ -94,7 +94,7 @@
     (magit-commit-create))
 
   (transient-append-suffix 'magit-file-dispatch "s"
-    '("C" "Stage+Commit" tvd-stage-and-commit-current-buffer))
+    '("i" "Stage+Commit" tvd-stage-and-commit-current-buffer))
 
   (transient-append-suffix 'magit-commit "c"
     '("i" "Stage+Commit" tvd-stage-and-commit-current-buffer))
