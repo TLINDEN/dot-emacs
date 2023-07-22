@@ -104,6 +104,20 @@ the user declines to add another file."
                 (emms-playlist-save 'native filename)
                 (emms-playlist-mode))))))))
 
+  (defun tvd-emms-follow-playing-song()
+    (interactive)
+    (emms-playlist-mode-center-current))
+    ;; (let ((track (emms-track-get (emms-playlist-current-selected-track) 'name)))
+    ;;   (message (format "track name: %s" track)))
+    ;; (message (format "%s" emms-playlist-selected-marker))
+    ;; (save-restriction
+    ;;   (when emms-playlist-selected-marker
+    ;; (goto-char emms-playlist-selected-marker))))
+
+  ;; we need  to apply  this hook automatically  because use-package's
+  ;; :hook keyword doesn't supporting appending a hook
+  (add-hook 'emms-playlist-selection-changed-hook 'tvd-emms-follow-playing-song 1)
+
   :hook
   (emms-playlist-mode . hl-line-mode)
   (emms-playlist-source-inserted . beginning-of-buffer)
@@ -112,7 +126,7 @@ the user declines to add another file."
                 ( "<right>" .  'emms-seek-forward)
                 ( "<left>" .  'emms-seek-backward)
                 ( "<SPC>" . 'emms-pause)
-                ( "c" . 'emms-playlist-set-playlist-buffer)
+                ;; ( "c" . 'emms-playlist-set-playlist-buffer) default: 'emms-playlist-mode-center-current
                 ( "b" . 'tvd-emms-beginning-of-song)
                 ( "r" . 'emms-toggle-repeat-track)
                 ( "R" . 'emms-toggle-repeat-playlist)))
