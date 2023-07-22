@@ -49,7 +49,9 @@
     (dolist (dir (list (expand-file-name "~/dev/D/github")
                        (expand-file-name "~/fits/git")
                        (expand-file-name "~/.emacs.d")
-                       (expand-file-name "~/dev")))
+                       (expand-file-name "~/dev")
+                       (expand-file-name "~/dev/web")
+                       (expand-file-name "~/dev/gitea")))
       (when (file-exists-p dir)
         (add-to-list 'magit-repository-directories (cons dir 1))))
 
