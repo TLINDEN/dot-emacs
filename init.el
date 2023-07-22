@@ -147,6 +147,7 @@
 (require 'init-projectile)
 (require 'init-occur)
 (require 'init-audio)
+(require 'init-daemonde)
 
 ;; emacs configuration
 (require 'init-windowmgmt)
