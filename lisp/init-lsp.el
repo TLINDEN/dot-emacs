@@ -17,8 +17,8 @@
   :commands lsp)
 
 ;; I use ivy
-(use-package lsp-ivy
-  :commands lsp-ivy-global-workspace-symbol)
+;; (use-package lsp-ivy
+;;   :commands lsp-ivy-global-workspace-symbol)
 
 
 (provide 'init-lsp)
