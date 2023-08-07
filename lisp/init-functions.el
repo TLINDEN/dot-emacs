@@ -10,9 +10,9 @@
   (interactive)
   (unwind-protect
       (progn
-        (linum-mode 1)
+        (display-line-numbers-mode 1)
         (call-interactively 'goto-line))
-    (linum-mode -1)))
+    (display-line-numbers-mode -1)))
 
 (global-set-key (kbd "<f7>")            'goto-line-with-feedback)
 
