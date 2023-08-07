@@ -35,7 +35,7 @@
 ;; display current function - if any - in mode line
 (add-something-to-mode-hooks
     '(c c++ cperl vala makefile ruby shell-script python go)
-    'which-func-mode)
+    'which-function-mode)
 
 
 
