@@ -189,7 +189,17 @@ Returns t if version changed, nil otherwise."
       (set-window-dedicated-p (selected-window) t)
       (set-background-color "azure"))))
 
-
+;; from prelude and crux,  comes in handy when I need to  do an ad hoc
+;; calc
+(defun eval-and-replace ()
+  "Replace the preceding sexp with its value."
+  (interactive)
+  (backward-kill-sexp)
+  (condition-case nil
+      (prin1 (eval (read (current-kill 0)))
+             (current-buffer))
+    (error (message "Invalid expression")
+           (insert (current-kill 0)))))
 
 (provide 'init-elisp)
 ;;; init-elisp.el ends here

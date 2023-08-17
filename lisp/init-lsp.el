@@ -12,6 +12,7 @@
   :init
   ;; I'm not using any of th  lsp commands, but better define a prefix
   ;; than being unable to reach it
+  ;; FIXME: add at least lsp-find-definition
   (setq lsp-keymap-prefix "C-c C-l")
 
   :commands lsp)
