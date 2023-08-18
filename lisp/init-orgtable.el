@@ -328,6 +328,14 @@ intended to be #'> to support reverse sorting."
     (interactive)
     (org-table-move-single-cell 'right))
 
+  (defun tvd-org-sum-column()
+    "Calculate sum of current row and put it into current cell, replacing cell"
+    (interactive)
+    (org-table-blank-field)
+    (org-table-sum)
+    (yank)
+    (org-table-align))
+
   ;; actual org table config
   (with-eval-after-load "org"
     (add-hook 'org-mode-hook
@@ -360,7 +368,7 @@ _si_:  ip             _tl_: Latex         _cc_: Copy Cell   (C-c t c)    _il_: I
 _sI_: -ip             _th_: HTML          _dd_: Delete Cell              _tr_: Transpose Table
 _sn_:  numeric        _tt_: Tab           _dc_: Delete Column            _mr_: Move Cell right
 _sN_: -numeric        _ta_: Aligned       _dr_: Delete Row               _ml_: Move Cell left
-_st_:  time           ^^                  _kr_: Kill Row                 _mu_: Move Cell up
+_st_:  time           ^^                  _kr_: Kill Row                 _mu_: Move Cell up       _S_: sum current column
 _sT_: -time           ^^                  _kc_: Kill Column              _md_: Move Cell down     _q_: Cancel
 
 
@@ -407,7 +415,7 @@ Reach this hydra with <C-x t>
     ("ot" tablify  nil)
     ("oe" orgtbl-mode nil)
     ("oc" align-repeat nil)
-
+    ("S"  tvd-org-sum-column)
     ("q" nil nil :color red))
 
   ;; allow me to insert org tables everywhere on request
