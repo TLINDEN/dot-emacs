@@ -111,6 +111,7 @@
 (require 'init-shellscript)
 (require 'init-perl)
 (require 'init-go)
+(require 'init-lua)
 (require 'init-sgml)
 (require 'init-webmode)
 (require 'init-cisco)
@@ -158,6 +159,7 @@
 (require 'init-printing)
 (require 'init-smarter-than-emacs)
 (require 'init-marginalia)
+(require 'init-avy)
 (require 'init-ui)
 
 

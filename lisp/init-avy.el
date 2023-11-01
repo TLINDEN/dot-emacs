@@ -17,7 +17,10 @@
   ;; Home row only (the default).
   (setq avy-keys '(?a ?s ?d ?f ?j ?k ?l))
 
-  (setq avy-background t))
+  (setq avy-background t)
+
+  ;; (global-set-key (kbd "C-j") 'avy-goto-word-1)
+  )
 
 
 (provide 'init-avy)

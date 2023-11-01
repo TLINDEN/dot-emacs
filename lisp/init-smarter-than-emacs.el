@@ -90,7 +90,8 @@ a remote file  anytime and from everywhere I am  by just entering :"
   :bind (:map vertico-map
               ("~" . tvd-vertico-jump-home)
               (":" . tvd-vertico-jump-ssh)
-              ("/" . tvd-vertico-jump-root) ;; experimental, not sure wether to keep this
+              ;;; ("/" . tvd-vertico-jump-root)
+              ;; experimental, not sure wether to keep this
               ("<backspace>" . tvd-vertico-del-dir)
               ("RET" . #'vertico-directory-enter)
               ;; experimental,  pressing   tab  on  a   match  doesn't
