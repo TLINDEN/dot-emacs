@@ -84,6 +84,8 @@
 
 ;; bootstrap emacs
 (add-to-list 'load-path tvd-lisp-dir)
+(add-to-list 'load-path tvd-sitelisp-dir)
+
 (require 'init-display)
 (require 'init-modeline)
 (require 'init-elget)
@@ -128,6 +130,7 @@
 (require 'init-orgtable)
 (require 'init-outline)
 (require 'init-markdown)
+(require 'init-lvl)
 
 ;; interactive modes
 (require 'init-eshell)
@@ -147,7 +150,7 @@
 (require 'init-ediff)
 (require 'init-projectile)
 (require 'init-occur)
-(require 'init-audio)
+;; (require 'init-audio) nope, I'm just not using it anymore
 (require 'init-daemonde)
 
 ;; emacs configuration

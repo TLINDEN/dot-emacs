@@ -5,6 +5,9 @@ el-get
 elpa-27.1
 elpa-28.2
 elpa-29.1
+elpa-29.2
+elpa-29.3
+.eln-cache
 elpa
 projectile-bookmarks.eld
 recentf
@@ -24,3 +27,4 @@ history
 emms
 macros.el
 forge-database.sqlite
+forge-database*
