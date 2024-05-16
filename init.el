@@ -130,7 +130,6 @@
 (require 'init-orgtable)
 (require 'init-outline)
 (require 'init-markdown)
-(require 'init-lvl)
 
 ;; interactive modes
 (require 'init-eshell)
