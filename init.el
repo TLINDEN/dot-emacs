@@ -130,6 +130,8 @@
 (require 'init-orgtable)
 (require 'init-outline)
 (require 'init-markdown)
+(require 'init-editorconfig)
+(require 'init-flymake)
 
 ;; interactive modes
 (require 'init-eshell)
