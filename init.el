@@ -113,6 +113,7 @@
 (require 'init-shellscript)
 (require 'init-perl)
 (require 'init-go)
+(require 'init-c)
 (require 'init-lua)
 (require 'init-sgml)
 (require 'init-webmode)

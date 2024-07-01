@@ -2,11 +2,7 @@
 auto-save-list
 backups
 el-get
-elpa-27.1
-elpa-28.2
-elpa-29.1
-elpa-29.2
-elpa-29.3
+elpa-*.*
 .eln-cache
 elpa
 projectile-bookmarks.eld
