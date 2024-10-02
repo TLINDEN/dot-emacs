@@ -51,6 +51,7 @@
                         tvd-config-dir))
 
 (add-to-list 'package-archives '("gnu"   . "https://elpa.gnu.org/packages/"))
+(add-to-list 'package-archives '("nongnu"   . "https://elpa.nongnu.org/nongnu/"))
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 
 ;; (setq package-archives
@@ -154,6 +155,7 @@
 (require 'init-occur)
 ;; (require 'init-audio) nope, I'm just not using it anymore
 (require 'init-daemonde)
+(require 'init-matrix)
 
 ;; emacs configuration
 (require 'init-windowmgmt)

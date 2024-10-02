@@ -1,3 +1,5 @@
+;; FIXME: how to force bash mode?
+
 (use-package flymake
   :ensure nil
 
