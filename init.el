@@ -130,6 +130,7 @@
 (require 'init-orgagenda)
 (require 'init-orgalist)
 (require 'init-orgtable)
+(require 'init-org-present)
 (require 'init-outline)
 (require 'init-markdown)
 (require 'init-editorconfig)

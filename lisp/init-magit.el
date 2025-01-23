@@ -25,6 +25,7 @@
       (call-interactively 'magit-status)))
 
   (setq magit-view-git-manual-method 'woman
+        magit-diff-refine-hunk t
         magit-commit-show-diff nil)
 
   (defalias 'git       'magit-status)

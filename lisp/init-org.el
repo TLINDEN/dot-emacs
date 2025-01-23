@@ -213,6 +213,10 @@ down and unfold it, otherwise jump paragraph as usual."
   ;; no more ... at the end of a heading
   (setq org-ellipsis " ⤵")
 
+  ;; use mono spaced font in src blocks
+  (set-face-attribute 'org-block nil :inherit 'fixed-pitch)
+  (setq org-activate-links '(plain radio tag date footnote))
+
   ;; my own keywords, must be set globally, not catched correctly inside hook
   (setq org-todo-keywords
         '((sequence "TODO" "START" "WAIT" "|" "DONE" "CANCEL" "FAIL")))

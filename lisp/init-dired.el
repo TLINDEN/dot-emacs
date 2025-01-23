@@ -193,7 +193,7 @@ files marked, always operate on current line in dired-mode"
 (eval-after-load 'dired
   '(progn
      ;; dired vars
-     (setq dired-listing-switches "-lt")
+     (setq dired-listing-switches "-lh")
 
      ;; stay  with 1  dired buffer  per instance
      ;; when changing directories
